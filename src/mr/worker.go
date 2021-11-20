@@ -2,10 +2,8 @@ package mr
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"hash/fnv"
-	"io"
 	"io/ioutil"
 	"net/rpc"
 	"os"
@@ -23,18 +21,6 @@ import (
 type KeyValue struct {
 	Key   string `json:"Key"`
 	Value string `json:"Value"`
-}
-
-// SyncWriter
-type SyncWriter struct {
-	m      sync.Mutex
-	Writer io.Writer
-}
-
-func (w *SyncWriter) Write(b []byte) (n int, err error) {
-	w.m.Lock()
-	defer w.m.Unlock()
-	return w.Writer.Write(b)
 }
 
 //
@@ -63,46 +49,6 @@ type Task struct {
 
 func (t *Task) Run() {
 	t.Worker(t.Params)
-}
-
-// GoPool is a routine pool, you should use like this :
-// 1. pool := NewGoPool(nums)
-// 2. go pool.Run()
-// 3. pool.Put(Task)
-type GoPool struct {
-	MaxRoutine    int64
-	Task          chan *Task
-	ControlSignal chan int64
-}
-
-func (g *GoPool) Put(t *Task) {
-	g.ControlSignal <- 1
-	g.Task <- t
-}
-
-func (g *GoPool) Worker(t *Task) {
-	t.Run()
-	<-g.ControlSignal
-}
-
-func (g *GoPool) Run() {
-	for {
-		select {
-		case t := <-g.Task:
-			go g.Worker(t)
-		}
-	}
-}
-
-func NewGoPool(maxNum int64) *GoPool {
-	Task := make(chan *Task, maxNum)
-	ControlSignal := make(chan int64, maxNum)
-
-	return &GoPool{
-		MaxRoutine:    maxNum,
-		Task:          Task,
-		ControlSignal: ControlSignal,
-	}
 }
 
 //
