@@ -185,3 +185,10 @@ func TestForSync(t *testing.T) {
 
 	fmt.Println(result)
 }
+
+func TestLock(t *testing.T) {
+	mutex := sync.Mutex{}
+	cond := sync.NewCond(&mutex)
+
+	cond.Wait()
+}
