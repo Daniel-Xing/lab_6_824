@@ -1,14 +1,31 @@
 package mr
 
-import "log"
-import "net"
-import "os"
-import "net/rpc"
-import "net/http"
-
+import (
+	"log"
+	"net"
+	"net/http"
+	"net/rpc"
+	"os"
+	"sync"
+)
 
 type Coordinator struct {
 	// Your definitions here.
+
+	// mutex is to protect the data of Coordinator from concurrent
+	mut sync.Mutex
+
+	// cond: cond is used for waiting for the excution of map or reduce tasks,
+	// when all map or reduce tasks are assigned but not return within a reasonable time.
+	// Hence, use cond.wait() to wait.
+	cond sync.Cond
+
+	// nMaps is the number of map tasks
+	nMaps int
+	// nReduces is the number of reduce tasks
+	nReduce int
+
+	// Map
 
 }
 
@@ -23,7 +40,6 @@ func (c *Coordinator) Example(args *ExampleArgs, reply *ExampleReply) error {
 	reply.Y = args.X + 1
 	return nil
 }
-
 
 //
 // start a thread that listens for RPCs from worker.go
@@ -50,7 +66,6 @@ func (c *Coordinator) Done() bool {
 
 	// Your code here.
 
-
 	return ret
 }
 
@@ -63,7 +78,6 @@ func MakeCoordinator(files []string, nReduce int) *Coordinator {
 	c := Coordinator{}
 
 	// Your code here.
-
 
 	c.server()
 	return &c
