@@ -41,7 +41,7 @@ const (
 type GetTaskRequestArgs struct {
 }
 
-type GetTaskResponse struct {
+type GetTaskReply struct {
 	// NumsMap: total numbers of map tasks, used by Reduce task to read the tempfile.
 	// for example, reduce task number is 2, so it should read the file from temp-0-2 to temp-NumsMap-2.
 	NumsMap int

@@ -7,6 +7,7 @@ import (
 	"net/rpc"
 	"os"
 	"sync"
+	"time"
 )
 
 type Coordinator struct {
@@ -25,11 +26,101 @@ type Coordinator struct {
 	// nReduces is the number of reduce tasks
 	nReduce int
 
-	// Map
+	// MapTask
+	mapTaskFilename []string
+	// Map task finish status
+	mapFinished []bool
+	// MapTaskIssuedTime
+	mapTaskIssuedTime []time.Time
+	// reduce task finish status
+	reduceFinished []bool
+	// Reduce Task issued Time, will be use to check if workers processe too long.
+	reduceTaskIssuedTime []time.Time
 
+	// isDone indicate whether all tasks are done.
+	isDone bool
 }
 
 // Your code here -- RPC handlers for the worker to call.
+
+// GetTask assigned a map or reduce(or done) task to a worker.
+//
+// If mapTask still has new tasks unassigned, it will assign it first.
+// when all map tasks are assigned, it will wait until the work finish their tasks and
+// send the request to the FinishedNotification. Or awake by the sechdule goroutine to check
+// if some tasks are timeout, it will be reschudle to a new wait goroutine.
+//
+// If all map tasks are finished, the same logic is used to assign reduce tasks.
+// After that, isdone is set to true.
+func (c *Coordinator) GetTask(args *GetTaskRequestArgs, reply *GetTaskReply) error {
+	// lock the coordinator to protect
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
+	reply.NumsMap = c.nMaps
+	reply.NumsReduce = c.nReduce
+
+	// issue the map task
+	for {
+		mapDone := true
+		// loop through all map tasks and find the task available
+		for index, isDone := range c.mapFinished {
+			if !isDone {
+				if c.mapTaskIssuedTime[index].IsZero() ||
+					time.Since(c.mapTaskIssuedTime[index]).Seconds() > 10 {
+					reply.Filename = c.mapTaskFilename[index]
+					reply.TaskNum = index
+					reply.Type = Map
+
+					return nil
+				} else { // all map tasks are issued but not completed during a reasonable time.
+					isDone = false
+				}
+			}
+		}
+
+		if mapDone {
+			break
+		} else {
+			c.cond.Wait()
+		}
+	}
+
+	// maptask has completed, issue the reduce tasks
+
+	for {
+		reduceDone := true
+		// loop through all reduce tasks and find the task available
+		for index, isDone := range c.reduceFinished {
+			if !isDone {
+				if c.reduceTaskIssuedTime[index].IsZero() ||
+					time.Since(c.reduceTaskIssuedTime[index]).Seconds() > 10 {
+
+					reply.Filename = ""
+					reply.TaskNum = index
+					reply.Type = Reduce
+
+					return nil
+				} else {
+					isDone = false
+				}
+			}
+		}
+
+		if reduceDone {
+			break
+		} else {
+			c.cond.Wait()
+		}
+	}
+
+	// If all map and reduce tasks are done, new request will get the type done task
+	// and set the isDone flag to true, and
+	reply.Type = Done
+	c.isDone = true
+
+	return nil
+}
 
 //
 // an example RPC handler.
@@ -75,9 +166,34 @@ func (c *Coordinator) Done() bool {
 // nReduce is the number of reduce tasks to use.
 //
 func MakeCoordinator(files []string, nReduce int) *Coordinator {
+	// init the coordinator
 	c := Coordinator{}
 
 	// Your code here.
+
+	// init the coordinator struct
+	c.cond = *sync.NewCond(&c.mut)
+
+	c.nMaps = len(files)
+	c.nReduce = nReduce
+
+	c.mapTaskFilename = files
+	c.mapFinished = make([]bool, len(files))
+	c.mapTaskIssuedTime = make([]time.Time, len(files))
+
+	c.reduceFinished = make([]bool, nReduce)
+	c.reduceTaskIssuedTime = make([]time.Time, nReduce)
+
+	c.isDone = false
+
+	// go routine to awaken other routines that wait all map or reduce tasks finished
+	// using sync.cond
+	go func() {
+		c.mut.Lock()
+		c.cond.Broadcast()
+		c.mut.Unlock()
+		time.Sleep(1 * time.Second)
+	}()
 
 	c.server()
 	return &c
