@@ -5,6 +5,7 @@ import (
 	"hash/fnv"
 	"log"
 	"net/rpc"
+	"os"
 )
 
 //
@@ -33,8 +34,35 @@ func Worker(mapf func(string, string) []KeyValue,
 
 	// Your worker implementation here.
 
-	// uncomment to send the Example RPC to the coordinator.
-	// CallExample()
+	// loop
+	for {
+		// get the task from the map
+		args := GetTaskRequestArgs{}
+		reply := GetTaskReply{}
+
+		call("Coordinator.GetTask", &args, &reply)
+
+		switch reply.Type {
+		case Map: // if task is map, process map tasks
+			MapWorker(&reply)
+		case Reduce: // if task is reduce, process reduce tasks
+			ReduceWorker(&reply)
+		case Done: // if task is Done, exit
+			os.Exit(0)
+		default:
+			fmt.Println("Unknow task type: ", reply.Type)
+		}
+
+		// After process the tasks, sene the finished tasks to the coordinator.
+
+	}
+}
+
+func MapWorker(getReply *GetTaskReply) {
+
+}
+
+func ReduceWorker(getReply *GetTaskReply) {
 
 }
 
