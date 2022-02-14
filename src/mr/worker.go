@@ -1,8 +1,10 @@
 package mr
 
 import (
+	"encoding/json"
 	"fmt"
 	"hash/fnv"
+	"io/ioutil"
 	"log"
 	"net/rpc"
 	"os"
@@ -44,7 +46,7 @@ func Worker(mapf func(string, string) []KeyValue,
 
 		switch reply.Type {
 		case Map: // if task is map, process map tasks
-			MapWorker(&reply)
+			MapWorker(&reply, mapf)
 		case Reduce: // if task is reduce, process reduce tasks
 			ReduceWorker(&reply)
 		case Done: // if task is Done, exit
@@ -53,18 +55,52 @@ func Worker(mapf func(string, string) []KeyValue,
 			fmt.Println("Unknow task type: ", reply.Type)
 		}
 
-		// After process the tasks, sene the finished tasks to the coordinator.
+		// After process the tasks, sene the finished tasks to the coordinator.b
+		finishArgs := FinishedNotificationArgs{
+			TaskNum: reply.TaskNum,
+			Type: reply.Type,
+		}
 
+		finishReply := FinishedNotificationResponse{}
+		call("Coordinator.FinishNotify", &finishArgs, &finishReply)
 	}
 }
 
-func MapWorker(getReply *GetTaskReply) {
+func MapWorker(getReply *GetTaskReply, mapf func(string, string) []KeyValue) {
+	// 
+	file, err := os.Open(getReply.Filename)
+	if err != nil {
+		log.Fatalf("cannot open %v", getReply.Filename)
+	}
+	content, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Fatalf("cannot read %v", getReply.Filename)
+	}
+	file.Close()
+	kva := mapf(getReply.Filename, string(content))
 
+	// create the temp file
+	tempFile, err := ioutil.TempFile("", "map")
+	tempFileName := tempFile.Name()
+	if err != nil {
+		log.Fatal("cannot create the temp file, task id: %d", getReply.TaskNum)
+	}
+
+	// encode the kv value into the json
+	enc := json.NewEncoder(tempFile)
+	for _, kv := range kva {
+		enc.Encode(&kv)
+	}
+	tempFile.Close()
+
+	// rename the file
+	os.Rename(tempFileName, getFinalMapName(getReply.TaskNum))
 }
 
 func ReduceWorker(getReply *GetTaskReply) {
 
 }
+
 
 //
 // example function to show how to make an RPC call to the coordinator.

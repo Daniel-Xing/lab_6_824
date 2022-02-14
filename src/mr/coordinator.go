@@ -1,6 +1,7 @@
 package mr
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -87,7 +88,6 @@ func (c *Coordinator) GetTask(args *GetTaskRequestArgs, reply *GetTaskReply) err
 	}
 
 	// maptask has completed, issue the reduce tasks
-
 	for {
 		reduceDone := true
 		// loop through all reduce tasks and find the task available
@@ -119,6 +119,27 @@ func (c *Coordinator) GetTask(args *GetTaskRequestArgs, reply *GetTaskReply) err
 	reply.Type = Done
 	c.isDone = true
 
+	return nil
+}
+
+// FinishNotify
+func (c *Coordinator) FinishNotify(args *FinishedNotificationArgs, reply *FinishedNotificationResponse) error {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
+	//
+	switch args.Type {
+	case Map:
+		//set the status to false
+		c.mapFinished[args.TaskNum] = false
+	case Reduce:
+		// set the status to false
+		c.reduceFinished[args.TaskNum] = false
+	default:
+		fmt.Println("Unknown task type:", args.Type)
+	}
+	
+	//
 	return nil
 }
 
