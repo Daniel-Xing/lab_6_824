@@ -46,9 +46,9 @@ func Worker(mapf func(string, string) []KeyValue,
 
 		switch reply.Type {
 		case Map: // if task is map, process map tasks
-			MapWorker(&reply, mapf)
+			MapWorker(&args, &reply, mapf)
 		case Reduce: // if task is reduce, process reduce tasks
-			ReduceWorker(&reply)
+			ReduceWorker(&args, &reply, reducef)
 		case Done: // if task is Done, exit
 			os.Exit(0)
 		default:
@@ -66,7 +66,7 @@ func Worker(mapf func(string, string) []KeyValue,
 	}
 }
 
-func MapWorker(getReply *GetTaskReply, mapf func(string, string) []KeyValue) {
+func MapWorker(args *GetTaskReply, getReply *GetTaskReply, mapf func(string, string) []KeyValue) {
 	// 
 	file, err := os.Open(getReply.Filename)
 	if err != nil {
@@ -95,10 +95,13 @@ func MapWorker(getReply *GetTaskReply, mapf func(string, string) []KeyValue) {
 
 	// rename the file
 	os.Rename(tempFileName, getFinalMapName(getReply.TaskNum))
+
+	// pack the replay args
+	
 }
 
-func ReduceWorker(getReply *GetTaskReply) {
-
+func ReduceWorker(args *GetTaskRequestArgs, reply  *GetTaskReply, reducef func(string,) {
+	
 }
 
 
