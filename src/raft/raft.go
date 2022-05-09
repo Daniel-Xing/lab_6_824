@@ -26,6 +26,7 @@ import (
 	//	"bytes"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	//	"6.824/labgob"
 	"6.824/labrpc"
@@ -70,7 +71,7 @@ type Raft struct {
 
 	// State
 	currentTerm int      // latest term server has seen
-	voteFor     int      // candidatedId that received vote in current term
+	voteFor     int      // index of peers, candidatedId that received vote in current term
 	leaderId    int      // leaderId == me ? decide if me is leader
 	Log         []*Entry // contain commands with log index and term
 
@@ -81,9 +82,15 @@ type Raft struct {
 	// volatile state for leaders
 	nextIndex  []int
 	matchIndex []int
+
+	// time
+	electionTimeout time.Duration //
+	heartbeat       chan string   // when follower received AppendEntries rpc, send a message to channel. TODO: maybe block.
 }
 
 type Entry struct {
+	command interface{}
+	term    int
 }
 
 // return currentTerm and whether this server
@@ -159,6 +166,29 @@ func (rf *Raft) Snapshot(index int, snapshot []byte) {
 }
 
 //
+type AppendEntriesArgs struct {
+	Term         int // leader's term
+	LeaderId     int // follower can redirect client
+	PrecLogIndex int // index of log entry immediately preceding new ones
+
+	PrevLogTerm int     // term of preLogIndex entry
+	Entries     []Entry // batch to store commands
+
+	LeaderCommit int // leader's commitIndex
+}
+
+//
+type AppendEntriesReply struct {
+	Term    int  // currentTerm, for leader to update itself
+	Success bool // true if follower matching
+}
+
+//
+func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
+
+}
+
+//
 // example RequestVote RPC arguments structure.
 // field names must start with capital letters!
 //
@@ -185,6 +215,10 @@ type RequestVoteReply struct {
 //
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (2A, 2B).
+	// pack the args
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
 }
 
 //
@@ -270,11 +304,22 @@ func (rf *Raft) killed() bool {
 // heartsbeats recently.
 func (rf *Raft) ticker() {
 	for rf.killed() == false {
-
 		// Your code here to check if a leader election should
 		// be started and to randomize sleeping time using
 		// time.Sleep().
+		select {
+		case <-time.After(rf.electionTimeout):
+			// start election
+			DPrintf("Machine: %d, election happend timeout.")
+			args := &RequestVoteArgs{}
 
+			reply := &RequestVoteReply{}
+
+			rf.RequestVote(args, reply)
+		case msg := <-rf.heartbeat:
+			// print the messages
+			DPrintf("Machine: %d get the message %s", rf.me, msg)
+		}
 	}
 }
 
@@ -297,7 +342,20 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.me = me
 
 	// Your initialization code here (2A, 2B, 2C).
+	rf.currentTerm = 0
+	// when init, no vote for any machine, so init as -1
+	rf.voteFor = -1
 
+	rf.Log = make([]*Entry, 0)
+	rf.commitIndex = -1
+
+	rf.leaderId = -1
+	rf.lastApplied = -1
+
+	rf.nextIndex = []int{}
+	rf.matchIndex = []int{}
+
+	rf.electionTimeout = time.Second
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
 
