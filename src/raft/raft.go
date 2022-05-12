@@ -55,6 +55,11 @@ type ApplyMsg struct {
 	SnapshotIndex int
 }
 
+// role defination
+const follower int = 1
+const candidate int = 2
+const leader int = 3
+
 //
 // A Go object implementing a single Raft peer.
 //
@@ -70,6 +75,7 @@ type Raft struct {
 	// state a Raft server must maintain.
 
 	// State
+	role        int      // 1: follower 2: candidate 3: leader
 	currentTerm int      // latest term server has seen
 	voteFor     int      // index of peers, candidatedId that received vote in current term
 	leaderId    int      // leaderId == me ? decide if me is leader
@@ -210,6 +216,49 @@ type RequestVoteReply struct {
 	VoteGranted bool // true means candidate received vote
 }
 
+// startElection
+func (rf *Raft) startElection() {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	// change the role from follower || leader to candidate
+	if rf.role == follower || rf.role == leader {
+		rf.role = candidate
+	}
+	// currentTerm add more one
+	rf.currentTerm++
+	// vote for himself
+	rf.voteFor = rf.me
+
+	// pack the args
+	args := RequestVoteArgs{}
+	args.Term = rf.currentTerm
+	args.LastLogTerm = rf.Log[len(rf.Log)-1].term
+	args.LastLogIndex = len(rf.Log) - 1
+
+	reply := RequestVoteReply{}
+
+	voteCount := 0
+	for i := 0; i < len(rf.peers); i++ {
+		if i == rf.me {
+			continue
+		}
+
+		ans := rf.sendRequestVote(i, &args, &reply)
+		if ans && reply.VoteGranted {
+			voteCount++
+		}
+	}
+
+	// win the election and change role to the leader
+	if voteCount > len(rf.peers)/2 {
+		rf.role = leader
+		// TODO: start appendEntries
+	}
+
+	// TODO: After election
+}
+
 //
 // example RequestVote RPC handler.
 //
@@ -219,6 +268,24 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
+	// TODO: not too sure about log index and term index
+	if args.Term < rf.currentTerm || args.LastLogTerm < rf.Log[len(rf.Log)-1].term ||
+		args.LastLogIndex < len(rf.Log)-1 ||
+		rf.voteFor != -1 || rf.voteFor != args.CandidateId {
+		reply.VoteGranted = false
+		reply.Term = rf.currentTerm
+		DPrintf("Vote rejected: %d, %d, %d, %d, %d, %d",
+			args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId)
+
+		return
+	}
+
+	// vote for the candidate
+	reply.VoteGranted = true
+	reply.Term = rf.currentTerm
+	rf.voteFor = args.CandidateId
+	DPrintf("Vote accepted: %d, %d, %d, %d, %d, %d",
+		args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId)
 }
 
 //
@@ -307,18 +374,23 @@ func (rf *Raft) ticker() {
 		// Your code here to check if a leader election should
 		// be started and to randomize sleeping time using
 		// time.Sleep().
+
+		// leader send heartbeat to followers
+		if rf.role == leader {
+
+			continue
+		}
+
+		electionTimeout := RandomTime()
 		select {
-		case <-time.After(rf.electionTimeout):
+		case <-time.After(electionTimeout):
 			// start election
-			DPrintf("Machine: %d, election happend timeout.")
-			args := &RequestVoteArgs{}
-
-			reply := &RequestVoteReply{}
-
-			rf.RequestVote(args, reply)
+			DPrintf("Machine: %d, election happend timeout.", rf.me)
+			rf.startElection()
 		case msg := <-rf.heartbeat:
 			// print the messages
 			DPrintf("Machine: %d get the message %s", rf.me, msg)
+			// process the message
 		}
 	}
 }
@@ -356,6 +428,9 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.matchIndex = []int{}
 
 	rf.electionTimeout = time.Second
+
+	rf.role = follower
+
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
 
