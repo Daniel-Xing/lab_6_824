@@ -117,7 +117,7 @@ func (rf *Raft) GetState() (int, bool) {
 func (rf *Raft) beLeaer() {
 	// Your code here (2B).
 	rf.role = leader
-	rf.nextIndex = make([]int, len(rf.peers))
+	rf.nextIndex = make([]int, len(rf.peers), len(rf.Log))
 	rf.matchIndex = make([]int, len(rf.peers))
 }
 
@@ -337,11 +337,12 @@ type RequestVoteReply struct {
 // startElection
 func (rf *Raft) startElection() {
 
-	DPrintf("%d start election", rf.me)
+	DPrintf("Machine %d start election", rf.me)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
 	// change the role from follower to candidate
+	DPrintf("Machine %d change role from follower to candidate", rf.me)
 	if rf.role == follower {
 		rf.beCandidate()
 	}
@@ -351,13 +352,10 @@ func (rf *Raft) startElection() {
 	// vote for himself
 	rf.voteFor = rf.me
 	// pack the args
-	args := &RequestVoteArgs{}
-	args.Term = rf.currentTerm
-	args.LastLogTerm = rf.Log[len(rf.Log)-1].term
-	args.LastLogIndex = len(rf.Log) - 1
+	DPrintf("Machine %d pack the args", rf.me)
 
 	// init result reply
-	reply := make([]*RequestVoteReply, len(rf.peers)-1)
+	reply := make([]*RequestVoteReply, len(rf.peers))
 	result := make(chan bool, len(rf.peers))
 	defer close(result)
 
@@ -366,7 +364,12 @@ func (rf *Raft) startElection() {
 			continue
 		}
 
-		DPrintf("%d send request vote to %d", rf.me, i)
+		args := &RequestVoteArgs{}
+		args.Term = rf.currentTerm
+		args.LastLogTerm = rf.Log[len(rf.Log)-1].term
+		args.LastLogIndex = len(rf.Log) - 1
+
+		DPrintf("Machine %d send request vote to %d", rf.me, i)
 		go func(result chan bool, index int, args *RequestVoteArgs, reply *RequestVoteReply) {
 			ok := rf.sendRequestVote(index, args, reply)
 			result <- ok
@@ -374,6 +377,7 @@ func (rf *Raft) startElection() {
 
 	}
 
+	DPrintf("Machine %d process the result", rf.me)
 	voteCount := 0
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me || <-result == false {
@@ -525,6 +529,8 @@ func (rf *Raft) killed() bool {
 // The ticker go routine starts a new election if this peer hasn't received
 // heartsbeats recently.
 func (rf *Raft) ticker() {
+	DPrintf("%d ticker start", rf.me)
+
 	for rf.killed() == false {
 		// Your code here to check if a leader election should
 		// be started and to randomize sleeping time using
@@ -532,6 +538,7 @@ func (rf *Raft) ticker() {
 
 		// leader send heartbeat to followers
 		if rf.role == leader {
+			DPrintf("%d ticker send heartbeat", rf.me)
 			rf.sendAERpcs(true)
 
 			time.Sleep(time.Second / 10)
@@ -566,6 +573,8 @@ func (rf *Raft) ticker() {
 //
 func Make(peers []*labrpc.ClientEnd, me int,
 	persister *Persister, applyCh chan ApplyMsg) *Raft {
+
+	DPrintf("Machine: %d, Make()", me)
 	rf := &Raft{}
 	rf.peers = peers
 	rf.persister = persister
@@ -577,6 +586,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.voteFor = -1
 
 	rf.Log = make([]Entry, 0)
+	rf.Log = append(rf.Log, Entry{command: nil, term: 0})
 	rf.commitIndex = -1
 
 	rf.leaderId = -1
