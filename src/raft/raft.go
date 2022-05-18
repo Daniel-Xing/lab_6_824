@@ -268,6 +268,7 @@ func (rf *Raft) startElection() {
 			continue
 		}
 
+		DPrintf("%d send request vote to %d", rf.me, i)
 		go func(result chan bool, index int, args *RequestVoteArgs, reply *RequestVoteReply) {
 			ok := rf.sendRequestVote(index, args, reply)
 			result <- ok
@@ -292,6 +293,8 @@ func (rf *Raft) startElection() {
 		}
 	}
 
+	DPrintf("%d voteCount: %d, maxTerm from others: %d", rf.me, voteCount, maxTerm)
+
 	rf.mu.Lock()
 	// change if back to follower
 	if maxTerm > rf.currentTerm {
@@ -315,24 +318,37 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	// TODO: not too sure about log index and term index
-	if args.Term < rf.currentTerm || args.LastLogTerm < rf.Log[len(rf.Log)-1].term ||
-		args.LastLogIndex < len(rf.Log)-1 ||
-		rf.voteFor != -1 || rf.voteFor != args.CandidateId {
-		reply.VoteGranted = false
+	var voter = func(granted bool) {
+		reply.VoteGranted = granted
 		reply.Term = rf.currentTerm
-		DPrintf("Vote rejected: %d, %d, %d, %d, %d, %d",
-			args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId)
+		DPrintf("Vote info : %d, %d, %d, %d, %d, %d, vote: %v",
+			args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId, reply.VoteGranted)
+	}
 
+	if args.Term < rf.currentTerm {
+		voter(false)
+		return
+	}
+
+	if args.Term > rf.currentTerm {
+		rf.currentTerm = args.Term
+		rf.beFollower()
+	}
+
+	if rf.voteFor != -1 && rf.voteFor != args.CandidateId {
+		voter(false)
+		return
+	}
+
+	// TODO: check if the log is the same
+	if args.LastLogIndex < len(rf.Log)-1 || args.LastLogTerm < rf.Log[len(rf.Log)-1].term {
+		voter(false)
 		return
 	}
 
 	// vote for the candidate
-	reply.VoteGranted = true
-	reply.Term = rf.currentTerm
 	rf.voteFor = args.CandidateId
-	DPrintf("Vote accepted: %d, %d, %d, %d, %d, %d",
-		args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId)
+	voter(true)
 }
 
 //
