@@ -20,3 +20,11 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 func RandomTime() time.Duration {
 	return time.Duration(rand.Intn(6))*time.Second/10 + time.Second*5/10
 }
+
+//
+func min(num1, num2 int) int {
+	if num1 > num2 {
+		return num2
+	}
+	return num1
+}

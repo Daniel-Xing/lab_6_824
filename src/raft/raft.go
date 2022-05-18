@@ -75,11 +75,11 @@ type Raft struct {
 	// state a Raft server must maintain.
 
 	// State
-	role        int      // 1: follower 2: candidate 3: leader
-	currentTerm int      // latest term server has seen
-	voteFor     int      // index of peers, candidatedId that received vote in current term
-	leaderId    int      // leaderId == me ? decide if me is leader
-	Log         []*Entry // contain commands with log index and term
+	role        int     // 1: follower 2: candidate 3: leader
+	currentTerm int     // latest term server has seen
+	voteFor     int     // index of peers, candidatedId that received vote in current term
+	leaderId    int     // leaderId == me ? decide if me is leader
+	Log         []Entry // contain commands with log index and term
 
 	// volatile state
 	commitIndex int // index of highest log entry known to be commited
@@ -210,8 +210,106 @@ type AppendEntriesReply struct {
 }
 
 //
-func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
+func (rf *Raft) sendAERpcs(isHeartBeat bool) {
+	// package the args and reply
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
 
+	//
+	args := &AppendEntriesArgs{}
+	args.LeaderId = rf.me
+	args.LeaderCommit = rf.commitIndex
+	args.Term = rf.currentTerm
+	args.PrecLogIndex = len(rf.Log) - 1
+	args.PrevLogTerm = rf.Log[args.PrecLogIndex].term
+
+	replys := make([]*AppendEntriesReply, len(rf.peers))
+	results := make(chan bool, len(rf.peers))
+	defer close(results)
+
+	//
+	for i := 0; i < len(rf.peers); i++ {
+		if i == rf.me {
+			continue
+		}
+
+		//
+		go func(index int, arg *AppendEntriesArgs, reply *AppendEntriesReply) {
+			ok := rf.sendAppendEntries(index, arg, reply)
+			results <- ok
+		}(i, args, replys[i])
+	}
+
+	// process the result
+	for i := 0; i < len(rf.peers); i++ {
+		if i == rf.me || <-results == false {
+			continue
+		}
+
+		//
+		if replys[i].Term > rf.currentTerm {
+			rf.currentTerm = replys[i].Term
+			rf.beFollower()
+			return
+		}
+
+		if replys[i].Success {
+			rf.matchIndex[i] = rf.nextIndex[i]
+			rf.nextIndex[i]++
+		} else {
+			rf.nextIndex[i]--
+		}
+	}
+}
+
+//
+func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	//
+	reply.Term = rf.currentTerm
+	reply.Success = false
+
+	//
+	if args.Term < rf.currentTerm {
+		return
+	}
+
+	//
+	if args.Term > rf.currentTerm {
+		rf.currentTerm = args.Term
+		rf.beFollower()
+	}
+
+	//
+	if args.PrecLogIndex < 0 || args.PrecLogIndex >= len(rf.Log) {
+		return
+	}
+
+	//
+	if args.PrevLogTerm != rf.Log[args.PrecLogIndex].term {
+		return
+	}
+
+	//
+	if len(args.Entries) > 0 {
+		rf.Log = append(rf.Log[:args.PrecLogIndex+1], args.Entries...)
+	}
+
+	//
+	if args.LeaderCommit > rf.commitIndex {
+		rf.commitIndex = min(args.LeaderCommit, len(rf.Log)-1)
+	}
+
+	//
+	reply.Success = true
+}
+
+//
+func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *AppendEntriesReply) bool {
+	ok := rf.peers[server].Call("Raft.AppendEntries", args, reply)
+	return ok
 }
 
 //
@@ -241,6 +339,7 @@ func (rf *Raft) startElection() {
 
 	DPrintf("%d start election", rf.me)
 	rf.mu.Lock()
+	defer rf.mu.Unlock()
 
 	// change the role from follower to candidate
 	if rf.role == follower {
@@ -257,14 +356,13 @@ func (rf *Raft) startElection() {
 	args.LastLogTerm = rf.Log[len(rf.Log)-1].term
 	args.LastLogIndex = len(rf.Log) - 1
 
-	rf.mu.Unlock()
-
 	// init result reply
 	reply := make([]*RequestVoteReply, len(rf.peers)-1)
-	result := make(chan bool, len(rf.peers)-1)
+	result := make(chan bool, len(rf.peers))
+	defer close(result)
 
 	for i := 0; i < len(rf.peers); i++ {
-		if i == rf.me {
+		if i == rf.me { // skip myself
 			continue
 		}
 
@@ -277,15 +375,17 @@ func (rf *Raft) startElection() {
 	}
 
 	voteCount := 0
-	maxTerm := 0
-	for i := 0; i < len(rf.peers)-1; i++ {
-		if !<-result {
+	for i := 0; i < len(rf.peers); i++ {
+		if i == rf.me || <-result == false {
 			continue
 		}
 
 		// find the max term from replys
-		if reply[i].Term > maxTerm {
-			maxTerm = reply[i].Term
+		// if maxTerm >
+		if reply[i].Term > rf.currentTerm {
+			rf.currentTerm = reply[i].Term
+			rf.beFollower()
+			return
 		}
 
 		if reply[i].VoteGranted {
@@ -293,20 +393,12 @@ func (rf *Raft) startElection() {
 		}
 	}
 
-	DPrintf("%d voteCount: %d, maxTerm from others: %d", rf.me, voteCount, maxTerm)
-
-	rf.mu.Lock()
-	// change if back to follower
-	if maxTerm > rf.currentTerm {
-		rf.currentTerm = maxTerm
-		rf.beFollower()
-	}
+	DPrintf("%d voteCount: %d", rf.me, voteCount)
 
 	// win the election and change role to the leader
 	if voteCount > len(rf.peers)/2 {
 		rf.beLeaer()
 	}
-	rf.mu.Unlock()
 }
 
 //
@@ -440,6 +532,7 @@ func (rf *Raft) ticker() {
 
 		// leader send heartbeat to followers
 		if rf.role == leader {
+			rf.sendAERpcs(true)
 
 			time.Sleep(time.Second / 10)
 			continue
@@ -483,7 +576,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	// when init, no vote for any machine, so init as -1
 	rf.voteFor = -1
 
-	rf.Log = make([]*Entry, 0)
+	rf.Log = make([]Entry, 0)
 	rf.commitIndex = -1
 
 	rf.leaderId = -1
