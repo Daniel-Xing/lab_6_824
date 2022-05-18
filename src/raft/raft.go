@@ -89,9 +89,8 @@ type Raft struct {
 	nextIndex  []int
 	matchIndex []int
 
-	// time
-	electionTimeout time.Duration //
-	heartbeat       chan string   // when follower received AppendEntries rpc, send a message to channel. TODO: maybe block.
+	// when follower received AppendEntries rpc, send a message to channel. TODO: maybe block.
+	heartbeat chan string
 }
 
 type Entry struct {
@@ -111,6 +110,27 @@ func (rf *Raft) GetState() (int, bool) {
 	defer rf.mu.Unlock()
 
 	return rf.currentTerm, rf.me == rf.commitIndex
+}
+
+// state transfer
+// beLeader clear the nextIndex and matchIndex
+func (rf *Raft) beLeaer() {
+	// Your code here (2B).
+	rf.role = leader
+	rf.nextIndex = make([]int, len(rf.peers))
+	rf.matchIndex = make([]int, len(rf.peers))
+}
+
+// beCandidate
+func (rf *Raft) beCandidate() {
+
+	rf.role = candidate
+}
+
+// beFollower
+func (rf *Raft) beFollower() {
+
+	rf.role = follower
 }
 
 //
@@ -218,45 +238,72 @@ type RequestVoteReply struct {
 
 // startElection
 func (rf *Raft) startElection() {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
 
-	// change the role from follower || leader to candidate
-	if rf.role == follower || rf.role == leader {
-		rf.role = candidate
+	DPrintf("%d start election", rf.me)
+	rf.mu.Lock()
+
+	// change the role from follower to candidate
+	if rf.role == follower {
+		rf.beCandidate()
 	}
+
 	// currentTerm add more one
 	rf.currentTerm++
 	// vote for himself
 	rf.voteFor = rf.me
-
 	// pack the args
-	args := RequestVoteArgs{}
+	args := &RequestVoteArgs{}
 	args.Term = rf.currentTerm
 	args.LastLogTerm = rf.Log[len(rf.Log)-1].term
 	args.LastLogIndex = len(rf.Log) - 1
 
-	reply := RequestVoteReply{}
+	rf.mu.Unlock()
 
-	voteCount := 0
+	// init result reply
+	reply := make([]*RequestVoteReply, len(rf.peers)-1)
+	result := make(chan bool, len(rf.peers)-1)
+
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me {
 			continue
 		}
 
-		ans := rf.sendRequestVote(i, &args, &reply)
-		if ans && reply.VoteGranted {
+		go func(result chan bool, index int, args *RequestVoteArgs, reply *RequestVoteReply) {
+			ok := rf.sendRequestVote(index, args, reply)
+			result <- ok
+		}(result, i, args, reply[i])
+
+	}
+
+	voteCount := 0
+	maxTerm := 0
+	for i := 0; i < len(rf.peers)-1; i++ {
+		if !<-result {
+			continue
+		}
+
+		// find the max term from replys
+		if reply[i].Term > maxTerm {
+			maxTerm = reply[i].Term
+		}
+
+		if reply[i].VoteGranted {
 			voteCount++
 		}
 	}
 
-	// win the election and change role to the leader
-	if voteCount > len(rf.peers)/2 {
-		rf.role = leader
-		// TODO: start appendEntries
+	rf.mu.Lock()
+	// change if back to follower
+	if maxTerm > rf.currentTerm {
+		rf.currentTerm = maxTerm
+		rf.beFollower()
 	}
 
-	// TODO: After election
+	// win the election and change role to the leader
+	if voteCount > len(rf.peers)/2 {
+		rf.beLeaer()
+	}
+	rf.mu.Unlock()
 }
 
 //
@@ -378,9 +425,11 @@ func (rf *Raft) ticker() {
 		// leader send heartbeat to followers
 		if rf.role == leader {
 
+			time.Sleep(time.Second / 10)
 			continue
 		}
 
+		// follower starts a new election or process the heartbeat
 		electionTimeout := RandomTime()
 		select {
 		case <-time.After(electionTimeout):
@@ -427,9 +476,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.nextIndex = []int{}
 	rf.matchIndex = []int{}
 
-	rf.electionTimeout = time.Second
-
-	rf.role = follower
+	rf.beFollower()
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
