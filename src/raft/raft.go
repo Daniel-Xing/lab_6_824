@@ -242,43 +242,27 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 		//
 		DPrintf("machine %d send the request to %d when SendAERpcs. Term: %d", rf.me, i, rf.currentTerm)
 		go func(index int, arg *AppendEntriesArgs, reply *AppendEntriesReply) {
-			ok := rf.sendAppendEntries(index, arg, reply)
+			waitChan := make(chan bool)
+			go func() {
+				start := time.Now()
+				ok := rf.sendAppendEntries(index, arg, reply)
+				end := time.Now()
+				if end.Sub(start) < time.Millisecond*300 {
 
-			DPrintf("machine %d try to get locker when receive the reply from %d when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
-			rf.mu.Lock()
-			DPrintf("machine %d has got locker when receive the reply from %d when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
-			defer rf.mu.Unlock()
-			defer rf.cond.Broadcast()
+					waitChan <- ok
+				} else {
+					DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
+				}
+			}()
 
-			DPrintf("machine %d receive the reply from %d when sendAppendEntries. Term: %d", rf.me, index, rf.currentTerm)
-			finished++
-
-			if !ok {
-				DPrintf("machine %d get the response to %d failed when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
-				return
+			ok := false
+			select {
+			case ok = <-waitChan:
+				DPrintf("machine %d get the response of sendAppendEntriews from %d success. Term: %d", rf.me, index, rf.currentTerm)
+			case <-time.After(time.Millisecond * 300):
+				DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
 			}
 
-			if rf.role == follower {
-				DPrintf("Machine %d used to be a leader, but now is follower. Term: %d", rf.me, rf.currentTerm)
-				return
-			}
-
-			if reply.Term > rf.currentTerm {
-				rf.currentTerm = reply.Term
-				rf.beFollower()
-				return
-			}
-
-			if isHeartBeat {
-				return
-			}
-
-			if reply.Success {
-				rf.matchIndex[index] = rf.nextIndex[index]
-				rf.nextIndex[index]++
-			} else {
-				rf.nextIndex[index]--
-			}
 		}(i, args, replys[i])
 	}
 
