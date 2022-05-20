@@ -18,7 +18,7 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 
 // RandomTime return a random time between min and max
 func RandomTime() time.Duration {
-	return time.Duration(rand.Intn(500))*time.Millisecond + time.Millisecond*500
+	return time.Duration(rand.Intn(500))*time.Millisecond + time.Millisecond*2500
 }
 
 //

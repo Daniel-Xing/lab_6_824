@@ -119,7 +119,7 @@ func (rf *Raft) GetState() (int, bool) {
 // beLeader clear the nextIndex and matchIndex
 func (rf *Raft) beLeaer() {
 	// Your code here (2B).
-	DPrintf("%d become leader from %s ", rf.me, role_map[rf.role])
+	DPrintf("%d become leader from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
 	rf.role = leader
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
@@ -127,13 +127,13 @@ func (rf *Raft) beLeaer() {
 
 // beCandidate
 func (rf *Raft) beCandidate() {
-	DPrintf("%d become candidate from %s ", rf.me, role_map[rf.role])
+	DPrintf("%d become candidate from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
 	rf.role = candidate
 }
 
 // beFollower
 func (rf *Raft) beFollower() {
-	DPrintf("%d become follower from %s ", rf.me, role_map[rf.role])
+	DPrintf("%d become follower from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
 
 	rf.voteFor = -1 // voteFor should be reset when transfer to followers
 	rf.role = follower
@@ -217,7 +217,7 @@ type AppendEntriesReply struct {
 
 //
 func (rf *Raft) sendAERpcs(isHeartBeat bool) {
-	DPrintf("machine %d package the args and reply when SendAERpcs", rf.me)
+	DPrintf("machine %d package the args and reply when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 
 	replys := make([]*AppendEntriesReply, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
@@ -225,7 +225,7 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 	}
 
 	//
-	DPrintf("machine %d start to send the requests when SendAERpcs", rf.me)
+	DPrintf("machine %d start to send the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 
 	finished := 0
 	for i := 0; i < len(rf.peers); i++ {
@@ -243,16 +243,25 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 		DPrintf("machine %d send the request to %d when SendAERpcs. Term: %d", rf.me, i, rf.currentTerm)
 		go func(index int, arg *AppendEntriesArgs, reply *AppendEntriesReply) {
 			ok := rf.sendAppendEntries(index, arg, reply)
-			if !ok || rf.role == follower {
-				DPrintf("Machine %d used to be a leader, but now is follower. Term: %d", rf.me, rf.currentTerm)
-				return
-			}
 
+			DPrintf("machine %d try to get locker when receive the reply from %d when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
 			rf.mu.Lock()
+			DPrintf("machine %d has got locker when receive the reply from %d when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
 			defer rf.mu.Unlock()
 			defer rf.cond.Broadcast()
 
+			DPrintf("machine %d receive the reply from %d when sendAppendEntries. Term: %d", rf.me, index, rf.currentTerm)
 			finished++
+
+			if !ok {
+				DPrintf("machine %d get the response to %d failed when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
+				return
+			}
+
+			if rf.role == follower {
+				DPrintf("Machine %d used to be a leader, but now is follower. Term: %d", rf.me, rf.currentTerm)
+				return
+			}
 
 			if reply.Term > rf.currentTerm {
 				rf.currentTerm = reply.Term
@@ -283,12 +292,12 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 
 //
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
-	DPrintf("machine %d get the request from %d when AppendEntries", rf.me, args.LeaderId)
-	rf.heartbeat <- ""
-	DPrintf("machine %d try to get the locker when AppendEntries", rf.me)
+	DPrintf("machine %d get the request from %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
+
+	DPrintf("machine %d try to get the locker when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	DPrintf("machine %d has got the locker when AppendEntries", rf.me)
+	DPrintf("machine %d has got the locker when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 
 	//
 	reply.Term = rf.currentTerm
@@ -296,26 +305,26 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	if args.Term < rf.currentTerm {
-		DPrintf("machine %d get a lower term when AppendEntries", rf.me)
+		DPrintf("machine %d get a lower term when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
 	//
 	if args.Term > rf.currentTerm {
-		DPrintf("machine %d get a higher term when AppendEntries", rf.me)
+		DPrintf("machine %d get a higher term when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		rf.currentTerm = args.Term
 		rf.beFollower()
 	}
 
 	//
 	if args.PrecLogIndex < 0 || args.PrecLogIndex >= len(rf.Log) {
-		DPrintf("machine %d get a wrong precLogIndex when AppendEntries", rf.me)
+		DPrintf("machine %d get a wrong precLogIndex when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
 	//
 	if args.PrevLogTerm != rf.Log[args.PrecLogIndex].Term {
-		DPrintf("machine %d get a wrong prevLogTerm when AppendEntries", rf.me)
+		DPrintf("machine %d get a wrong prevLogTerm when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
@@ -331,7 +340,11 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	reply.Success = true
-	DPrintf("machine %d send the reply to %d of success msg when AppendEntries", rf.me, args.LeaderId)
+	DPrintf("machine %d send the reply to %d of success msg when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
+
+	DPrintf("machine %d send the heartbeat when %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
+	rf.heartbeat <- ""
+	DPrintf("machine %d has sended the heartbeat when %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
 }
 
 //
@@ -365,10 +378,10 @@ type RequestVoteReply struct {
 // startElection
 func (rf *Raft) startElection() {
 
-	DPrintf("Machine %d start election", rf.me)
+	DPrintf("Machine %d start election. Term: %d", rf.me, rf.currentTerm)
 	rf.mu.Lock()
 	// change the role from follower to candidate
-	DPrintf("Machine %d change role from follower to candidate", rf.me)
+	DPrintf("Machine %d change role from follower to candidate. Term: %d", rf.me, rf.currentTerm)
 	if rf.role == follower {
 		rf.beCandidate()
 	}
@@ -378,7 +391,7 @@ func (rf *Raft) startElection() {
 	// vote for himself
 	rf.voteFor = rf.me
 	// pack the args
-	DPrintf("Machine %d pack the args", rf.me)
+	DPrintf("Machine %d pack the args. Term: %d", rf.me, rf.currentTerm)
 	rf.mu.Unlock()
 
 	// init result reply
@@ -400,15 +413,22 @@ func (rf *Raft) startElection() {
 		args.LastLogIndex = len(rf.Log) - 1
 		args.CandidateId = rf.me
 
-		DPrintf("Machine %d send request vote to %d", rf.me, i)
+		DPrintf("Machine %d send request vote to %d. Term: %d", rf.me, i, rf.currentTerm)
 		go func(index int, args *RequestVoteArgs, reply *RequestVoteReply) {
 			ok := rf.sendRequestVote(index, args, reply)
+
+			rf.mu.Lock()
+			defer rf.mu.Unlock()
+			defer rf.cond.Broadcast()
+
+			DPrintf("Machine %d get the reply when sendRequestVote from %d. Term: %d", rf.me, index, rf.currentTerm)
+			finished++
+
 			if !ok {
-				DPrintf("Machine %d get requestvote response from %d failed", rf.me, index)
+				DPrintf("Machine %d get requestvote response from %d failed. Term: %d", rf.me, index, rf.currentTerm)
 				return
 			}
 
-			rf.mu.Lock()
 			if reply.Term > rf.currentTerm {
 				rf.currentTerm = reply.Term
 				rf.beFollower()
@@ -416,9 +436,6 @@ func (rf *Raft) startElection() {
 			if reply.VoteGranted {
 				voteCount++
 			}
-			finished++
-			rf.cond.Broadcast()
-			rf.mu.Unlock()
 		}(i, args, reply[i])
 
 	}
@@ -440,12 +457,12 @@ func (rf *Raft) startElection() {
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (2A, 2B).
 	// pack the args
-	DPrintf("Machine %d try to get locker in Requestvote, called by %d", rf.me, args.CandidateId)
+	// DPrintf("Machine %d try to get locker in Requestvote, called by %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	DPrintf("Machine %d has got locker in Requestvote, called by %d", rf.me, args.CandidateId)
+	// DPrintf("Machine %d has got locker in Requestvote, called by %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 
-	DPrintf("Machine %d receive request vote from %d", rf.me, args.CandidateId)
+	DPrintf("Machine %d receive request vote from %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 	var voter = func(granted bool) {
 		reply.VoteGranted = granted
 		reply.Term = rf.currentTerm
@@ -454,7 +471,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if args.Term < rf.currentTerm {
-		DPrintf("Machine %d reject the request vote from %d because Term < currentTerm", rf.me, args.CandidateId)
+		DPrintf("Machine %d reject the request vote from %d because Term < currentTerm. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
@@ -465,24 +482,24 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if rf.voteFor != -1 && rf.voteFor != args.CandidateId {
-		DPrintf("Machine %d reject the request vote from %d because voteFor != args.CandidateId", rf.me, args.CandidateId)
+		DPrintf("Machine %d reject the request vote from %d because voteFor != args.CandidateId. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
 
 	// TODO: check if the log is the same
 	if args.LastLogIndex < len(rf.Log)-1 || args.LastLogTerm < rf.Log[len(rf.Log)-1].Term {
-		DPrintf("Machine %d reject the request vote from %d because log is not the same", rf.me, args.CandidateId)
+		DPrintf("Machine %d reject the request vote from %d because log is not the same. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
 
 	// vote for the candidate
-	DPrintf("Machine %d vote for the candidate %d", rf.me, args.CandidateId)
+	DPrintf("Machine %d vote for the candidate %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 	rf.voteFor = args.CandidateId
 	voter(true)
 	// rf.heartbeat <- ""
-	DPrintf("Machine %d ends in Requestvote, called by %d", rf.me, args.CandidateId)
+	DPrintf("Machine %d ends in Requestvote, called by %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 }
 
 //
@@ -576,7 +593,7 @@ func (rf *Raft) ticker() {
 
 		// leader send heartbeat to followers
 		if rf.role == leader {
-			DPrintf("%d ticker send heartbeat", rf.me)
+			DPrintf("%d ticker send heartbeat. Term: %d", rf.me, rf.currentTerm)
 			rf.sendAERpcs(true)
 
 			time.Sleep(time.Second / 10)
@@ -585,15 +602,15 @@ func (rf *Raft) ticker() {
 
 		// follower starts a new election or process the heartbeat
 		electionTimeout := RandomTime()
-		DPrintf("Machine %d has eletiontime: %d", rf.me, electionTimeout/time.Millisecond)
+		DPrintf("Machine %d has eletiontime: %d. Term: %d", rf.me, electionTimeout/time.Millisecond, rf.currentTerm)
 		select {
 		case <-time.After(electionTimeout):
 			// start election
-			DPrintf("Machine: %d, election happend timeout.", rf.me)
+			DPrintf("Machine: %d, election happend timeout. Term: %d", rf.me, rf.currentTerm)
 			rf.startElection()
 		case msg := <-rf.heartbeat:
 			// print the messages
-			DPrintf("Machine: %d get the message %s", rf.me, msg)
+			DPrintf("Machine: %d get the message %s. Term: %d", rf.me, msg, rf.currentTerm)
 			// process the message
 		}
 	}
