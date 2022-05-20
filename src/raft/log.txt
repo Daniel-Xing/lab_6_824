@@ -1,0 +1,209 @@
+2022/05/20 19:49:58 Machine: 0, Make()
+2022/05/20 19:49:58 0 become follower from  
+2022/05/20 19:49:58 Machine: 1, Make()
+2022/05/20 19:49:58 1 become follower from  
+2022/05/20 19:49:58 Machine: 2, Make()
+2022/05/20 19:49:58 2 become follower from  
+Test (2A): election after network failure ...
+
+ check one leader2022/05/20 19:49:58 2 ticker start
+2022/05/20 19:49:58 0 ticker start
+2022/05/20 19:49:58 Machine 2 has eletiontime: 649
+2022/05/20 19:49:58 Machine 0 has eletiontime: 891
+2022/05/20 19:49:58 1 ticker start
+2022/05/20 19:49:58 Machine 1 has eletiontime: 650
+2022/05/20 19:49:58 Machine: 2, election happend timeout.
+2022/05/20 19:49:58 Machine 2 start election
+2022/05/20 19:49:58 Machine 2 change role from follower to candidate
+2022/05/20 19:49:58 2 become candidate from follower 
+2022/05/20 19:49:58 Machine 2 pack the args
+2022/05/20 19:49:58 Machine 2 send request vote to 0
+2022/05/20 19:49:58 Machine: 1, election happend timeout.
+2022/05/20 19:49:58 Machine 1 start election
+2022/05/20 19:49:58 Machine 1 change role from follower to candidate
+2022/05/20 19:49:58 1 become candidate from follower 
+2022/05/20 19:49:58 Machine 1 pack the args
+2022/05/20 19:49:58 Machine 2 send request vote to 1
+2022/05/20 19:49:58 Machine 1 send request vote to 0
+2022/05/20 19:49:58 Machine 1 send request vote to 2
+2022/05/20 19:49:58 Machine 2 try to get locker in Requestvote, called by 1
+2022/05/20 19:49:58 Machine 2 has got locker in Requestvote, called by 1
+2022/05/20 19:49:58 Machine 2 receive request vote from 1
+2022/05/20 19:49:58 Machine 2 reject the request vote from 1 because voteFor != args.CandidateId
+2022/05/20 19:49:58 Machine 2 Vote info - args Term: 1, currentTerm : 1, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 2, CandidateID1, vote: false
+2022/05/20 19:49:58 Machine 0 try to get locker in Requestvote, called by 1
+2022/05/20 19:49:58 Machine 0 has got locker in Requestvote, called by 1
+2022/05/20 19:49:58 Machine 0 receive request vote from 1
+2022/05/20 19:49:58 0 become follower from follower 
+2022/05/20 19:49:58 Machine 0 vote for the candidate 1
+2022/05/20 19:49:58 Machine 0 Vote info - args Term: 1, currentTerm : 1, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 1, CandidateID1, vote: true
+2022/05/20 19:49:58 Machine 0 ends in Requestvote, called by 1
+2022/05/20 19:49:58 Machine 0 try to get locker in Requestvote, called by 2
+2022/05/20 19:49:58 Machine 0 has got locker in Requestvote, called by 2
+2022/05/20 19:49:58 Machine 0 receive request vote from 2
+2022/05/20 19:49:58 Machine 0 reject the request vote from 2 because voteFor != args.CandidateId
+2022/05/20 19:49:58 Machine 0 Vote info - args Term: 1, currentTerm : 1, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 1, CandidateID2, vote: false
+2022/05/20 19:49:58 Machine 1 try to get locker in Requestvote, called by 2
+2022/05/20 19:49:58 Machine 1 has got locker in Requestvote, called by 2
+2022/05/20 19:49:58 Machine 1 receive request vote from 2
+2022/05/20 19:49:58 Machine 1 reject the request vote from 2 because voteFor != args.CandidateId
+2022/05/20 19:49:58 Machine 1 Vote info - args Term: 1, currentTerm : 1, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 1, CandidateID2, vote: false
+2022/05/20 19:49:58 Machine 2 has eletiontime: 537
+2022/05/20 19:49:58 1 become leader from candidate 
+2022/05/20 19:49:58 1 ticker send heartbeat
+2022/05/20 19:49:58 machine 1 package the args and reply when SendAERpcs
+2022/05/20 19:49:58 machine 1 start to send the requests when SendAERpcs
+2022/05/20 19:49:58 machine 1 send the request to 0 when SendAERpcs
+2022/05/20 19:49:58 machine 1 send the request to 2 when SendAERpcs
+2022/05/20 19:49:58 machine 2 get the request from 1 when AppendEntries
+2022/05/20 19:49:58 machine 0 get the request from 1 when AppendEntries
+2022/05/20 19:49:58 machine 0 try to get the locker when AppendEntries
+2022/05/20 19:49:58 machine 2 try to get the locker when AppendEntries
+2022/05/20 19:49:58 machine 2 has got the locker when AppendEntries
+2022/05/20 19:49:58 machine 2 send the reply to 1 of success msg when AppendEntries
+2022/05/20 19:49:58 Machine: 2 get the message 
+2022/05/20 19:49:58 Machine 2 has eletiontime: 805
+2022/05/20 19:49:58 machine 0 has got the locker when AppendEntries
+2022/05/20 19:49:58 machine 0 send the reply to 1 of success msg when AppendEntries
+2022/05/20 19:49:58 Machine: 0 get the message 
+2022/05/20 19:49:58 Machine 0 has eletiontime: 548
+2022/05/20 19:49:58 1 ticker send heartbeat
+2022/05/20 19:49:58 machine 1 package the args and reply when SendAERpcs
+2022/05/20 19:49:58 machine 1 start to send the requests when SendAERpcs
+2022/05/20 19:49:58 machine 1 send the request to 0 when SendAERpcs
+2022/05/20 19:49:58 machine 1 send the request to 2 when SendAERpcs
+2022/05/20 19:49:58 machine 2 get the request from 1 when AppendEntries
+2022/05/20 19:49:58 machine 2 try to get the locker when AppendEntries
+2022/05/20 19:49:58 machine 2 has got the locker when AppendEntries
+2022/05/20 19:49:58 machine 2 send the reply to 1 of success msg when AppendEntries
+2022/05/20 19:49:58 machine 0 get the request from 1 when AppendEntries
+2022/05/20 19:49:58 machine 0 try to get the locker when AppendEntries
+2022/05/20 19:49:58 Machine: 0 get the message 
+2022/05/20 19:49:58 Machine 0 has eletiontime: 626
+2022/05/20 19:49:58 machine 0 has got the locker when AppendEntries
+2022/05/20 19:49:58 machine 0 send the reply to 1 of success msg when AppendEntries
+2022/05/20 19:49:58 Machine: 2 get the message 
+2022/05/20 19:49:58 Machine 2 has eletiontime: 577
+2022/05/20 19:49:58 1 ticker send heartbeat
+2022/05/20 19:49:58 machine 1 package the args and reply when SendAERpcs
+2022/05/20 19:49:58 machine 1 start to send the requests when SendAERpcs
+2022/05/20 19:49:58 machine 1 send the request to 0 when SendAERpcs
+2022/05/20 19:49:58 machine 1 send the request to 2 when SendAERpcs
+2022/05/20 19:49:58 machine 2 get the request from 1 when AppendEntries
+2022/05/20 19:49:58 machine 2 try to get the locker when AppendEntries
+2022/05/20 19:49:58 machine 2 has got the locker when AppendEntries
+2022/05/20 19:49:58 machine 2 send the reply to 1 of success msg when AppendEntries
+2022/05/20 19:49:58 machine 0 get the request from 1 when AppendEntries
+2022/05/20 19:49:58 machine 0 try to get the locker when AppendEntries
+2022/05/20 19:49:58 machine 0 has got the locker when AppendEntries
+2022/05/20 19:49:58 machine 0 send the reply to 1 of success msg when AppendEntries
+2022/05/20 19:49:58 Machine: 0 get the message 
+2022/05/20 19:49:58 Machine 0 has eletiontime: 921
+2022/05/20 19:49:58 Machine: 2 get the message 
+2022/05/20 19:49:58 Machine 2 has eletiontime: 626
+2022/05/20 19:49:59 1 ticker send heartbeat
+2022/05/20 19:49:59 machine 1 package the args and reply when SendAERpcs
+2022/05/20 19:49:59 machine 1 start to send the requests when SendAERpcs
+2022/05/20 19:49:59 machine 1 send the request to 0 when SendAERpcs
+2022/05/20 19:49:59 machine 1 send the request to 2 when SendAERpcs
+2022/05/20 19:49:59 machine 0 get the request from 1 when AppendEntries
+2022/05/20 19:49:59 machine 2 get the request from 1 when AppendEntries
+2022/05/20 19:49:59 machine 2 try to get the locker when AppendEntries
+2022/05/20 19:49:59 machine 2 has got the locker when AppendEntries
+2022/05/20 19:49:59 machine 0 try to get the locker when AppendEntries
+2022/05/20 19:49:59 Machine: 2 get the message 
+2022/05/20 19:49:59 machine 0 has got the locker when AppendEntries
+2022/05/20 19:49:59 machine 0 send the reply to 1 of success msg when AppendEntries
+2022/05/20 19:49:59 Machine: 0 get the message 
+2022/05/20 19:49:59 Machine 0 has eletiontime: 735
+2022/05/20 19:49:59 machine 2 send the reply to 1 of success msg when AppendEntries
+2022/05/20 19:49:59 Machine 2 has eletiontime: 572
+cluster has leader 1. 
+
+ if the leader disconnects, a new one should be elected.2022/05/20 19:49:59 1 ticker send heartbeat
+2022/05/20 19:49:59 machine 1 package the args and reply when SendAERpcs
+2022/05/20 19:49:59 machine 1 start to send the requests when SendAERpcs
+2022/05/20 19:49:59 machine 1 send the request to 0 when SendAERpcs
+2022/05/20 19:49:59 machine 1 send the request to 2 when SendAERpcs
+2022/05/20 19:49:59 Machine: 2, election happend timeout.
+2022/05/20 19:49:59 Machine 2 start election
+2022/05/20 19:49:59 Machine 2 change role from follower to candidate
+2022/05/20 19:49:59 Machine 2 pack the args
+2022/05/20 19:49:59 Machine 2 send request vote to 0
+2022/05/20 19:49:59 Machine 2 send request vote to 1
+2022/05/20 19:49:59 Machine 0 try to get locker in Requestvote, called by 2
+2022/05/20 19:49:59 Machine 0 has got locker in Requestvote, called by 2
+2022/05/20 19:49:59 Machine 0 receive request vote from 2
+2022/05/20 19:49:59 0 become follower from follower 
+2022/05/20 19:49:59 Machine 0 vote for the candidate 2
+2022/05/20 19:49:59 Machine 0 Vote info - args Term: 2, currentTerm : 2, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 2, CandidateID2, vote: true
+2022/05/20 19:49:59 Machine 0 ends in Requestvote, called by 2
+2022/05/20 19:49:59 2 become leader from candidate 
+2022/05/20 19:49:59 2 ticker send heartbeat
+2022/05/20 19:49:59 machine 2 package the args and reply when SendAERpcs
+2022/05/20 19:49:59 machine 2 start to send the requests when SendAERpcs
+2022/05/20 19:49:59 machine 2 send the request to 0 when SendAERpcs
+2022/05/20 19:49:59 machine 2 send the request to 1 when SendAERpcs
+2022/05/20 19:49:59 machine 0 get the request from 2 when AppendEntries
+2022/05/20 19:49:59 machine 0 try to get the locker when AppendEntries
+2022/05/20 19:49:59 machine 0 has got the locker when AppendEntries
+2022/05/20 19:49:59 Machine: 0 get the message 
+2022/05/20 19:49:59 machine 0 send the reply to 2 of success msg when AppendEntries
+2022/05/20 19:49:59 Machine 0 has eletiontime: 523
+CHECK ONE LEADER.
+
+ if the old leader rejoins, that shouldn't disturb the new leader.
+2022/05/20 19:50:00 Machine: 0, election happend timeout.
+2022/05/20 19:50:00 Machine 0 start election
+2022/05/20 19:50:00 Machine 0 change role from follower to candidate
+2022/05/20 19:50:00 0 become candidate from follower 
+2022/05/20 19:50:00 Machine 0 pack the args
+2022/05/20 19:50:00 Machine 0 send request vote to 1
+2022/05/20 19:50:00 Machine 0 send request vote to 2
+2022/05/20 19:50:00 Machine 2 try to get locker in Requestvote, called by 0
+2022/05/20 19:50:00 Machine 2 has got locker in Requestvote, called by 0
+2022/05/20 19:50:00 Machine 2 receive request vote from 0
+2022/05/20 19:50:00 2 become follower from leader 
+2022/05/20 19:50:00 Machine 2 vote for the candidate 0
+2022/05/20 19:50:00 Machine 2 Vote info - args Term: 3, currentTerm : 3, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 0, CandidateID0, vote: true
+2022/05/20 19:50:00 Machine 2 ends in Requestvote, called by 0
+2022/05/20 19:50:00 Machine 1 try to get locker in Requestvote, called by 0
+2022/05/20 19:50:00 0 become leader from candidate 
+2022/05/20 19:50:00 Machine 1 has got locker in Requestvote, called by 0
+2022/05/20 19:50:00 Machine 1 receive request vote from 0
+2022/05/20 19:50:00 1 become follower from leader 
+2022/05/20 19:50:00 Machine 1 vote for the candidate 0
+2022/05/20 19:50:00 Machine 1 Vote info - args Term: 3, currentTerm : 3, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 0, CandidateID0, vote: true
+2022/05/20 19:50:00 Machine 1 ends in Requestvote, called by 0
+2022/05/20 19:50:00 0 ticker send heartbeat
+2022/05/20 19:50:00 machine 0 package the args and reply when SendAERpcs
+2022/05/20 19:50:00 machine 0 start to send the requests when SendAERpcs
+2022/05/20 19:50:00 machine 0 send the request to 1 when SendAERpcs
+2022/05/20 19:50:00 machine 0 send the request to 2 when SendAERpcs
+2022/05/20 19:50:00 machine 2 get the request from 0 when AppendEntries
+2022/05/20 19:50:00 machine 2 try to get the locker when AppendEntries
+2022/05/20 19:50:00 machine 2 has got the locker when AppendEntries
+2022/05/20 19:50:00 machine 2 send the reply to 0 of success msg when AppendEntries
+2022/05/20 19:50:00 machine 1 get the request from 0 when AppendEntries
+2022/05/20 19:50:00 machine 1 try to get the locker when AppendEntries
+2022/05/20 19:50:00 machine 1 has got the locker when AppendEntries
+2022/05/20 19:50:00 machine 1 send the reply to 0 of success msg when AppendEntries
+2022/05/20 19:50:00 0 ticker send heartbeat
+2022/05/20 19:50:00 machine 0 package the args and reply when SendAERpcs
+2022/05/20 19:50:00 machine 0 start to send the requests when SendAERpcs
+2022/05/20 19:50:00 machine 0 send the request to 1 when SendAERpcs
+2022/05/20 19:50:00 machine 0 send the request to 2 when SendAERpcs
+2022/05/20 19:50:00 machine 2 get the request from 0 when AppendEntries
+2022/05/20 19:50:00 machine 1 get the request from 0 when AppendEntries
+CHECK ONE LEADER.
+2022/05/20 19:50:00 Machine 0 used to be a leader, but now is follower. Term: 3
+2022/05/20 19:50:00 Machine 0 used to be a leader, but now is follower. Term: 3
+2022/05/20 19:50:00 Machine 1 used to be a leader, but now is follower. Term: 3
+2022/05/20 19:50:01 Machine 2 get requestvote response from 1 failed
+2022/05/20 19:50:02 Machine 1 used to be a leader, but now is follower. Term: 3
+2022/05/20 19:50:06 Machine 2 used to be a leader, but now is follower. Term: 3
+--- FAIL: TestReElection2A (9.53s)
+    config.go:404: expected one leader, got none
+FAIL
+exit status 1
+FAIL	6.824/raft	9.534s

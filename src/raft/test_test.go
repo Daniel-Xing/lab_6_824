@@ -59,16 +59,22 @@ func TestReElection2A(t *testing.T) {
 
 	cfg.begin("Test (2A): election after network failure")
 
+	fmt.Printf("\n check one leader")
 	leader1 := cfg.checkOneLeader()
+	fmt.Printf("cluster has leader %d. \n", leader1)
 
 	// if the leader disconnects, a new one should be elected.
+	fmt.Printf("\n if the leader disconnects, a new one should be elected.")
 	cfg.disconnect(leader1)
 	cfg.checkOneLeader()
+	fmt.Printf("CHECK ONE LEADER.\n")
 
 	// if the old leader rejoins, that shouldn't
 	// disturb the new leader.
+	fmt.Printf("\n if the old leader rejoins, that shouldn't disturb the new leader.\n")
 	cfg.connect(leader1)
 	leader2 := cfg.checkOneLeader()
+	fmt.Printf("CHECK ONE LEADER.\n")
 
 	// if there's no quorum, no leader should
 	// be elected.

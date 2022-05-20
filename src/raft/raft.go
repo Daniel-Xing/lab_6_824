@@ -67,6 +67,7 @@ var role_map map[int]string
 //
 type Raft struct {
 	mu        sync.Mutex          // Lock to protect shared access to this peer's state
+	cond      *sync.Cond          //
 	peers     []*labrpc.ClientEnd // RPC end points of all peers
 	persister *Persister          // Object to hold this peer's persisted state
 	me        int                 // this peer's index into peers[]
@@ -216,72 +217,74 @@ type AppendEntriesReply struct {
 
 //
 func (rf *Raft) sendAERpcs(isHeartBeat bool) {
-	// package the args and reply
-	DPrintf("machine %d try to get the locker when SendAERpcs", rf.me)
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-	DPrintf("machine %d has got the locker when SendAERpcs", rf.me)
-
-	//
 	DPrintf("machine %d package the args and reply when SendAERpcs", rf.me)
-	args := &AppendEntriesArgs{}
-	args.LeaderId = rf.me
-	args.LeaderCommit = rf.commitIndex
-	args.Term = rf.currentTerm
-	args.PrecLogIndex = len(rf.Log) - 1
-	args.PrevLogTerm = rf.Log[args.PrecLogIndex].Term
 
 	replys := make([]*AppendEntriesReply, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
 		replys[i] = &AppendEntriesReply{}
 	}
 
-	results := make(chan bool, len(rf.peers))
-	defer close(results)
-
 	//
 	DPrintf("machine %d start to send the requests when SendAERpcs", rf.me)
+
+	finished := 0
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me {
 			continue
 		}
+		args := &AppendEntriesArgs{}
+		args.LeaderId = rf.me
+		args.LeaderCommit = rf.commitIndex
+		args.Term = rf.currentTerm
+		args.PrecLogIndex = len(rf.Log) - 1
+		args.PrevLogTerm = rf.Log[args.PrecLogIndex].Term
 
 		//
-		DPrintf("machine %d send the request to %d when SendAERpcs", rf.me, i)
+		DPrintf("machine %d send the request to %d when SendAERpcs. Term: %d", rf.me, i, rf.currentTerm)
 		go func(index int, arg *AppendEntriesArgs, reply *AppendEntriesReply) {
 			ok := rf.sendAppendEntries(index, arg, reply)
-			results <- ok
+			if !ok || rf.role == follower {
+				DPrintf("Machine %d used to be a leader, but now is follower. Term: %d", rf.me, rf.currentTerm)
+				return
+			}
+
+			rf.mu.Lock()
+			defer rf.mu.Unlock()
+			defer rf.cond.Broadcast()
+
+			finished++
+
+			if reply.Term > rf.currentTerm {
+				rf.currentTerm = reply.Term
+				rf.beFollower()
+				return
+			}
+
+			if isHeartBeat {
+				return
+			}
+
+			if reply.Success {
+				rf.matchIndex[index] = rf.nextIndex[index]
+				rf.nextIndex[index]++
+			} else {
+				rf.nextIndex[index]--
+			}
 		}(i, args, replys[i])
 	}
 
 	// process the result
-	DPrintf("machine %d start to process the result when SendAERpcs", rf.me)
-	for i := 0; i < len(rf.peers); i++ {
-		if i == rf.me || <-results == false {
-			continue
-		}
-
-		//
-		if replys[i].Term > rf.currentTerm {
-			DPrintf("machine %d get a higher term when SendAERpcs", rf.me)
-			rf.currentTerm = replys[i].Term
-			rf.beFollower()
-			return
-		}
-
-		if replys[i].Success {
-			rf.matchIndex[i] = rf.nextIndex[i]
-			rf.nextIndex[i]++
-		} else {
-			rf.nextIndex[i]--
-		}
+	rf.mu.Lock()
+	for finished != len(rf.peers)-1 {
+		rf.cond.Wait()
 	}
+	rf.mu.Unlock()
 }
 
 //
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	DPrintf("machine %d get the request from %d when AppendEntries", rf.me, args.LeaderId)
-
+	rf.heartbeat <- ""
 	DPrintf("machine %d try to get the locker when AppendEntries", rf.me)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
@@ -364,8 +367,6 @@ func (rf *Raft) startElection() {
 
 	DPrintf("Machine %d start election", rf.me)
 	rf.mu.Lock()
-	defer rf.mu.Unlock()
-
 	// change the role from follower to candidate
 	DPrintf("Machine %d change role from follower to candidate", rf.me)
 	if rf.role == follower {
@@ -378,6 +379,7 @@ func (rf *Raft) startElection() {
 	rf.voteFor = rf.me
 	// pack the args
 	DPrintf("Machine %d pack the args", rf.me)
+	rf.mu.Unlock()
 
 	// init result reply
 	reply := make([]*RequestVoteReply, len(rf.peers))
@@ -385,9 +387,8 @@ func (rf *Raft) startElection() {
 		reply[i] = &RequestVoteReply{}
 	}
 
-	result := make(chan bool, len(rf.peers))
-	defer close(result)
-
+	voteCount := 1
+	finished := 0
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me { // skip myself
 			continue
@@ -400,38 +401,37 @@ func (rf *Raft) startElection() {
 		args.CandidateId = rf.me
 
 		DPrintf("Machine %d send request vote to %d", rf.me, i)
-		go func(result chan bool, index int, args *RequestVoteArgs, reply *RequestVoteReply) {
+		go func(index int, args *RequestVoteArgs, reply *RequestVoteReply) {
 			ok := rf.sendRequestVote(index, args, reply)
-			result <- ok
-		}(result, i, args, reply[i])
+			if !ok {
+				DPrintf("Machine %d get requestvote response from %d failed", rf.me, index)
+				return
+			}
+
+			rf.mu.Lock()
+			if reply.Term > rf.currentTerm {
+				rf.currentTerm = reply.Term
+				rf.beFollower()
+			}
+			if reply.VoteGranted {
+				voteCount++
+			}
+			finished++
+			rf.cond.Broadcast()
+			rf.mu.Unlock()
+		}(i, args, reply[i])
 
 	}
 
-	DPrintf("Machine %d process the result", rf.me)
-	voteCount := 1
-	for i := 0; i < len(rf.peers); i++ {
-		if i == rf.me || <-result == false {
-			continue
-		}
-
-		// find the max term from replys
-		// if maxTerm >
-		if reply[i].Term > rf.currentTerm {
-			rf.currentTerm = reply[i].Term
-			rf.beFollower()
-			return
-		}
-
-		if reply[i].VoteGranted {
-			voteCount++
-		}
+	rf.mu.Lock()
+	for voteCount <= len(rf.peers)/2 && finished != len(rf.peers)-1 {
+		rf.cond.Wait()
 	}
-
-	DPrintf("%d voteCount: %d", rf.me, voteCount)
 	// win the election and change role to the leader
 	if voteCount > len(rf.peers)/2 {
 		rf.beLeaer()
 	}
+	rf.mu.Unlock()
 }
 
 //
@@ -440,14 +440,16 @@ func (rf *Raft) startElection() {
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (2A, 2B).
 	// pack the args
+	DPrintf("Machine %d try to get locker in Requestvote, called by %d", rf.me, args.CandidateId)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+	DPrintf("Machine %d has got locker in Requestvote, called by %d", rf.me, args.CandidateId)
 
 	DPrintf("Machine %d receive request vote from %d", rf.me, args.CandidateId)
 	var voter = func(granted bool) {
 		reply.VoteGranted = granted
 		reply.Term = rf.currentTerm
-		DPrintf("Me: %d Vote info - args Term: %d, currentTerm : %d, args.LastLog Term: %d, args.LastLogIndex%d, voteFor: %d, CandidateID%d, vote: %v",
+		DPrintf("Machine %d Vote info - args Term: %d, currentTerm : %d, args.LastLog Term: %d, args.LastLogIndex%d, voteFor: %d, CandidateID%d, vote: %v",
 			rf.me, args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId, reply.VoteGranted)
 	}
 
@@ -479,6 +481,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	DPrintf("Machine %d vote for the candidate %d", rf.me, args.CandidateId)
 	rf.voteFor = args.CandidateId
 	voter(true)
+	// rf.heartbeat <- ""
+	DPrintf("Machine %d ends in Requestvote, called by %d", rf.me, args.CandidateId)
 }
 
 //
@@ -581,6 +585,7 @@ func (rf *Raft) ticker() {
 
 		// follower starts a new election or process the heartbeat
 		electionTimeout := RandomTime()
+		DPrintf("Machine %d has eletiontime: %d", rf.me, electionTimeout/time.Millisecond)
 		select {
 		case <-time.After(electionTimeout):
 			// start election
@@ -614,6 +619,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.peers = peers
 	rf.persister = persister
 	rf.me = me
+	rf.cond = sync.NewCond(&rf.mu)
 
 	// Your initialization code here (2A, 2B, 2C).
 	rf.currentTerm = 0
@@ -629,6 +635,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	rf.nextIndex = []int{}
 	rf.matchIndex = []int{}
+	rf.heartbeat = make(chan string, 1)
 
 	rf.beFollower()
 
