@@ -89,11 +89,15 @@ func TestReElection2A(t *testing.T) {
 	fmt.Println("CHECK NO LEADER.")
 
 	// if a quorum arises, it should elect a leader.
+	fmt.Println("\n if a quorum arises, it should elect a leader.")
 	cfg.connect((leader2 + 1) % servers)
+	fmt.Println("CONNECT server:", (leader2+1)%servers)
 	cfg.checkOneLeader()
 
 	// re-join of last node shouldn't prevent leader from existing.
+	fmt.Println("\n re-join of last node shouldn't prevent leader from existing.")
 	cfg.connect(leader2)
+	fmt.Println("CONNECT server:", leader2)
 	cfg.checkOneLeader()
 
 	cfg.end()
@@ -114,6 +118,7 @@ func TestManyElections2A(t *testing.T) {
 		i1 := rand.Int() % servers
 		i2 := rand.Int() % servers
 		i3 := rand.Int() % servers
+		fmt.Printf("DISCONNECT %d %d %d\n", i1, i2, i3)
 		cfg.disconnect(i1)
 		cfg.disconnect(i2)
 		cfg.disconnect(i3)
@@ -122,6 +127,8 @@ func TestManyElections2A(t *testing.T) {
 		// or the remaining four should elect a new one.
 		cfg.checkOneLeader()
 
+		// re-connect the nodes in a random order
+		fmt.Printf("RECONNECT %d %d %d\n", i1, i2, i3)
 		cfg.connect(i1)
 		cfg.connect(i2)
 		cfg.connect(i3)
