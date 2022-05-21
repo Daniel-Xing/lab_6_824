@@ -118,7 +118,6 @@ func (rf *Raft) GetState() (int, bool) {
 // state transfer
 // beLeader clear the nextIndex and matchIndex
 func (rf *Raft) beLeaer() {
-	// Your code here (2B).
 	DPrintf("%d become leader from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
 	rf.role = leader
 	rf.nextIndex = make([]int, len(rf.peers))
@@ -690,7 +689,10 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.matchIndex = []int{}
 	rf.heartbeat = make(chan string, 1)
 
+	// init as the follower
+	rf.mu.Lock()
 	rf.beFollower()
+	rf.mu.Unlock()
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
