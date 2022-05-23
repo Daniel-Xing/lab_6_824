@@ -248,14 +248,16 @@ func (rf *Raft) startElection() {
 			continue
 		}
 
-		args := &RequestVoteArgs{}
-		args.Term = rf.currentTerm
-		args.LastLogTerm = rf.Log[len(rf.Log)-1].Term
-		args.LastLogIndex = len(rf.Log) - 1
-		args.CandidateId = rf.me
-
 		DPrintf("Machine %d send request vote to %d. Term: %d", rf.me, i, rf.currentTerm)
-		go func(index int, args *RequestVoteArgs, reply *RequestVoteReply) {
+		go func(index int, reply *RequestVoteReply) {
+			rf.mu.Lock()
+			args := &RequestVoteArgs{}
+			args.Term = rf.currentTerm
+			args.LastLogTerm = rf.Log[len(rf.Log)-1].Term
+			args.LastLogIndex = len(rf.Log) - 1
+			args.CandidateId = rf.me
+			rf.mu.Unlock()
+
 			waitChan := make(chan bool)
 			go func() {
 				start := time.Now()
@@ -266,15 +268,15 @@ func (rf *Raft) startElection() {
 				}
 			}()
 
-			rf.mu.Lock()
-			defer rf.mu.Unlock()
-			defer rf.cond.Broadcast()
-
 			ok := false
 			select {
 			case ok = <-waitChan:
 			case <-time.After(time.Millisecond * 300):
 			}
+
+			rf.mu.Lock()
+			defer rf.mu.Unlock()
+			defer rf.cond.Broadcast()
 
 			DPrintf("Machine %d get the reply when sendRequestVote from %d, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
 			finished++
@@ -295,7 +297,7 @@ func (rf *Raft) startElection() {
 			if reply.VoteGranted {
 				voteCount++
 			}
-		}(i, args, reply[i])
+		}(i, reply[i])
 
 	}
 
@@ -463,6 +465,9 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 			}
 
 			rf.mu.Lock()
+			defer rf.mu.Unlock()
+			defer rf.cond.Broadcast()
+
 			DPrintf("machine %d receive the reply from %d when sendAppendEntries, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
 			finished++
 
@@ -492,9 +497,6 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 			} else {
 				rf.nextIndex[index]--
 			}
-
-			rf.cond.Broadcast()
-			rf.mu.Unlock()
 
 		}(i, replys[i])
 	}
