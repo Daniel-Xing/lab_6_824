@@ -43,7 +43,7 @@ func TestInitialElection2A(t *testing.T) {
 	time.Sleep(2 * RaftElectionTimeout)
 	term2 := cfg.checkTerms()
 	if term1 != term2 {
-		fmt.Printf("warning: term changed even though there were no failures")
+		P2b("warning: term changed even though there were no failures")
 	}
 
 	// there should still be a leader.
@@ -59,22 +59,22 @@ func TestReElection2A(t *testing.T) {
 
 	cfg.begin("Test (2A): election after network failure")
 
-	fmt.Printf("\n check one leader")
+	P2b("\n check one leader")
 	leader1 := cfg.checkOneLeader()
-	fmt.Printf("cluster has leader %d. \n", leader1)
+	P2b("cluster has leader %d. \n", leader1)
 
 	// if the leader disconnects, a new one should be elected.
-	fmt.Printf("\n if the leader disconnects, a new one should be elected.")
+	P2b("\n if the leader disconnects, a new one should be elected.")
 	cfg.disconnect(leader1)
 	cfg.checkOneLeader()
-	fmt.Printf("CHECK ONE LEADER.\n")
+	P2b("CHECK ONE LEADER.\n")
 
 	// if the old leader rejoins, that shouldn't
 	// disturb the new leader.
-	fmt.Printf("\n if the old leader rejoins, that shouldn't disturb the new leader.\n")
+	P2b("\n if the old leader rejoins, that shouldn't disturb the new leader.\n")
 	cfg.connect(leader1)
 	leader2 := cfg.checkOneLeader()
-	fmt.Printf("CHECK ONE LEADER.\n")
+	P2b("CHECK ONE LEADER.\n")
 
 	// if there's no quorum, no leader should
 	// be elected.
@@ -118,7 +118,7 @@ func TestManyElections2A(t *testing.T) {
 		i1 := rand.Int() % servers
 		i2 := rand.Int() % servers
 		i3 := rand.Int() % servers
-		fmt.Printf("DISCONNECT %d %d %d\n", i1, i2, i3)
+		P2b("DISCONNECT %d %d %d\n", i1, i2, i3)
 		cfg.disconnect(i1)
 		cfg.disconnect(i2)
 		cfg.disconnect(i3)
@@ -128,7 +128,7 @@ func TestManyElections2A(t *testing.T) {
 		cfg.checkOneLeader()
 
 		// re-connect the nodes in a random order
-		fmt.Printf("RECONNECT %d %d %d\n", i1, i2, i3)
+		P2b("RECONNECT %d %d %d\n", i1, i2, i3)
 		cfg.connect(i1)
 		cfg.connect(i2)
 		cfg.connect(i3)
@@ -391,32 +391,43 @@ func TestRejoin2B(t *testing.T) {
 	cfg.begin("Test (2B): rejoin of partitioned leader")
 
 	cfg.one(101, servers, true)
+	P2b("\n \n")
 
 	// leader network failure
+	P2b("Start: leader network failure.")
 	leader1 := cfg.checkOneLeader()
 	cfg.disconnect(leader1)
+	P2b("\n \n")
 
 	// make old leader try to agree on some entries
+	P2b("make old leader try to agree on some entries")
 	cfg.rafts[leader1].Start(102)
 	cfg.rafts[leader1].Start(103)
 	cfg.rafts[leader1].Start(104)
+	P2b("\n \n")
 
 	// new leader commits, also for index=2
+	P2b("new leader commits, also for index=2")
 	cfg.one(103, 2, true)
+	P2b("\n \n")
 
 	// new leader network failure
+	P2b("new leader network failure")
 	leader2 := cfg.checkOneLeader()
 	cfg.disconnect(leader2)
+	P2b("\n \n")
 
 	// old leader connected again
+	P2b("old leader connected again, leader1 %d , leader2 %d", leader1, leader2)
 	cfg.connect(leader1)
-
 	cfg.one(104, 2, true)
+	P2b("\n \n")
 
 	// all together now
+	P2b("all together now")
 	cfg.connect(leader2)
-
 	cfg.one(105, servers, true)
+	P2b("\n \n")
 
 	cfg.end()
 }

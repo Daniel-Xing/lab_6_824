@@ -94,6 +94,7 @@ type Raft struct {
 
 	// when follower received AppendEntries rpc, send a message to channel. TODO: maybe block.
 	heartbeat chan string
+	applyCh   chan ApplyMsg
 }
 
 type Entry struct {
@@ -120,8 +121,14 @@ func (rf *Raft) GetState() (int, bool) {
 func (rf *Raft) beLeaer() {
 	DPrintf("%d become leader from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
 	rf.role = leader
+
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
+	for i := 0; i < len(rf.peers); i++ {
+		rf.matchIndex[i] = 0
+		rf.nextIndex[i] = 1
+	}
+
 }
 
 // beCandidate
@@ -253,8 +260,8 @@ func (rf *Raft) startElection() {
 			rf.mu.Lock()
 			args := &RequestVoteArgs{}
 			args.Term = rf.currentTerm
-			args.LastLogTerm = rf.Log[len(rf.Log)-1].Term
 			args.LastLogIndex = len(rf.Log) - 1
+			args.LastLogTerm = rf.Log[args.LastLogIndex].Term
 			args.CandidateId = rf.me
 			rf.mu.Unlock()
 
@@ -263,7 +270,7 @@ func (rf *Raft) startElection() {
 				start := time.Now()
 				ok := rf.sendRequestVote(index, args, reply)
 				end := time.Now()
-				if end.Sub(start) < time.Millisecond*300 {
+				if end.Sub(start) < time.Millisecond*150 {
 					waitChan <- ok
 				}
 			}()
@@ -271,7 +278,7 @@ func (rf *Raft) startElection() {
 			ok := false
 			select {
 			case ok = <-waitChan:
-			case <-time.After(time.Millisecond * 300):
+			case <-time.After(time.Millisecond * 150):
 			}
 
 			rf.mu.Lock()
@@ -330,12 +337,12 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	var voter = func(granted bool) {
 		reply.VoteGranted = granted
 		reply.Term = rf.currentTerm
-		DPrintf("Machine %d Vote info - args Term: %d, currentTerm : %d, args.LastLog Term: %d, args.LastLogIndex%d, voteFor: %d, CandidateID%d, vote: %v",
-			rf.me, args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId, reply.VoteGranted)
+		DPrintf("Machine %d Vote info - args Term: %d, currentTerm : %d, args.LastLogTerm: %d, args.LastLogIndex:%d, voteFor: %d, CandidateID%d, vote: %v, rf.logs:%v",
+			rf.me, args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId, reply.VoteGranted, rf.Log)
 	}
 
 	if args.Term < rf.currentTerm {
-		// DPrintf("Machine %d reject the request vote from %d because Term < currentTerm. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
+		DPrintf("Machine %d reject the request vote from %d because Term < currentTerm. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
@@ -346,14 +353,19 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if rf.voteFor != -1 && rf.voteFor != args.CandidateId {
-		// DPrintf("Machine %d reject the request vote from %d because voteFor != args.CandidateId. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
+		DPrintf("Machine %d reject the request vote from %d because voteFor != args.CandidateId. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
 
 	// TODO: check if the log is the same
-	if args.LastLogIndex < len(rf.Log)-1 || args.LastLogTerm < rf.Log[len(rf.Log)-1].Term {
-		// DPrintf("Machine %d reject the request vote from %d because log is not the same. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
+	if args.LastLogTerm < rf.Log[len(rf.Log)-1].Term {
+		voter(false)
+		return
+	}
+
+	if args.LastLogTerm == rf.Log[len(rf.Log)-1].Term && args.LastLogIndex < len(rf.Log)-1 {
+		DPrintf("Machine %d reject the request vote from %d because log is not the same. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
@@ -404,7 +416,7 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 type AppendEntriesArgs struct {
 	Term         int // leader's term
 	LeaderId     int // follower can redirect client
-	PrecLogIndex int // index of log entry immediately preceding new ones
+	PrevLogIndex int // index of log entry immediately preceding new ones
 
 	PrevLogTerm int     // term of preLogIndex entry
 	Entries     []Entry // batch to store commands
@@ -419,7 +431,7 @@ type AppendEntriesReply struct {
 }
 
 //
-func (rf *Raft) sendAERpcs(isHeartBeat bool) {
+func (rf *Raft) sendAERpcs() {
 	// DPrintf("machine %d package the args and reply when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 	replys := make([]*AppendEntriesReply, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
@@ -442,8 +454,20 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 			args.LeaderId = rf.me
 			args.LeaderCommit = rf.commitIndex
 			args.Term = rf.currentTerm
-			args.PrecLogIndex = len(rf.Log) - 1
-			args.PrevLogTerm = rf.Log[args.PrecLogIndex].Term
+
+			// prevLogIndex is the nextindex of log, which should be sented
+			args.PrevLogIndex = rf.nextIndex[index] - 1
+			if args.PrevLogIndex != -1 {
+				args.PrevLogTerm = rf.Log[args.PrevLogIndex].Term
+			}
+
+			isHeartBeat := rf.nextIndex[index] == len(rf.Log)
+			if !isHeartBeat {
+				// P2b("%d, %d ", rf.nextIndex[index], len(rf.Log))
+				P2b("Machine %d think it is the leader and send the entris to the follower %d, the index of log is %d. Term: %d",
+					rf.me, index, rf.matchIndex[index], rf.currentTerm)
+				args.Entries = append(args.Entries, rf.Log[rf.nextIndex[index]:]...)
+			}
 			rf.mu.Unlock()
 
 			waitChan := make(chan bool)
@@ -451,7 +475,7 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 				start := time.Now()
 				ok := rf.sendAppendEntries(index, args, reply)
 				end := time.Now()
-				if end.Sub(start) < time.Millisecond*300 {
+				if end.Sub(start) < time.Millisecond*150 {
 					waitChan <- ok
 				}
 			}()
@@ -460,7 +484,7 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 			select {
 			case ok = <-waitChan:
 				DPrintf("machine %d get the response of sendAppendEntriews from %d success. Term: %d", rf.me, index, rf.currentTerm)
-			case <-time.After(time.Millisecond * 300):
+			case <-time.After(time.Millisecond * 150):
 				DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
 			}
 
@@ -482,6 +506,7 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 			// }
 
 			if reply.Term > rf.currentTerm {
+				P2b("machine %d get the response of sendAppendEntries from %d, but the term is %d, so it is not the leader. Term: %d", rf.me, index, reply.Term, rf.currentTerm)
 				rf.currentTerm = reply.Term
 				rf.beFollower()
 				return
@@ -491,9 +516,10 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 				return
 			}
 
+			// if success, means all log entries has been appended
 			if reply.Success {
-				rf.matchIndex[index] = rf.nextIndex[index]
-				rf.nextIndex[index]++
+				rf.nextIndex[index] += len(args.Entries)
+				rf.matchIndex[index] = rf.nextIndex[index] - 1
 			} else {
 				rf.nextIndex[index]--
 			}
@@ -506,6 +532,22 @@ func (rf *Raft) sendAERpcs(isHeartBeat bool) {
 	for finished != len(rf.peers)-1 {
 		rf.cond.Wait()
 	}
+
+	//
+	count := 1
+	for i := 0; i < len(rf.peers); i++ {
+		if i != rf.me && rf.nextIndex[i] > rf.commitIndex+1 {
+			count++
+		}
+	}
+
+	DPrintf("machine %d has nextIndex;%v, rf.commitIndex: %d. count:%d,  Term: %d", rf.me, rf.nextIndex, rf.commitIndex, count, rf.currentTerm)
+	if count > len(rf.peers)/2 {
+		rf.commitIndex++
+		P2b("Machine %d send the applyMsg %v, %d. Term: %d", rf.me, rf.Log[rf.commitIndex].Command, rf.commitIndex, rf.currentTerm)
+		rf.applyCh <- ApplyMsg{Command: rf.Log[rf.commitIndex].Command, CommandIndex: rf.commitIndex, CommandValid: true}
+	}
+
 	rf.mu.Unlock()
 	DPrintf("machine %d finish sending the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 }
@@ -525,37 +567,48 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	if args.Term < rf.currentTerm {
-		DPrintf("machine %d get a lower term when AppendEntries. Term: %d", rf.me, rf.currentTerm)
+		DPrintf("machine %d get a lower term when AppendEntries, the request is not admitted. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
 	//
 	if args.Term > rf.currentTerm {
-		DPrintf("machine %d get a higher term when AppendEntries. Term: %d", rf.me, rf.currentTerm)
+		DPrintf("machine %d get a higher term when AppendEntries, tansfer to the follower. Term: %d", rf.me, rf.currentTerm)
 		rf.currentTerm = args.Term
 		rf.beFollower()
 	}
 
 	//
-	if args.PrecLogIndex < 0 || args.PrecLogIndex >= len(rf.Log) {
+	if args.PrevLogIndex < 0 || args.PrevLogIndex >= len(rf.Log) {
 		DPrintf("machine %d get a wrong precLogIndex when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
 	//
-	if args.PrevLogTerm != rf.Log[args.PrecLogIndex].Term {
+	if args.PrevLogTerm != rf.Log[args.PrevLogIndex].Term {
 		DPrintf("machine %d get a wrong prevLogTerm when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
 	//
 	if len(args.Entries) > 0 {
-		rf.Log = append(rf.Log[:args.PrecLogIndex+1], args.Entries...)
+		P2b("Machine %d is %v, append the logs: %v. Term: %d", rf.me, role_map[rf.role], args.Entries, rf.currentTerm)
+		rf.Log = append(rf.Log[:args.PrevLogIndex+1], args.Entries...)
 	}
 
 	//
 	if args.LeaderCommit > rf.commitIndex {
+		old_commitIndex := rf.commitIndex
 		rf.commitIndex = min(args.LeaderCommit, len(rf.Log)-1)
+
+		for i := old_commitIndex + 1; i <= rf.commitIndex; i++ {
+			P2b("Machine %d send the applyMsg %v, %d, old_commitIndex: %d, rf.commitIndex: %d. Term: %d", rf.me, rf.Log[i].Command, i, old_commitIndex, rf.commitIndex, rf.currentTerm)
+			rf.applyCh <- ApplyMsg{
+				Command:      rf.Log[i].Command,
+				CommandIndex: i,
+				CommandValid: true,
+			}
+		}
 	}
 
 	//
@@ -643,9 +696,9 @@ func (rf *Raft) ticker() {
 		// leader send heartbeat to followers
 		if rf.role == leader {
 			DPrintf("%d ticker send heartbeat. Term: %d", rf.me, rf.currentTerm)
-			rf.sendAERpcs(true)
+			rf.sendAERpcs()
 
-			time.Sleep(time.Millisecond * 300)
+			time.Sleep(time.Millisecond * 80)
 			continue
 		}
 
@@ -699,25 +752,28 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.leaderId = -1
 	rf.lastApplied = -1
 
-	// init nextIndex as the -1 + 1
+	// init nextIndex as the 0 + 1
 	rf.nextIndex = make([]int, len(rf.peers))
-	// init matchIndex
 	rf.matchIndex = make([]int, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
-		rf.matchIndex[i] = -1
+		rf.matchIndex[i] = 0
+		rf.nextIndex[i] = 1
 	}
 
 	rf.heartbeat = make(chan string, 1)
+	rf.applyCh = applyCh
 
 	// init as the follower
 	rf.mu.Lock()
 	rf.beFollower()
 	rf.mu.Unlock()
 
+	// applyCh <- ApplyMsg{Command: nil, CommandIndex: 0, CommandValid: true}
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
 
 	// start ticker goroutine to start elections
+
 	go rf.ticker()
 
 	return rf
