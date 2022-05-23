@@ -1,0 +1,120 @@
+2022/05/21 01:39:52 Machine: 0, Make()
+2022/05/21 01:39:52 0 become follower from . Term: 0
+2022/05/21 01:39:52 Machine: 1, Make()
+2022/05/21 01:39:52 1 become follower from . Term: 0
+2022/05/21 01:39:52 Machine: 2, Make()
+2022/05/21 01:39:52 2 become follower from . Term: 0
+Test (2A): election after network failure ...
+
+ check one leader2022/05/21 01:39:52 2 ticker start
+2022/05/21 01:39:52 Machine 2 has eletiontime: 2746. Term: 0
+2022/05/21 01:39:52 0 ticker start
+2022/05/21 01:39:52 1 ticker start
+2022/05/21 01:39:52 Machine 0 has eletiontime: 2669. Term: 0
+2022/05/21 01:39:52 Machine 1 has eletiontime: 2995. Term: 0
+2022/05/21 01:39:55 Machine 0 has eletiontime: 2706. Term: 0
+2022/05/21 01:39:55 0 become candidate from follower. Term: 0
+2022/05/21 01:39:55 Machine 0 send request vote to 1. Term: 1
+2022/05/21 01:39:55 Machine 0 send request vote to 2. Term: 1
+2022/05/21 01:39:55 Machine 2 receive request vote from 0. Term: 0
+2022/05/21 01:39:55 2 become follower from follower. Term: 1
+2022/05/21 01:39:55 Machine 1 receive request vote from 0. Term: 0
+2022/05/21 01:39:55 Machine 2 Vote info - args Term: 1, currentTerm : 1, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 0, CandidateID0, vote: true
+2022/05/21 01:39:55 1 become follower from follower. Term: 1
+2022/05/21 01:39:55 Machine 1 Vote info - args Term: 1, currentTerm : 1, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 0, CandidateID0, vote: true
+2022/05/21 01:39:55 Machine 1 finished Requestvote, called by 0. Term: 1
+2022/05/21 01:39:55 Machine 2 finished Requestvote, called by 0. Term: 1
+2022/05/21 01:39:55 Machine 0 get the reply when sendRequestVote from 1, Status: true. Term: 1
+2022/05/21 01:39:55 Machine 0 get the reply when sendRequestVote from 2, Status: true. Term: 1
+2022/05/21 01:39:55 0 become leader from candidate. Term: 1
+2022/05/21 01:39:55 Machine 0 has finished the election. Term: 1
+2022/05/21 01:39:55 Machine 2 has eletiontime: 2805. Term: 1
+2022/05/21 01:39:55 2 become candidate from follower. Term: 1
+2022/05/21 01:39:55 Machine 2 send request vote to 0. Term: 2
+2022/05/21 01:39:55 Machine 2 send request vote to 1. Term: 2
+2022/05/21 01:39:55 Machine 0 receive request vote from 2. Term: 1
+2022/05/21 01:39:55 0 become follower from leader. Term: 2
+2022/05/21 01:39:55 Machine 1 receive request vote from 2. Term: 1
+2022/05/21 01:39:55 1 become follower from follower. Term: 2
+2022/05/21 01:39:55 Machine 0 Vote info - args Term: 2, currentTerm : 2, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 2, CandidateID2, vote: true
+2022/05/21 01:39:55 Machine 0 finished Requestvote, called by 2. Term: 2
+2022/05/21 01:39:55 Machine 1 Vote info - args Term: 2, currentTerm : 2, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 2, CandidateID2, vote: true
+2022/05/21 01:39:55 Machine 1 finished Requestvote, called by 2. Term: 2
+2022/05/21 01:39:55 Machine 2 get the reply when sendRequestVote from 0, Status: true. Term: 2
+2022/05/21 01:39:55 2 become leader from candidate. Term: 2
+2022/05/21 01:39:55 Machine 2 has finished the election. Term: 2
+2022/05/21 01:39:55 Machine 2 get the reply when sendRequestVote from 1, Status: true. Term: 2
+2022/05/21 01:39:55 Machine 1 has eletiontime: 2595. Term: 2
+2022/05/21 01:39:55 1 become candidate from follower. Term: 2
+2022/05/21 01:39:55 Machine 1 send request vote to 0. Term: 3
+2022/05/21 01:39:55 Machine 1 send request vote to 2. Term: 3
+2022/05/21 01:39:55 Machine 2 receive request vote from 1. Term: 2
+2022/05/21 01:39:55 2 become follower from leader. Term: 3
+2022/05/21 01:39:55 Machine 2 Vote info - args Term: 3, currentTerm : 3, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 1, CandidateID1, vote: true
+2022/05/21 01:39:55 Machine 2 finished Requestvote, called by 1. Term: 3
+2022/05/21 01:39:55 Machine 0 receive request vote from 1. Term: 2
+2022/05/21 01:39:55 0 become follower from follower. Term: 3
+2022/05/21 01:39:55 Machine 0 Vote info - args Term: 3, currentTerm : 3, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 1, CandidateID1, vote: true
+2022/05/21 01:39:55 Machine 0 finished Requestvote, called by 1. Term: 3
+2022/05/21 01:39:55 Machine 1 get the reply when sendRequestVote from 0, Status: true. Term: 3
+2022/05/21 01:39:55 Machine 1 get the reply when sendRequestVote from 2, Status: true. Term: 3
+2022/05/21 01:39:55 1 become leader from candidate. Term: 3
+2022/05/21 01:39:55 Machine 1 has finished the election. Term: 3
+cluster has leader 1. 
+
+ if the leader disconnects, a new one should be elected.2022/05/21 01:39:58 Machine 0 has eletiontime: 2597. Term: 3
+2022/05/21 01:39:58 0 become candidate from follower. Term: 3
+2022/05/21 01:39:58 Machine 0 send request vote to 1. Term: 4
+2022/05/21 01:39:58 Machine 0 send request vote to 2. Term: 4
+2022/05/21 01:39:58 Machine 2 receive request vote from 0. Term: 3
+2022/05/21 01:39:58 2 become follower from follower. Term: 4
+2022/05/21 01:39:58 Machine 2 Vote info - args Term: 4, currentTerm : 4, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 0, CandidateID0, vote: true
+2022/05/21 01:39:58 Machine 2 finished Requestvote, called by 0. Term: 4
+2022/05/21 01:39:58 Machine 2 has eletiontime: 2536. Term: 4
+2022/05/21 01:39:58 2 become candidate from follower. Term: 4
+2022/05/21 01:39:58 Machine 2 send request vote to 0. Term: 5
+2022/05/21 01:39:58 Machine 2 send request vote to 1. Term: 5
+2022/05/21 01:39:58 1 ticker send heartbeat. Term: 3
+2022/05/21 01:39:58 Machine 1 send request vote to 0. Term: 4
+2022/05/21 01:39:58 Machine 1 send request vote to 2. Term: 4
+2022/05/21 01:39:58 Machine 0 get the reply when sendRequestVote from 1, Status: false. Term: 4
+2022/05/21 01:39:58 Machine 0 get the reply when sendRequestVote from 2, Status: true. Term: 4
+2022/05/21 01:39:58 Machine 0 receive request vote from 2. Term: 4
+2022/05/21 01:39:58 0 become follower from candidate. Term: 5
+2022/05/21 01:39:58 Machine 0 Vote info - args Term: 5, currentTerm : 5, args.LastLog Term: 0, args.LastLogIndex0, voteFor: 2, CandidateID2, vote: true
+2022/05/21 01:39:58 Machine 0 finished Requestvote, called by 2. Term: 5
+2022/05/21 01:39:58 0 become leader from follower. Term: 5
+2022/05/21 01:39:58 Machine 0 has finished the election. Term: 5
+2022/05/21 01:39:58 Machine 2 get the reply when sendRequestVote from 0, Status: true. Term: 5
+2022/05/21 01:39:58 1 ticker send heartbeat. Term: 4
+2022/05/21 01:39:58 1 ticker send heartbeat. Term: 4
+2022/05/21 01:39:58 Machine 1 get the reply when sendRequestVote from 0, Status: false. Term: 4
+2022/05/21 01:39:58 1 ticker send heartbeat. Term: 4
+2022/05/21 01:39:58 Machine 2 get the reply when sendRequestVote from 1, Status: false. Term: 5
+2022/05/21 01:39:58 2 become leader from candidate. Term: 5
+2022/05/21 01:39:58 Machine 2 has finished the election. Term: 5
+2022/05/21 01:39:58 1 ticker send heartbeat. Term: 4
+2022/05/21 01:39:58 1 ticker send heartbeat. Term: 4
+2022/05/21 01:39:58 Machine 1 get the reply when sendRequestVote from 2, Status: false. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 0 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 0 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 0 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 0 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 2 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 2 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 2 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 2 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 0 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 Machine 1 has finished the election. Term: 4
+2022/05/21 01:39:58 machine 1 send the request to 0 when SendAERpcs. Term: 4
+2022/05/21 01:39:58 1 ticker send heartbeat. Term: 4
+2022/05/21 01:39:58 1 ticker send heartbeat. Term: 4
+2022/05/21 01:39:59 1 ticker send heartbeat. Term: 4
+2022/05/21 01:39:59 machine 1 get the response of sendAppendEntriews from to 2 failed. Term: 4
+2022/05/21 01:39:59 machine 1 receive the reply from 2 when sendAppendEntries, Status: false. Term: 4
+2022/05/21 01:39:59 1 ticker send heartbeat. Term: 4
+--- FAIL: TestReElection2A (6.51s)
+    config.go:393: term 5 has 2 (>1) leaders
+FAIL
+exit status 1
+FAIL	6.824/raft	6.946s

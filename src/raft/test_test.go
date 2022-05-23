@@ -8,12 +8,14 @@ package raft
 // test with the original before submitting.
 //
 
-import "testing"
-import "fmt"
-import "time"
-import "math/rand"
-import "sync/atomic"
-import "sync"
+import (
+	"fmt"
+	"math/rand"
+	"sync"
+	"sync/atomic"
+	"testing"
+	"time"
+)
 
 // The tester generously allows solutions to complete elections in one second
 // (much more than the paper's range of timeouts).
@@ -57,30 +59,45 @@ func TestReElection2A(t *testing.T) {
 
 	cfg.begin("Test (2A): election after network failure")
 
+	fmt.Printf("\n check one leader")
 	leader1 := cfg.checkOneLeader()
+	fmt.Printf("cluster has leader %d. \n", leader1)
 
 	// if the leader disconnects, a new one should be elected.
+	fmt.Printf("\n if the leader disconnects, a new one should be elected.")
 	cfg.disconnect(leader1)
 	cfg.checkOneLeader()
+	fmt.Printf("CHECK ONE LEADER.\n")
 
 	// if the old leader rejoins, that shouldn't
 	// disturb the new leader.
+	fmt.Printf("\n if the old leader rejoins, that shouldn't disturb the new leader.\n")
 	cfg.connect(leader1)
 	leader2 := cfg.checkOneLeader()
+	fmt.Printf("CHECK ONE LEADER.\n")
 
 	// if there's no quorum, no leader should
 	// be elected.
+	fmt.Println("\n if there's no quorum, no leader should be elected.")
 	cfg.disconnect(leader2)
+	fmt.Println("DISCONNECT LEADER:", leader2)
 	cfg.disconnect((leader2 + 1) % servers)
+	fmt.Println("DISCONNECT server:", (leader2+1)%servers)
 	time.Sleep(2 * RaftElectionTimeout)
+	fmt.Println("SLEEP2S.")
 	cfg.checkNoLeader()
+	fmt.Println("CHECK NO LEADER.")
 
 	// if a quorum arises, it should elect a leader.
+	fmt.Println("\n if a quorum arises, it should elect a leader.")
 	cfg.connect((leader2 + 1) % servers)
+	fmt.Println("CONNECT server:", (leader2+1)%servers)
 	cfg.checkOneLeader()
 
 	// re-join of last node shouldn't prevent leader from existing.
+	fmt.Println("\n re-join of last node shouldn't prevent leader from existing.")
 	cfg.connect(leader2)
+	fmt.Println("CONNECT server:", leader2)
 	cfg.checkOneLeader()
 
 	cfg.end()
@@ -101,6 +118,7 @@ func TestManyElections2A(t *testing.T) {
 		i1 := rand.Int() % servers
 		i2 := rand.Int() % servers
 		i3 := rand.Int() % servers
+		fmt.Printf("DISCONNECT %d %d %d\n", i1, i2, i3)
 		cfg.disconnect(i1)
 		cfg.disconnect(i2)
 		cfg.disconnect(i3)
@@ -109,6 +127,8 @@ func TestManyElections2A(t *testing.T) {
 		// or the remaining four should elect a new one.
 		cfg.checkOneLeader()
 
+		// re-connect the nodes in a random order
+		fmt.Printf("RECONNECT %d %d %d\n", i1, i2, i3)
 		cfg.connect(i1)
 		cfg.connect(i2)
 		cfg.connect(i3)
