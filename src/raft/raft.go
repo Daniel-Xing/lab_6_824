@@ -78,10 +78,12 @@ type Raft struct {
 	// state a Raft server must maintain.
 
 	// State
-	role        int     // 1: follower 2: candidate 3: leader
+	role     int // 1: follower 2: candidate 3: leader
+	leaderId int // leaderId == me ? decide if me is leader
+
+	// Persistent States
 	currentTerm int     // latest term server has seen
 	voteFor     int     // index of peers, candidatedId that received vote in current term
-	leaderId    int     // leaderId == me ? decide if me is leader
 	Log         []Entry // contain commands with log index and term
 
 	// volatile state
@@ -141,7 +143,8 @@ func (rf *Raft) beCandidate() {
 func (rf *Raft) beFollower() {
 	DPrintf("%d become follower from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
 
-	rf.voteFor = -1 // voteFor should be reset when transfer to followers
+	rf.updateVoteFor(-1)
+	// rf.voteFor = -1 // voteFor should be reset when transfer to followers
 	rf.role = follower
 }
 
@@ -225,6 +228,24 @@ type RequestVoteReply struct {
 	VoteGranted bool // true means candidate received vote
 }
 
+// update the currentTerm
+func (rf *Raft) updateCurrentTerm(term int) {
+	rf.currentTerm = term
+	rf.persist()
+}
+
+// update the voteFor
+func (rf *Raft) updateVoteFor(candidateId int) {
+	rf.voteFor = candidateId
+	rf.persist()
+}
+
+// update logs
+func (rf *Raft) updateLogs(index int, entries []Entry) {
+	rf.Log = append(rf.Log[:index], entries...)
+	rf.persist()
+}
+
 // startElection
 func (rf *Raft) startElection() {
 
@@ -235,9 +256,9 @@ func (rf *Raft) startElection() {
 	}
 
 	// currentTerm add more one
-	rf.currentTerm++
+	rf.updateCurrentTerm(rf.currentTerm + 1)
 	// vote for himself
-	rf.voteFor = rf.me
+	rf.updateVoteFor(rf.me)
 	// pack the args
 	currentTerm, role := rf.currentTerm, rf.role
 	rf.mu.Unlock()
@@ -348,7 +369,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if args.Term > rf.currentTerm {
-		rf.currentTerm = args.Term
+		rf.updateCurrentTerm(args.Term)
+		// rf.currentTerm = args.Term
 		rf.beFollower()
 	}
 
@@ -372,7 +394,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	// vote for the candidate
 	// DPrintf("Machine %d vote for the candidate %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
-	rf.voteFor = args.CandidateId
+	rf.updateVoteFor(args.CandidateId)
+	// rf.voteFor = args.CandidateId
 	voter(true)
 	// rf.heartbeat <- ""
 	DPrintf("Machine %d finished Requestvote, called by %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
@@ -507,7 +530,8 @@ func (rf *Raft) sendAERpcs() {
 
 			if reply.Term > rf.currentTerm {
 				P2b("machine %d get the response of sendAppendEntries from %d, but the term is %d, so it is not the leader. Term: %d", rf.me, index, reply.Term, rf.currentTerm)
-				rf.currentTerm = reply.Term
+				rf.updateCurrentTerm(reply.Term)
+				// rf.currentTerm = reply.Term
 				rf.beFollower()
 				return
 			}
@@ -574,7 +598,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	//
 	if args.Term > rf.currentTerm {
 		DPrintf("machine %d get a higher term when AppendEntries, tansfer to the follower. Term: %d", rf.me, rf.currentTerm)
-		rf.currentTerm = args.Term
+		rf.updateCurrentTerm(args.Term)
+		// rf.currentTerm = args.Term
 		rf.beFollower()
 	}
 
@@ -593,7 +618,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	//
 	if len(args.Entries) > 0 {
 		P2b("Machine %d is %v, append the logs: %v. Term: %d", rf.me, role_map[rf.role], args.Entries, rf.currentTerm)
-		rf.Log = append(rf.Log[:args.PrevLogIndex+1], args.Entries...)
+		// rf.Log = append(rf.Log[:args.PrevLogIndex+1], args.Entries...)
+		rf.updateLogs(args.PrevLogIndex+1, args.Entries)
 	}
 
 	//
@@ -655,7 +681,8 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	if isLeader {
 		// append the command to the end of logs
 		index = len(rf.Log)
-		rf.Log = append(rf.Log, Entry{Term: term, Command: command})
+		// rf.Log = append(rf.Log, Entry{Term: term, Command: command})
+		rf.updateLogs(len(rf.Log), []Entry{{Term: term, Command: command}})
 		P2b("Machine %d is the leader, append the log in index %d, Term: %d", rf.me, index, rf.currentTerm)
 	}
 
