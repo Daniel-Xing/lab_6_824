@@ -24,11 +24,13 @@ package raft
 
 import (
 	//	"bytes"
+	"bytes"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	//	"6.824/labgob"
+	"6.824/labgob"
 	"6.824/labrpc"
 )
 
@@ -162,6 +164,14 @@ func (rf *Raft) persist() {
 	// e.Encode(rf.yyy)
 	// data := w.Bytes()
 	// rf.persister.SaveRaftState(data)
+
+	w := new(bytes.Buffer)
+	e := labgob.NewEncoder(w)
+	e.Encode(rf.currentTerm)
+	e.Encode(rf.voteFor)
+	e.Encode(rf.Log)
+	data := w.Bytes()
+	rf.persister.SaveRaftState(data)
 }
 
 //
@@ -184,6 +194,24 @@ func (rf *Raft) readPersist(data []byte) {
 	//   rf.xxx = xxx
 	//   rf.yyy = yyy
 	// }
+
+	r := bytes.NewBuffer(data)
+	d := labgob.NewDecoder(r)
+	var currentTerm int
+	var voteFor int
+	var log []Entry
+	if d.Decode(&currentTerm) != nil ||
+		d.Decode(&voteFor) != nil ||
+		d.Decode(&log) != nil {
+
+		DPrintf("%d readPersist error", rf.me)
+	} else {
+		rf.currentTerm = currentTerm
+		rf.voteFor = voteFor
+		rf.Log = log
+		DPrintf("Machine %d readPersist success, currentTerm: %d, VoteFor: %d, Log: %v",
+			rf.me, rf.currentTerm, rf.voteFor, rf.Log)
+	}
 }
 
 //
@@ -271,12 +299,12 @@ func (rf *Raft) startElection() {
 
 	voteCount := 1
 	finished := 0
+	DPrintf("Machine %d start to send requestVote. Term: %d, Logs: %v", rf.me, rf.currentTerm, rf.Log)
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me { // skip myself
 			continue
 		}
 
-		DPrintf("Machine %d send request vote to %d. Term: %d", rf.me, i, rf.currentTerm)
 		go func(index int, reply *RequestVoteReply) {
 			rf.mu.Lock()
 			args := &RequestVoteArgs{}
@@ -363,7 +391,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if args.Term < rf.currentTerm {
-		DPrintf("Machine %d reject the request vote from %d because Term < currentTerm. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
+		// DPrintf("Machine %d reject the request vote from %d because Term < currentTerm. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
@@ -375,7 +403,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if rf.voteFor != -1 && rf.voteFor != args.CandidateId {
-		DPrintf("Machine %d reject the request vote from %d because voteFor != args.CandidateId. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
+		// DPrintf("Machine %d reject the request vote from %d because voteFor != args.CandidateId. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
@@ -387,7 +415,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if args.LastLogTerm == rf.Log[len(rf.Log)-1].Term && args.LastLogIndex < len(rf.Log)-1 {
-		DPrintf("Machine %d reject the request vote from %d because log is not the same. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
+		// DPrintf("Machine %d reject the request vote from %d because log is not the same. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
@@ -462,15 +490,14 @@ func (rf *Raft) sendAERpcs() {
 	}
 
 	//
-	// DPrintf("machine %d start to send the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
+	DPrintf("machine %d start to send the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 	finished := 0
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me {
 			continue
 		}
 
-		//
-		DPrintf("machine %d send the request to %d when SendAERpcs. Term: %d", rf.me, i, rf.currentTerm)
+		// DPrintf("machine %d send the request to %d when SendAERpcs. Term: %d", rf.me, i, rf.currentTerm)
 		go func(index int, reply *AppendEntriesReply) {
 			rf.mu.Lock()
 			args := &AppendEntriesArgs{}
@@ -486,9 +513,9 @@ func (rf *Raft) sendAERpcs() {
 
 			isHeartBeat := rf.nextIndex[index] == len(rf.Log)
 			if !isHeartBeat {
-				// P2b("%d, %d ", rf.nextIndex[index], len(rf.Log))
-				P2b("Machine %d think it is the leader and send the entris to the follower %d, the index of log is %d. Term: %d",
-					rf.me, index, rf.matchIndex[index], rf.currentTerm)
+				// DPrintf("%d, %d ", rf.nextIndex[index], len(rf.Log))
+				// DPrintf("Machine %d think it is the leader and send the entris to the follower %d, the index of log is %d. Term: %d",
+				// rf.me, index, rf.matchIndex[index], rf.currentTerm)
 				args.Entries = append(args.Entries, rf.Log[rf.nextIndex[index]:]...)
 			}
 			rf.mu.Unlock()
@@ -506,9 +533,9 @@ func (rf *Raft) sendAERpcs() {
 			ok := false
 			select {
 			case ok = <-waitChan:
-				DPrintf("machine %d get the response of sendAppendEntriews from %d success. Term: %d", rf.me, index, rf.currentTerm)
+				// DPrintf("machine %d get the response of sendAppendEntriews from %d success. Term: %d", rf.me, index, rf.currentTerm)
 			case <-time.After(time.Millisecond * 150):
-				DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
+				// DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
 			}
 
 			rf.mu.Lock()
@@ -529,7 +556,7 @@ func (rf *Raft) sendAERpcs() {
 			// }
 
 			if reply.Term > rf.currentTerm {
-				P2b("machine %d get the response of sendAppendEntries from %d, but the term is %d, so it is not the leader. Term: %d", rf.me, index, reply.Term, rf.currentTerm)
+				// DPrintf("machine %d get the response of sendAppendEntries from %d, but the term is %d, so it is not the leader. Term: %d", rf.me, index, reply.Term, rf.currentTerm)
 				rf.updateCurrentTerm(reply.Term)
 				// rf.currentTerm = reply.Term
 				rf.beFollower()
@@ -565,10 +592,10 @@ func (rf *Raft) sendAERpcs() {
 		}
 	}
 
-	DPrintf("machine %d has nextIndex;%v, rf.commitIndex: %d. count:%d,  Term: %d", rf.me, rf.nextIndex, rf.commitIndex, count, rf.currentTerm)
+	// DPrintf("machine %d has nextIndex;%v, rf.commitIndex: %d. count:%d,  Term: %d", rf.me, rf.nextIndex, rf.commitIndex, count, rf.currentTerm)
 	if count > len(rf.peers)/2 {
 		rf.commitIndex++
-		P2b("Machine %d send the applyMsg %v, %d. Term: %d", rf.me, rf.Log[rf.commitIndex].Command, rf.commitIndex, rf.currentTerm)
+		// DPrintf("Machine %d send the applyMsg %v, %d. Term: %d", rf.me, rf.Log[rf.commitIndex].Command, rf.commitIndex, rf.currentTerm)
 		rf.applyCh <- ApplyMsg{Command: rf.Log[rf.commitIndex].Command, CommandIndex: rf.commitIndex, CommandValid: true}
 	}
 
@@ -617,7 +644,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	if len(args.Entries) > 0 {
-		P2b("Machine %d is %v, append the logs: %v. Term: %d", rf.me, role_map[rf.role], args.Entries, rf.currentTerm)
+		DPrintf("Machine %d is %v, append the logs: %v. Term: %d", rf.me, role_map[rf.role], args.Entries, rf.currentTerm)
 		// rf.Log = append(rf.Log[:args.PrevLogIndex+1], args.Entries...)
 		rf.updateLogs(args.PrevLogIndex+1, args.Entries)
 	}
@@ -628,7 +655,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		rf.commitIndex = min(args.LeaderCommit, len(rf.Log)-1)
 
 		for i := old_commitIndex + 1; i <= rf.commitIndex; i++ {
-			P2b("Machine %d send the applyMsg %v, %d, old_commitIndex: %d, rf.commitIndex: %d. Term: %d", rf.me, rf.Log[i].Command, i, old_commitIndex, rf.commitIndex, rf.currentTerm)
+			// DPrintf("Machine %d send the applyMsg %v, %d, old_commitIndex: %d, rf.commitIndex: %d. Term: %d", rf.me, rf.Log[i].Command, i, old_commitIndex, rf.commitIndex, rf.currentTerm)
 			rf.applyCh <- ApplyMsg{
 				Command:      rf.Log[i].Command,
 				CommandIndex: i,
@@ -639,9 +666,9 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	reply.Success = true
-	DPrintf("machine %d send the reply to %d of success msg when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
+	// DPrintf("machine %d send the reply to %d of success msg when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
 
-	DPrintf("machine %d send the heartbeat when %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
+	// DPrintf("machine %d send the heartbeat when %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
 	rf.heartbeat <- ""
 	DPrintf("machine %d has sended the heartbeat when %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
 }
@@ -683,7 +710,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 		index = len(rf.Log)
 		// rf.Log = append(rf.Log, Entry{Term: term, Command: command})
 		rf.updateLogs(len(rf.Log), []Entry{{Term: term, Command: command}})
-		P2b("Machine %d is the leader, append the log in index %d, Term: %d", rf.me, index, rf.currentTerm)
+		DPrintf("Machine %d is the leader, append the log in index %d, Term: %d", rf.me, index, rf.currentTerm)
 	}
 
 	return index, term, isLeader
@@ -722,7 +749,7 @@ func (rf *Raft) ticker() {
 
 		// leader send heartbeat to followers
 		if rf.role == leader {
-			DPrintf("%d ticker send heartbeat. Term: %d", rf.me, rf.currentTerm)
+			// DPrintf("%d ticker send heartbeat. Term: %d", rf.me, rf.currentTerm)
 			rf.sendAERpcs()
 
 			time.Sleep(time.Millisecond * 80)
@@ -735,7 +762,7 @@ func (rf *Raft) ticker() {
 		select {
 		case <-time.After(electionTimeout):
 			// start election
-			DPrintf("Machine: %d, election happend timeout, timeout: %d, role: %s. Term: %d", rf.me, electionTimeout/time.Millisecond, role_map[rf.role], rf.currentTerm)
+			// DPrintf("Machine: %d, election happend timeout, timeout: %d, role: %s. Term: %d", rf.me, electionTimeout/time.Millisecond, role_map[rf.role], rf.currentTerm)
 			rf.startElection()
 		case <-rf.heartbeat:
 			// print the messages
@@ -768,14 +795,18 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.cond = sync.NewCond(&rf.mu)
 
 	// Your initialization code here (2A, 2B, 2C).
+	// init the persistent states
 	rf.currentTerm = 0
-	// when init, no vote for any machine, so init as -1
 	rf.voteFor = -1
-
 	rf.Log = make([]Entry, 0)
 	rf.Log = append(rf.Log, Entry{Command: nil, Term: 0})
-	rf.commitIndex = -1
 
+	// recover from the persister
+	if rf.persister != nil {
+		rf.readPersist(rf.persister.raftstate)
+	}
+
+	rf.commitIndex = -1
 	rf.leaderId = -1
 	rf.lastApplied = -1
 

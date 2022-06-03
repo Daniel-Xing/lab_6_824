@@ -7,18 +7,10 @@ import (
 )
 
 // Debugging
-const Debug = false
-const Debug2b = false
+const Debug = true
 
 func DPrintf(format string, a ...interface{}) (n int, err error) {
 	if Debug {
-		log.Printf(format, a...)
-	}
-	return
-}
-
-func P2b(format string, a ...interface{}) (n int, err error) {
-	if Debug2b {
 		log.Printf(format, a...)
 	}
 	return
