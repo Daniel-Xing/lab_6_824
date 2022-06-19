@@ -278,6 +278,7 @@ func (rf *Raft) updateLogs(index int, entries []Entry) {
 func (rf *Raft) startElection() {
 
 	rf.mu.Lock()
+	defer rf.mu.Unlock()
 	// change the role from follower to candidate
 	if rf.role == follower {
 		rf.beCandidate()
@@ -289,7 +290,7 @@ func (rf *Raft) startElection() {
 	rf.updateVoteFor(rf.me)
 	// pack the args
 	currentTerm, role := rf.currentTerm, rf.role
-	rf.mu.Unlock()
+	// rf.mu.Unlock()
 
 	// init result reply
 	reply := make([]*RequestVoteReply, len(rf.peers))
@@ -299,7 +300,8 @@ func (rf *Raft) startElection() {
 
 	voteCount := 1
 	finished := 0
-	DPrintf("Machine %d start to send requestVote. Term: %d, Logs: %v", rf.me, rf.currentTerm, rf.Log)
+	DPrintf("Machine %d start to send requestVote. Term: %d", rf.me, rf.currentTerm)
+	DPrintf("Machine %d log info, the length of logs: %d, the last one log: %v", rf.me, len(rf.Log), rf.Log[len(rf.Log)-1])
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me { // skip myself
 			continue
@@ -327,7 +329,7 @@ func (rf *Raft) startElection() {
 			ok := false
 			select {
 			case ok = <-waitChan:
-			case <-time.After(time.Millisecond * 150):
+			case <-time.After(time.Millisecond * 300):
 			}
 
 			rf.mu.Lock()
@@ -357,7 +359,7 @@ func (rf *Raft) startElection() {
 
 	}
 
-	rf.mu.Lock()
+	// rf.mu.Lock()
 	for voteCount <= len(rf.peers)/2 && finished != len(rf.peers)-1 {
 		rf.cond.Wait()
 	}
@@ -365,7 +367,7 @@ func (rf *Raft) startElection() {
 	if voteCount > len(rf.peers)/2 {
 		rf.beLeaer()
 	}
-	rf.mu.Unlock()
+	// rf.mu.Unlock()
 
 	DPrintf("Machine %d has finished the election. Term: %d", rf.me, rf.currentTerm)
 }
@@ -386,8 +388,9 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	var voter = func(granted bool) {
 		reply.VoteGranted = granted
 		reply.Term = rf.currentTerm
-		DPrintf("Machine %d Vote info - args Term: %d, currentTerm : %d, args.LastLogTerm: %d, args.LastLogIndex:%d, voteFor: %d, CandidateID%d, vote: %v, rf.logs:%v",
-			rf.me, args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId, reply.VoteGranted, rf.Log)
+		DPrintf("Machine %d Vote info - args Term: %d, currentTerm : %d, args.LastLogTerm: %d, args.LastLogIndex:%d, voteFor: %d, CandidateID%d, vote: %v",
+			rf.me, args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId, reply.VoteGranted)
+		DPrintf("Machine %d log info, the length of logs: %d, the last one log: %v", rf.me, len(rf.Log), rf.Log[len(rf.Log)-1])
 	}
 
 	if args.Term < rf.currentTerm {
@@ -483,6 +486,9 @@ type AppendEntriesReply struct {
 
 //
 func (rf *Raft) sendAERpcs() {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
 	// DPrintf("machine %d package the args and reply when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 	replys := make([]*AppendEntriesReply, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
@@ -534,7 +540,7 @@ func (rf *Raft) sendAERpcs() {
 			select {
 			case ok = <-waitChan:
 				// DPrintf("machine %d get the response of sendAppendEntriews from %d success. Term: %d", rf.me, index, rf.currentTerm)
-			case <-time.After(time.Millisecond * 150):
+			case <-time.After(time.Millisecond * 300):
 				// DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
 			}
 
@@ -579,7 +585,7 @@ func (rf *Raft) sendAERpcs() {
 	}
 
 	// process the result
-	rf.mu.Lock()
+	// rf.mu.Lock()
 	for finished != len(rf.peers)-1 {
 		rf.cond.Wait()
 	}
@@ -599,7 +605,7 @@ func (rf *Raft) sendAERpcs() {
 		rf.applyCh <- ApplyMsg{Command: rf.Log[rf.commitIndex].Command, CommandIndex: rf.commitIndex, CommandValid: true}
 	}
 
-	rf.mu.Unlock()
+	// rf.mu.Unlock()
 	DPrintf("machine %d finish sending the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 }
 
@@ -644,9 +650,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	if len(args.Entries) > 0 {
-		DPrintf("Machine %d is %v, append the logs: %v. Term: %d", rf.me, role_map[rf.role], args.Entries, rf.currentTerm)
-		// rf.Log = append(rf.Log[:args.PrevLogIndex+1], args.Entries...)
 		rf.updateLogs(args.PrevLogIndex+1, args.Entries)
+		DPrintf("Machine %d is %v, the length of logs: %d, the last one: %v. Term: %d", rf.me, role_map[rf.role], len(rf.Log), rf.Log[len(rf.Log)-1], rf.currentTerm)
 	}
 
 	//
