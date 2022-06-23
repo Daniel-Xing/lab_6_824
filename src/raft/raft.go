@@ -34,6 +34,14 @@ import (
 	"6.824/labrpc"
 )
 
+// role defination
+const follower int = 1
+const candidate int = 2
+const leader int = 3
+const RPCTimeout = time.Millisecond * 200
+
+var role_map map[int]string
+
 //
 // as each Raft peer becomes aware that successive log entries are
 // committed, the peer should send an ApplyMsg to the service (or
@@ -56,13 +64,6 @@ type ApplyMsg struct {
 	SnapshotTerm  int
 	SnapshotIndex int
 }
-
-// role defination
-const follower int = 1
-const candidate int = 2
-const leader int = 3
-
-var role_map map[int]string
 
 //
 // A Go object implementing a single Raft peer.
@@ -97,8 +98,10 @@ type Raft struct {
 	matchIndex []int
 
 	// when follower received AppendEntries rpc, send a message to channel. TODO: maybe block.
-	heartbeat chan string
-	applyCh   chan ApplyMsg
+	applyCh chan ApplyMsg
+
+	// eletion timeout
+	electionTimeout time.Time
 }
 
 type Entry struct {
@@ -120,10 +123,28 @@ func (rf *Raft) GetState() (int, bool) {
 	return rf.currentTerm, rf.role == leader
 }
 
+// update the currentTerm
+func (rf *Raft) updateCurrentTerm(term int) {
+	rf.currentTerm = term
+	rf.persist()
+}
+
+// update the voteFor
+func (rf *Raft) updateVoteFor(candidateId int) {
+	rf.voteFor = candidateId
+	rf.persist()
+}
+
+// update logs
+func (rf *Raft) updateLogs(index int, entries []Entry) {
+	rf.Log = append(rf.Log[:index], entries...)
+	rf.persist()
+}
+
 // state transfer
 // beLeader clear the nextIndex and matchIndex
 func (rf *Raft) beLeaer() {
-	DPrintf("%d become leader from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
+	DPrintf("Machine %d become leader from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
 	rf.role = leader
 
 	rf.nextIndex = make([]int, len(rf.peers))
@@ -137,17 +158,25 @@ func (rf *Raft) beLeaer() {
 
 // beCandidate
 func (rf *Raft) beCandidate() {
-	DPrintf("%d become candidate from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
+	DPrintf("Machine %d become candidate from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
 	rf.role = candidate
 }
 
 // beFollower
 func (rf *Raft) beFollower() {
-	DPrintf("%d become follower from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
+	DPrintf("Machine %d become follower from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
 
 	rf.updateVoteFor(-1)
-	// rf.voteFor = -1 // voteFor should be reset when transfer to followers
 	rf.role = follower
+}
+
+func (rf *Raft) updateElectionTimeout() {
+	rf.electionTimeout = time.Now().Add(RandomTime())
+	DPrintf("Machine %d update election timeout: %s", rf.me, rf.electionTimeout)
+}
+
+func (rf *Raft) isTimeout() bool {
+	return time.Now().After(rf.electionTimeout)
 }
 
 //
@@ -256,29 +285,13 @@ type RequestVoteReply struct {
 	VoteGranted bool // true means candidate received vote
 }
 
-// update the currentTerm
-func (rf *Raft) updateCurrentTerm(term int) {
-	rf.currentTerm = term
-	rf.persist()
-}
-
-// update the voteFor
-func (rf *Raft) updateVoteFor(candidateId int) {
-	rf.voteFor = candidateId
-	rf.persist()
-}
-
-// update logs
-func (rf *Raft) updateLogs(index int, entries []Entry) {
-	rf.Log = append(rf.Log[:index], entries...)
-	rf.persist()
-}
-
 // startElection
 func (rf *Raft) startElection() {
 
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+	defer rf.updateElectionTimeout()
+
 	// change the role from follower to candidate
 	if rf.role == follower {
 		rf.beCandidate()
@@ -290,7 +303,6 @@ func (rf *Raft) startElection() {
 	rf.updateVoteFor(rf.me)
 	// pack the args
 	currentTerm, role := rf.currentTerm, rf.role
-	// rf.mu.Unlock()
 
 	// init result reply
 	reply := make([]*RequestVoteReply, len(rf.peers))
@@ -321,7 +333,7 @@ func (rf *Raft) startElection() {
 				start := time.Now()
 				ok := rf.sendRequestVote(index, args, reply)
 				end := time.Now()
-				if end.Sub(start) < time.Millisecond*150 {
+				if end.Sub(start) < RPCTimeout {
 					waitChan <- ok
 				}
 			}()
@@ -329,7 +341,7 @@ func (rf *Raft) startElection() {
 			ok := false
 			select {
 			case ok = <-waitChan:
-			case <-time.After(time.Millisecond * 300):
+			case <-time.After(RPCTimeout):
 			}
 
 			rf.mu.Lock()
@@ -359,7 +371,6 @@ func (rf *Raft) startElection() {
 
 	}
 
-	// rf.mu.Lock()
 	for voteCount <= len(rf.peers)/2 && finished != len(rf.peers)-1 {
 		rf.cond.Wait()
 	}
@@ -367,7 +378,6 @@ func (rf *Raft) startElection() {
 	if voteCount > len(rf.peers)/2 {
 		rf.beLeaer()
 	}
-	// rf.mu.Unlock()
 
 	DPrintf("Machine %d has finished the election. Term: %d", rf.me, rf.currentTerm)
 }
@@ -377,11 +387,10 @@ func (rf *Raft) startElection() {
 //
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (2A, 2B).
-	// pack the args
 	// DPrintf("Machine %d try to get locker in Requestvote, called by %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
-	defer func() { rf.heartbeat <- "" }()
+	defer rf.updateElectionTimeout()
 	// DPrintf("Machine %d has got locker in Requestvote, called by %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 
 	DPrintf("Machine %d receive request vote from %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
@@ -426,9 +435,8 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// vote for the candidate
 	// DPrintf("Machine %d vote for the candidate %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 	rf.updateVoteFor(args.CandidateId)
-	// rf.voteFor = args.CandidateId
 	voter(true)
-	// rf.heartbeat <- ""
+
 	DPrintf("Machine %d finished Requestvote, called by %d. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 }
 
@@ -496,7 +504,7 @@ func (rf *Raft) sendAERpcs() {
 	}
 
 	//
-	DPrintf("machine %d start to send the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
+	DPrintf("Machine %d start to send the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 	finished := 0
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me {
@@ -519,9 +527,6 @@ func (rf *Raft) sendAERpcs() {
 
 			isHeartBeat := rf.nextIndex[index] == len(rf.Log)
 			if !isHeartBeat {
-				// DPrintf("%d, %d ", rf.nextIndex[index], len(rf.Log))
-				// DPrintf("Machine %d think it is the leader and send the entris to the follower %d, the index of log is %d. Term: %d",
-				// rf.me, index, rf.matchIndex[index], rf.currentTerm)
 				args.Entries = append(args.Entries, rf.Log[rf.nextIndex[index]:]...)
 			}
 			rf.mu.Unlock()
@@ -531,7 +536,7 @@ func (rf *Raft) sendAERpcs() {
 				start := time.Now()
 				ok := rf.sendAppendEntries(index, args, reply)
 				end := time.Now()
-				if end.Sub(start) < time.Millisecond*150 {
+				if end.Sub(start) < RPCTimeout {
 					waitChan <- ok
 				}
 			}()
@@ -540,7 +545,7 @@ func (rf *Raft) sendAERpcs() {
 			select {
 			case ok = <-waitChan:
 				// DPrintf("machine %d get the response of sendAppendEntriews from %d success. Term: %d", rf.me, index, rf.currentTerm)
-			case <-time.After(time.Millisecond * 300):
+			case <-time.After(RPCTimeout):
 				// DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
 			}
 
@@ -548,18 +553,13 @@ func (rf *Raft) sendAERpcs() {
 			defer rf.mu.Unlock()
 			defer rf.cond.Broadcast()
 
-			DPrintf("machine %d receive the reply from %d when sendAppendEntries, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
+			DPrintf("Machine %d receive the reply from %d when sendAppendEntries, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
 			finished++
 
 			if !ok {
 				// DPrintf("machine %d get the response to %d failed when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
 				return
 			}
-
-			// if rf.role == follower {
-			// 	// DPrintf("Machine %d used to be a leader, but now is follower. Term: %d", rf.me, rf.currentTerm)
-			// 	return
-			// }
 
 			if reply.Term > rf.currentTerm {
 				// DPrintf("machine %d get the response of sendAppendEntries from %d, but the term is %d, so it is not the leader. Term: %d", rf.me, index, reply.Term, rf.currentTerm)
@@ -585,37 +585,56 @@ func (rf *Raft) sendAERpcs() {
 	}
 
 	// process the result
-	// rf.mu.Lock()
 	for finished != len(rf.peers)-1 {
 		rf.cond.Wait()
 	}
 
-	//
-	count := 1
-	for i := 0; i < len(rf.peers); i++ {
-		if i != rf.me && rf.nextIndex[i] > rf.commitIndex+1 {
-			count++
+	N := rf.findMaxN()
+	if N != -1 {
+		for i := rf.commitIndex + 1; i <= N; i++ {
+			// DPrintf("Machine %d send the applyMsg %v, %d. Term: %d", rf.me, rf.Log[i].Command, rf.commitIndex, rf.currentTerm)
+			rf.applyCh <- ApplyMsg{Command: rf.Log[i].Command,
+				CommandIndex: i, CommandValid: true}
 		}
+
+		rf.commitIndex = N
 	}
 
-	// DPrintf("machine %d has nextIndex;%v, rf.commitIndex: %d. count:%d,  Term: %d", rf.me, rf.nextIndex, rf.commitIndex, count, rf.currentTerm)
-	if count > len(rf.peers)/2 {
-		rf.commitIndex++
-		// DPrintf("Machine %d send the applyMsg %v, %d. Term: %d", rf.me, rf.Log[rf.commitIndex].Command, rf.commitIndex, rf.currentTerm)
-		rf.applyCh <- ApplyMsg{Command: rf.Log[rf.commitIndex].Command, CommandIndex: rf.commitIndex, CommandValid: true}
-	}
+	DPrintf("Machine %d has log: %v.", rf.me, rf.Log)
 
 	// rf.mu.Unlock()
-	DPrintf("machine %d finish sending the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
+	DPrintf("Machine %d finish sending the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
+}
+
+func (rf *Raft) findMaxN() int {
+
+	N := len(rf.Log) - 1
+	for N > 0 {
+		count := 1
+		for i := 0; i < len(rf.peers); i++ {
+			if i != rf.me && rf.matchIndex[i] >= N && rf.Log[N].Term == rf.currentTerm {
+				count++
+			}
+		}
+
+		if count > len(rf.peers)/2 {
+			return N
+		}
+
+		N--
+	}
+
+	return -1
 }
 
 //
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
-	DPrintf("machine %d get the request from %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
+	DPrintf("Machine %d get the request from %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
 
 	// DPrintf("machine %d try to get the locker when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
+	defer rf.updateElectionTimeout()
 	// DPrintf("machine %d has got the locker when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 
 	//
@@ -624,13 +643,13 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	if args.Term < rf.currentTerm {
-		DPrintf("machine %d get a lower term when AppendEntries, the request is not admitted. Term: %d", rf.me, rf.currentTerm)
+		DPrintf("Machine %d get a lower term when AppendEntries, the request is not admitted. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
 	//
-	if args.Term > rf.currentTerm {
-		DPrintf("machine %d get a higher term when AppendEntries, tansfer to the follower. Term: %d", rf.me, rf.currentTerm)
+	if args.Term >= rf.currentTerm {
+		DPrintf("Machine %d get a higher term when AppendEntries, tansfer to the follower. Term: %d", rf.me, rf.currentTerm)
 		rf.updateCurrentTerm(args.Term)
 		// rf.currentTerm = args.Term
 		rf.beFollower()
@@ -638,13 +657,13 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	if args.PrevLogIndex < 0 || args.PrevLogIndex >= len(rf.Log) {
-		DPrintf("machine %d get a wrong precLogIndex when AppendEntries. Term: %d", rf.me, rf.currentTerm)
+		DPrintf("Machine %d get a wrong precLogIndex when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
 	//
 	if args.PrevLogTerm != rf.Log[args.PrevLogIndex].Term {
-		DPrintf("machine %d get a wrong prevLogTerm when AppendEntries. Term: %d", rf.me, rf.currentTerm)
+		DPrintf("Machine %d get a wrong prevLogTerm when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
@@ -656,26 +675,26 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	if args.LeaderCommit > rf.commitIndex {
-		old_commitIndex := rf.commitIndex
-		rf.commitIndex = min(args.LeaderCommit, len(rf.Log)-1)
+		newCommitIndex := min(args.LeaderCommit, len(rf.Log)-1)
 
-		for i := old_commitIndex + 1; i <= rf.commitIndex; i++ {
-			// DPrintf("Machine %d send the applyMsg %v, %d, old_commitIndex: %d, rf.commitIndex: %d. Term: %d", rf.me, rf.Log[i].Command, i, old_commitIndex, rf.commitIndex, rf.currentTerm)
+		for i := rf.commitIndex + 1; i <= newCommitIndex; i++ {
+			DPrintf("Machine %d send the applyMsg %v, %d, old_commitIndex: %d, rf.commitIndex: %d. Term: %d", rf.me, rf.Log[i].Command, i, rf.commitIndex, newCommitIndex, rf.currentTerm)
 			rf.applyCh <- ApplyMsg{
 				Command:      rf.Log[i].Command,
 				CommandIndex: i,
 				CommandValid: true,
 			}
 		}
+
+		rf.commitIndex = newCommitIndex
 	}
 
-	//
 	reply.Success = true
 	// DPrintf("machine %d send the reply to %d of success msg when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
 
+	DPrintf("Machine %d has log: %v.", rf.me, rf.Log)
 	// DPrintf("machine %d send the heartbeat when %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
-	rf.heartbeat <- ""
-	DPrintf("machine %d has sended the heartbeat when %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
+	DPrintf("Machine %d has sended the heartbeat when %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
 }
 
 //
@@ -711,9 +730,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 
 	// if the server think it is the leader
 	if isLeader {
-		// append the command to the end of logs
 		index = len(rf.Log)
-		// rf.Log = append(rf.Log, Entry{Term: term, Command: command})
 		rf.updateLogs(len(rf.Log), []Entry{{Term: term, Command: command}})
 		DPrintf("Machine %d is the leader, append the log in index %d, Term: %d", rf.me, index, rf.currentTerm)
 	}
@@ -762,18 +779,10 @@ func (rf *Raft) ticker() {
 		}
 
 		// follower starts a new election or process the heartbeat
-		electionTimeout := RandomTime()
-		DPrintf("Machine %d has eletiontime: %d. Term: %d", rf.me, electionTimeout/time.Millisecond, rf.currentTerm)
-		select {
-		case <-time.After(electionTimeout):
-			// start election
-			// DPrintf("Machine: %d, election happend timeout, timeout: %d, role: %s. Term: %d", rf.me, electionTimeout/time.Millisecond, role_map[rf.role], rf.currentTerm)
+		if rf.isTimeout() {
 			rf.startElection()
-		case <-rf.heartbeat:
-			// print the messages
-			DPrintf("Machine: %d refresh the eletiontimeout. Term: %d", rf.me, rf.currentTerm)
-			// process the message
 		}
+		time.Sleep(time.Millisecond * 50)
 	}
 }
 
@@ -823,20 +832,18 @@ func Make(peers []*labrpc.ClientEnd, me int,
 		rf.nextIndex[i] = 1
 	}
 
-	rf.heartbeat = make(chan string, 1)
 	rf.applyCh = applyCh
 
 	// init as the follower
 	rf.mu.Lock()
 	rf.beFollower()
+	rf.updateElectionTimeout()
 	rf.mu.Unlock()
 
-	// applyCh <- ApplyMsg{Command: nil, CommandIndex: 0, CommandValid: true}
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
 
 	// start ticker goroutine to start elections
-
 	go rf.ticker()
 
 	return rf
