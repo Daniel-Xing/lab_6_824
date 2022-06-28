@@ -591,11 +591,11 @@ func (rf *Raft) sendAERpcs() {
 
 	N := rf.findMaxN()
 	if N != -1 {
-		for i := rf.commitIndex + 1; i <= N; i++ {
-			// DPrintf("Machine %d send the applyMsg %v, %d. Term: %d", rf.me, rf.Log[i].Command, rf.commitIndex, rf.currentTerm)
-			rf.applyCh <- ApplyMsg{Command: rf.Log[i].Command,
-				CommandIndex: i, CommandValid: true}
-		}
+		// for i := rf.commitIndex + 1; i <= N; i++ {
+		// 	// DPrintf("Machine %d send the applyMsg %v, %d. Term: %d", rf.me, rf.Log[i].Command, rf.commitIndex, rf.currentTerm)
+		// 	rf.applyCh <- ApplyMsg{Command: rf.Log[i].Command,
+		// 		CommandIndex: i, CommandValid: true}
+		// }
 
 		rf.commitIndex = N
 	}
@@ -609,7 +609,7 @@ func (rf *Raft) sendAERpcs() {
 func (rf *Raft) findMaxN() int {
 
 	N := len(rf.Log) - 1
-	for N > 0 {
+	for N > rf.commitIndex {
 		count := 1
 		for i := 0; i < len(rf.peers); i++ {
 			if i != rf.me && rf.matchIndex[i] >= N && rf.Log[N].Term == rf.currentTerm {
@@ -677,14 +677,14 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	if args.LeaderCommit > rf.commitIndex {
 		newCommitIndex := min(args.LeaderCommit, len(rf.Log)-1)
 
-		for i := rf.commitIndex + 1; i <= newCommitIndex; i++ {
-			DPrintf("Machine %d send the applyMsg %v, %d, old_commitIndex: %d, rf.commitIndex: %d. Term: %d", rf.me, rf.Log[i].Command, i, rf.commitIndex, newCommitIndex, rf.currentTerm)
-			rf.applyCh <- ApplyMsg{
-				Command:      rf.Log[i].Command,
-				CommandIndex: i,
-				CommandValid: true,
-			}
-		}
+		// for i := rf.commitIndex + 1; i <= newCommitIndex; i++ {
+		// 	DPrintf("Machine %d send the applyMsg %v, %d, old_commitIndex: %d, rf.commitIndex: %d. Term: %d", rf.me, rf.Log[i].Command, i, rf.commitIndex, newCommitIndex, rf.currentTerm)
+		// 	rf.applyCh <- ApplyMsg{
+		// 		Command:      rf.Log[i].Command,
+		// 		CommandIndex: i,
+		// 		CommandValid: true,
+		// 	}
+		// }
 
 		rf.commitIndex = newCommitIndex
 	}
@@ -786,6 +786,24 @@ func (rf *Raft) ticker() {
 	}
 }
 
+func (rf *Raft) applier() {
+	for !rf.killed() {
+		time.Sleep(time.Millisecond * 50)
+
+		// 决定是否需要应用日志到状态机
+		if rf.commitIndex > rf.lastApplied {
+			rf.mu.Lock()
+			rf.lastApplied++
+			rf.applyCh <- ApplyMsg{
+				Command:      rf.Log[rf.lastApplied].Command,
+				CommandIndex: rf.lastApplied,
+				CommandValid: true,
+			}
+			rf.mu.Unlock()
+		}
+	}
+}
+
 //
 // the service or tester wants to create a Raft server. the ports
 // of all the Raft servers (including this one) are in peers[]. this
@@ -845,6 +863,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	// start ticker goroutine to start elections
 	go rf.ticker()
+	go rf.applier()
 
 	return rf
 }
