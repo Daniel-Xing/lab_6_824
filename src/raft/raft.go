@@ -102,6 +102,10 @@ type Raft struct {
 
 	// eletion timeout
 	electionTimeout time.Time
+
+	// snapshot
+	lastAppliedIndex int
+	lastAppliedTerm  int
 }
 
 type Entry struct {
@@ -199,6 +203,8 @@ func (rf *Raft) persist() {
 	e.Encode(rf.currentTerm)
 	e.Encode(rf.voteFor)
 	e.Encode(rf.Log)
+	e.Encode(rf.lastAppliedIndex)
+	e.Encode(rf.lastAppliedTerm)
 	data := w.Bytes()
 	rf.persister.SaveRaftState(data)
 }
@@ -229,17 +235,23 @@ func (rf *Raft) readPersist(data []byte) {
 	var currentTerm int
 	var voteFor int
 	var log []Entry
+	var lastAppliedIndex int
+	var lastAppliedTerm int
 	if d.Decode(&currentTerm) != nil ||
 		d.Decode(&voteFor) != nil ||
-		d.Decode(&log) != nil {
+		d.Decode(&log) != nil ||
+		d.Decode(&lastAppliedIndex) != nil ||
+		d.Decode(&lastAppliedTerm) != nil {
 
 		DPrintf("%d readPersist error", rf.me)
 	} else {
 		rf.currentTerm = currentTerm
 		rf.voteFor = voteFor
 		rf.Log = log
-		DPrintf("Machine %d readPersist success, currentTerm: %d, VoteFor: %d, Log: %v",
-			rf.me, rf.currentTerm, rf.voteFor, rf.Log)
+		rf.lastAppliedIndex = lastAppliedIndex
+		rf.lastAppliedTerm = lastAppliedTerm
+		DPrintf("Machine %d readPersist success, currentTerm: %d, VoteFor: %d, Log: %v, lastAppliedIndex: %d, lastAppliedTerm: %d",
+			rf.me, rf.currentTerm, rf.voteFor, rf.Log, rf.lastAppliedIndex, rf.lastAppliedTerm)
 	}
 }
 
@@ -841,6 +853,8 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.commitIndex = -1
 	rf.leaderId = -1
 	rf.lastApplied = -1
+	rf.lastAppliedIndex = -1
+	rf.lastAppliedTerm = 0
 
 	// init nextIndex as the 0 + 1
 	rf.nextIndex = make([]int, len(rf.peers))
