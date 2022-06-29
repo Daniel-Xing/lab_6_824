@@ -445,6 +445,7 @@ func (cfg *config) nCommitted(index int) (int, interface{}) {
 
 		cfg.mu.Lock()
 		cmd1, ok := cfg.logs[i][index]
+		DPrintf("TTTTTTT: Machine %d has logs: %v", i, cfg.logs[i])
 		cfg.mu.Unlock()
 
 		if ok {
@@ -534,6 +535,7 @@ func (cfg *config) one(cmd interface{}, expectedServers int, retry bool) int {
 			for time.Since(t1).Seconds() < 2 {
 				nd, cmd1 := cfg.nCommitted(index)
 				DPrintf("%d, %v", nd, cmd1)
+
 				if nd > 0 && nd >= expectedServers {
 					// committed
 					if cmd1 == cmd {
