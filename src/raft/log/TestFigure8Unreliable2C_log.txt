@@ -1,0 +1,6 @@
+Test (2C): Figure 8 (unreliable) ...
+--- FAIL: TestFigure8Unreliable2C (41.61s)
+    config.go:553: one(4893) failed to reach agreement
+FAIL
+exit status 1
+FAIL	6.824/raft	42.223s
