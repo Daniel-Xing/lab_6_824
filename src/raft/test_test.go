@@ -894,8 +894,9 @@ func TestFigure8Unreliable2C(t *testing.T) {
 		}
 	}
 
-	// cfg.one(rand.Int()%10000, servers, true)
-	cfg.one(12345678, servers, true)
+	DPrintf("All Server connected\n")
+	cfg.one(rand.Int()%10000, servers, true)
+	// cfg.one(12345678, servers, true)
 
 	cfg.end()
 }
