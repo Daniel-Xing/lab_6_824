@@ -272,7 +272,47 @@ func (rf *Raft) CondInstallSnapshot(lastIncludedTerm int, lastIncludedIndex int,
 // that index. Raft should now trim its log as much as possible.
 func (rf *Raft) Snapshot(index int, snapshot []byte) {
 	// Your code here (2D).
+	go rf.doSnapshot(index, snapshot)
+}
 
+func (rf *Raft) doSnapshot(index int, snapshot []byte) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	w := new(bytes.Buffer)
+	e := labgob.NewEncoder(w)
+	e.Encode(rf.currentTerm)
+	e.Encode(rf.voteFor)
+	e.Encode(rf.Log)
+	e.Encode(rf.lastAppliedIndex)
+	e.Encode(rf.lastAppliedTerm)
+	data := w.Bytes()
+
+	rf.persister.SaveStateAndSnapshot(data, snapshot)
+
+	// send the message
+	var lastAppliedIndex, lastAppliedTerm int
+	if index == rf.lastAppliedIndex {
+		lastAppliedIndex = rf.lastAppliedIndex
+		lastAppliedTerm = rf.lastAppliedTerm
+	} else {
+		lastAppliedIndex = index
+		lastAppliedTerm = rf.Log[index-rf.lastAppliedIndex-1].Term
+	}
+
+	rf.applyCh <- ApplyMsg{
+		CommandValid: false,
+
+		SnapshotValid: true,
+		Snapshot:      snapshot,
+		SnapshotTerm:  lastAppliedTerm, // maybe panic, cause len(rf.log) == 0
+		SnapshotIndex: lastAppliedIndex,
+	}
+
+	// delete the log
+	rf.Log = rf.Log[index-rf.lastAppliedIndex:]
+	rf.lastAppliedIndex = lastAppliedIndex
+	rf.lastAppliedTerm = lastAppliedTerm
 }
 
 //
@@ -325,7 +365,7 @@ func (rf *Raft) startElection() {
 	voteCount := 1
 	finished := 0
 	DPrintf("Machine %d start to send requestVote. Term: %d", rf.me, rf.currentTerm)
-	DPrintf("Machine %d log info, the length of logs: %d, the last one log: %v", rf.me, len(rf.Log), rf.Log[len(rf.Log)-1])
+	DPrintf("Machine %d log info, the length of logs: %d, the last one log: %v, lastApplied: %d", rf.me, len(rf.Log), rf.Log[len(rf.Log)-1], rf.lastApplied)
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me { // skip myself
 			continue
@@ -335,8 +375,13 @@ func (rf *Raft) startElection() {
 			rf.mu.Lock()
 			args := &RequestVoteArgs{}
 			args.Term = rf.currentTerm
-			args.LastLogIndex = len(rf.Log) - 1
-			args.LastLogTerm = rf.Log[args.LastLogIndex].Term
+			if len(rf.Log) != 0 {
+				args.LastLogIndex = len(rf.Log) - 1
+				args.LastLogTerm = rf.Log[args.LastLogIndex].Term
+			} else {
+				args.LastLogIndex = rf.lastAppliedIndex
+				args.LastLogTerm = rf.lastAppliedTerm
+			}
 			args.CandidateId = rf.me
 			rf.mu.Unlock()
 
@@ -367,7 +412,6 @@ func (rf *Raft) startElection() {
 				DPrintf("Machine %d, expired process, currentTerm: %d, role: %d, rf.currentTerm: %d, rf.role: %d", rf.me, currentTerm, role, rf.currentTerm, rf.role)
 				return
 			}
-
 			if !ok {
 				return
 			}
@@ -411,7 +455,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		reply.Term = rf.currentTerm
 		DPrintf("Machine %d Vote info - args Term: %d, currentTerm : %d, args.LastLogTerm: %d, args.LastLogIndex:%d, voteFor: %d, CandidateID%d, vote: %v",
 			rf.me, args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId, reply.VoteGranted)
-		DPrintf("Machine %d log info, the length of logs: %d, the last one log: %v", rf.me, len(rf.Log), rf.Log[len(rf.Log)-1])
+		DPrintf("Machine %d log info, the length of logs: %d, the last one log: %v, lastApplied: %d", rf.me, len(rf.Log), rf.Log[len(rf.Log)-1], rf.lastApplied)
 	}
 
 	if args.Term < rf.currentTerm {
@@ -432,13 +476,24 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		return
 	}
 
-	// TODO: check if the log is the same
-	if args.LastLogTerm < rf.Log[len(rf.Log)-1].Term {
+	// check if the last log is the same
+	var lastLogTerm int
+	var lastLogIndex int
+
+	if len(rf.Log) != 0 {
+		lastLogTerm = rf.Log[len(rf.Log)-1].Term
+		lastLogIndex = len(rf.Log) + rf.lastAppliedIndex
+	} else {
+		lastLogTerm = rf.lastAppliedTerm
+		lastLogIndex = rf.lastAppliedIndex
+	}
+
+	if args.LastLogTerm < lastLogTerm {
 		voter(false)
 		return
 	}
 
-	if args.LastLogTerm == rf.Log[len(rf.Log)-1].Term && args.LastLogIndex < len(rf.Log)-1 {
+	if args.LastLogTerm == lastLogTerm && args.LastLogIndex < lastLogIndex {
 		// DPrintf("Machine %d reject the request vote from %d because log is not the same. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
@@ -603,18 +658,10 @@ func (rf *Raft) sendAERpcs() {
 
 	N := rf.findMaxN()
 	if N != -1 {
-		// for i := rf.commitIndex + 1; i <= N; i++ {
-		// 	// DPrintf("Machine %d send the applyMsg %v, %d. Term: %d", rf.me, rf.Log[i].Command, rf.commitIndex, rf.currentTerm)
-		// 	rf.applyCh <- ApplyMsg{Command: rf.Log[i].Command,
-		// 		CommandIndex: i, CommandValid: true}
-		// }
-
 		rf.commitIndex = N
 	}
 
 	DPrintf("Machine %d has log: %v.", rf.me, rf.Log)
-
-	// rf.mu.Unlock()
 	DPrintf("Machine %d finish sending the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 }
 
@@ -668,41 +715,40 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	}
 
 	//
-	if args.PrevLogIndex < 0 || args.PrevLogIndex >= len(rf.Log) {
+
+	if args.PrevLogIndex < rf.lastAppliedIndex || args.PrevLogIndex > len(rf.Log)+rf.lastAppliedIndex {
 		DPrintf("Machine %d get a wrong precLogIndex when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
 	//
-	if args.PrevLogTerm != rf.Log[args.PrevLogIndex].Term {
+	var prevLogTerm int
+	if len(rf.Log) == 0 {
+		prevLogTerm = rf.lastAppliedTerm
+	} else {
+		prevLogTerm = rf.Log[args.PrevLogIndex-rf.lastAppliedIndex-1].Term
+	}
+	if args.PrevLogTerm != prevLogTerm {
 		DPrintf("Machine %d get a wrong prevLogTerm when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 		return
 	}
 
 	//
 	if len(args.Entries) > 0 {
-		rf.updateLogs(args.PrevLogIndex+1, args.Entries)
-		DPrintf("Machine %d is %v, the length of logs: %d, the last one: %v. Term: %d", rf.me, role_map[rf.role], len(rf.Log), rf.Log[len(rf.Log)-1], rf.currentTerm)
+		// rf.updateLogs(args.PrevLogIndex+1, args.Entries)
+		// DPrintf("Machine %d is %v, the length of logs: %d, the last one: %v. Term: %d", rf.me, role_map[rf.role], len(rf.Log), rf.Log[len(rf.Log)-1], rf.currentTerm)
+		rf.Log = append(rf.Log[:args.PrevLogIndex-rf.lastAppliedIndex], args.Entries...)
+		rf.persist()
 	}
 
 	//
 	if args.LeaderCommit > rf.commitIndex {
-		newCommitIndex := min(args.LeaderCommit, len(rf.Log)-1)
-
-		// for i := rf.commitIndex + 1; i <= newCommitIndex; i++ {
-		// 	DPrintf("Machine %d send the applyMsg %v, %d, old_commitIndex: %d, rf.commitIndex: %d. Term: %d", rf.me, rf.Log[i].Command, i, rf.commitIndex, newCommitIndex, rf.currentTerm)
-		// 	rf.applyCh <- ApplyMsg{
-		// 		Command:      rf.Log[i].Command,
-		// 		CommandIndex: i,
-		// 		CommandValid: true,
-		// 	}
-		// }
+		newCommitIndex := min(args.LeaderCommit, len(rf.Log)+rf.lastAppliedIndex)
 
 		rf.commitIndex = newCommitIndex
 	}
 
 	reply.Success = true
-	// DPrintf("machine %d send the reply to %d of success msg when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
 
 	DPrintf("Machine %d has log: %v.", rf.me, rf.Log)
 	// DPrintf("machine %d send the heartbeat when %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
@@ -743,7 +789,8 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	// if the server think it is the leader
 	if isLeader {
 		index = len(rf.Log)
-		rf.updateLogs(len(rf.Log), []Entry{{Term: term, Command: command}})
+		rf.Log = append(rf.Log[:], []Entry{{Term: term, Command: command}}...)
+		rf.persist()
 		DPrintf("Machine %d is the leader, append the log in index %d, Term: %d", rf.me, index, rf.currentTerm)
 	}
 
@@ -798,20 +845,30 @@ func (rf *Raft) ticker() {
 	}
 }
 
+func (rf *Raft) applyLogToRSM(index int) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	// apply the log to the RSM which index is before index(included).
+	for i := rf.lastApplied + 1; i <= index; i++ {
+		rf.applyCh <- ApplyMsg{
+			CommandIndex: i,
+			Command:      rf.Log[i-rf.lastAppliedIndex-1].Command,
+			CommandValid: true,
+		}
+		rf.lastApplied++
+
+		DPrintf("Machine %d apply the log in index %d, Term: %d", rf.me, i, rf.currentTerm)
+	}
+}
+
 func (rf *Raft) applier() {
 	for !rf.killed() {
 		time.Sleep(time.Millisecond * 50)
 
 		// 决定是否需要应用日志到状态机
 		if rf.commitIndex > rf.lastApplied {
-			rf.mu.Lock()
-			rf.lastApplied++
-			rf.applyCh <- ApplyMsg{
-				Command:      rf.Log[rf.lastApplied].Command,
-				CommandIndex: rf.lastApplied,
-				CommandValid: true,
-			}
-			rf.mu.Unlock()
+			rf.applyLogToRSM(rf.commitIndex)
 		}
 	}
 }
