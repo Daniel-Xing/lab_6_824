@@ -140,10 +140,10 @@ func (rf *Raft) updateVoteFor(candidateId int) {
 }
 
 // update logs
-func (rf *Raft) updateLogs(index int, entries []Entry) {
-	rf.Log = append(rf.Log[:index], entries...)
-	rf.persist()
-}
+// func (rf *Raft) updateLogs(index int, entries []Entry) {
+// 	rf.Log = append(rf.Log[:index], entries...)
+// 	rf.persist()
+// }
 
 // state transfer
 // beLeader clear the nextIndex and matchIndex
@@ -279,6 +279,12 @@ func (rf *Raft) doSnapshot(index int, snapshot []byte) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
+	//
+	if index > rf.lastApplied {
+		rf.unsafeApplyLogToRSM(index)
+	}
+
+	// encode the data
 	w := new(bytes.Buffer)
 	e := labgob.NewEncoder(w)
 	e.Encode(rf.currentTerm)
@@ -455,7 +461,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 		reply.Term = rf.currentTerm
 		DPrintf("Machine %d Vote info - args Term: %d, currentTerm : %d, args.LastLogTerm: %d, args.LastLogIndex:%d, voteFor: %d, CandidateID%d, vote: %v",
 			rf.me, args.Term, rf.currentTerm, args.LastLogTerm, args.LastLogIndex, rf.voteFor, args.CandidateId, reply.VoteGranted)
-		DPrintf("Machine %d log info, the length of logs: %d, the last one log: %v, lastApplied: %d", rf.me, len(rf.Log), rf.Log[len(rf.Log)-1], rf.lastApplied)
+		// DPrintf("Machine %d log info, the length of logs: %d, the last one log: %v, lastApplied: %d", rf.me, len(rf.Log), rf.Log[len(rf.Log)-1], rf.lastApplied)
 	}
 
 	if args.Term < rf.currentTerm {
@@ -572,87 +578,23 @@ func (rf *Raft) sendAERpcs() {
 
 	//
 	DPrintf("Machine %d start to send the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
-	finished := 0
+	var finished int64 = 0
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me {
 			continue
 		}
 
-		// DPrintf("machine %d send the request to %d when SendAERpcs. Term: %d", rf.me, i, rf.currentTerm)
-		go func(index int, reply *AppendEntriesReply) {
-			rf.mu.Lock()
-			args := &AppendEntriesArgs{}
-			args.LeaderId = rf.me
-			args.LeaderCommit = rf.commitIndex
-			args.Term = rf.currentTerm
+		IsSendSnapshot := rf.nextIndex[i] == rf.lastAppliedIndex
 
-			// prevLogIndex is the nextindex of log, which should be sented
-			args.PrevLogIndex = rf.nextIndex[index] - 1
-			if args.PrevLogIndex != -1 {
-				args.PrevLogTerm = rf.Log[args.PrevLogIndex].Term
-			}
-
-			isHeartBeat := rf.nextIndex[index] == len(rf.Log)
-			if !isHeartBeat {
-				args.Entries = append(args.Entries, rf.Log[rf.nextIndex[index]:]...)
-			}
-			rf.mu.Unlock()
-
-			waitChan := make(chan bool)
-			go func() {
-				start := time.Now()
-				ok := rf.sendAppendEntries(index, args, reply)
-				end := time.Now()
-				if end.Sub(start) < RPCTimeout {
-					waitChan <- ok
-				}
-			}()
-
-			ok := false
-			select {
-			case ok = <-waitChan:
-				// DPrintf("machine %d get the response of sendAppendEntriews from %d success. Term: %d", rf.me, index, rf.currentTerm)
-			case <-time.After(RPCTimeout):
-				// DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
-			}
-
-			rf.mu.Lock()
-			defer rf.mu.Unlock()
-			defer rf.cond.Broadcast()
-
-			DPrintf("Machine %d receive the reply from %d when sendAppendEntries, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
-			finished++
-
-			if !ok {
-				// DPrintf("machine %d get the response to %d failed when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
-				return
-			}
-
-			if reply.Term > rf.currentTerm {
-				// DPrintf("machine %d get the response of sendAppendEntries from %d, but the term is %d, so it is not the leader. Term: %d", rf.me, index, reply.Term, rf.currentTerm)
-				rf.updateCurrentTerm(reply.Term)
-				// rf.currentTerm = reply.Term
-				rf.beFollower()
-				return
-			}
-
-			if isHeartBeat {
-				return
-			}
-
-			// if success, means all log entries has been appended
-			if reply.Success {
-				rf.nextIndex[index] += len(args.Entries)
-				rf.matchIndex[index] = rf.nextIndex[index] - 1
-			} else {
-				rf.nextIndex[index]--
-			}
-
-		}(i, replys[i])
+		if IsSendSnapshot {
+			// nothing
+		} else {
+			go rf.appendRPCWorker(i, replys[i], &finished)
+		}
 	}
 
 	// process the result
-	for finished != len(rf.peers)-1 {
+	for finished != int64(len(rf.peers)-1) {
 		rf.cond.Wait()
 	}
 
@@ -663,6 +605,79 @@ func (rf *Raft) sendAERpcs() {
 
 	DPrintf("Machine %d has log: %v.", rf.me, rf.Log)
 	DPrintf("Machine %d finish sending the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
+}
+
+func (rf *Raft) appendRPCWorker(index int, reply *AppendEntriesReply, finished *int64) {
+
+	rf.mu.Lock()
+	args := &AppendEntriesArgs{}
+	args.LeaderId = rf.me
+	args.LeaderCommit = rf.commitIndex
+	args.Term = rf.currentTerm
+
+	// prevLogIndex is the nextindex of log, which should be sented
+	args.PrevLogIndex = rf.nextIndex[index] - 1
+	if args.PrevLogIndex != -1 {
+		args.PrevLogTerm = rf.Log[args.PrevLogIndex].Term
+	}
+
+	isHeartBeat := rf.nextIndex[index] == len(rf.Log)
+	if !isHeartBeat {
+		args.Entries = append(args.Entries, rf.Log[rf.nextIndex[index]:]...)
+	}
+	rf.mu.Unlock()
+
+	waitChan := make(chan bool)
+	go func() {
+		start := time.Now()
+		ok := rf.sendAppendEntries(index, args, reply)
+		end := time.Now()
+		if end.Sub(start) < RPCTimeout {
+			waitChan <- ok
+		}
+	}()
+
+	ok := false
+	select {
+	case ok = <-waitChan:
+		// DPrintf("machine %d get the response of sendAppendEntriews from %d success. Term: %d", rf.me, index, rf.currentTerm)
+	case <-time.After(RPCTimeout):
+		// DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
+	}
+
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	defer rf.cond.Broadcast()
+
+	DPrintf("Machine %d receive the reply from %d when sendAppendEntries, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
+	// finished++
+	atomic.AddInt64(finished, 1)
+
+	if !ok {
+		// DPrintf("machine %d get the response to %d failed when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
+		return
+	}
+
+	if reply.Term > rf.currentTerm {
+		// DPrintf("machine %d get the response of sendAppendEntries from %d, but the term is %d, so it is not the leader. Term: %d", rf.me, index, reply.Term, rf.currentTerm)
+		rf.updateCurrentTerm(reply.Term)
+		// rf.currentTerm = reply.Term
+		rf.beFollower()
+		return
+	}
+
+	if isHeartBeat {
+		return
+	}
+
+	// if success, means all log entries has been appended
+	if reply.Success {
+		rf.nextIndex[index] += len(args.Entries)
+		rf.matchIndex[index] = rf.nextIndex[index] - 1
+	} else {
+		rf.nextIndex[index]--
+	}
+
 }
 
 func (rf *Raft) findMaxN() int {
@@ -845,10 +860,7 @@ func (rf *Raft) ticker() {
 	}
 }
 
-func (rf *Raft) applyLogToRSM(index int) {
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-
+func (rf *Raft) unsafeApplyLogToRSM(index int) {
 	// apply the log to the RSM which index is before index(included).
 	for i := rf.lastApplied + 1; i <= index; i++ {
 		rf.applyCh <- ApplyMsg{
@@ -868,7 +880,9 @@ func (rf *Raft) applier() {
 
 		// 决定是否需要应用日志到状态机
 		if rf.commitIndex > rf.lastApplied {
-			rf.applyLogToRSM(rf.commitIndex)
+			rf.mu.Lock()
+			rf.unsafeApplyLogToRSM(rf.commitIndex)
+			rf.mu.Unlock()
 		}
 	}
 }
