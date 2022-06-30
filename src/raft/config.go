@@ -186,6 +186,7 @@ const SnapShotInterval = 10
 func (cfg *config) applierSnap(i int, applyCh chan ApplyMsg) {
 	lastApplied := 0
 	for m := range applyCh {
+		DPrintf("TTTTTTT: Machine %d has logs: %v", i, cfg.logs[i])
 		if m.SnapshotValid {
 			//DPrintf("Installsnapshot %v %v\n", m.SnapshotIndex, lastApplied)
 			cfg.mu.Lock()
@@ -445,7 +446,6 @@ func (cfg *config) nCommitted(index int) (int, interface{}) {
 
 		cfg.mu.Lock()
 		cmd1, ok := cfg.logs[i][index]
-		DPrintf("TTTTTTT: Machine %d has logs: %v", i, cfg.logs[i])
 		cfg.mu.Unlock()
 
 		if ok {

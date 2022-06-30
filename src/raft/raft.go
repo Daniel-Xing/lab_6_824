@@ -99,6 +99,7 @@ type Raft struct {
 
 	// when follower received AppendEntries rpc, send a message to channel. TODO: maybe block.
 	applyCh chan ApplyMsg
+	sender  chan ApplyMsg
 
 	// eletion timeout
 	electionTimeout time.Time
@@ -305,15 +306,6 @@ func (rf *Raft) doSnapshot(index int, snapshot []byte) {
 
 	rf.persister.SaveStateAndSnapshot(data, snapshot)
 
-	rf.applyCh <- ApplyMsg{
-		CommandValid: false,
-
-		SnapshotValid: true,
-		Snapshot:      snapshot,
-		SnapshotTerm:  lastAppliedTerm, // maybe panic, cause len(rf.log) == 0
-		SnapshotIndex: lastAppliedIndex,
-	}
-
 	rf.lastApplied = index
 	DPrintf("Machine %d doSnapshot success, currentTerm: %d, VoteFor: %d, Log: %v, lastAppliedIndex: %d, lastAppliedTerm: %d",
 		rf.me, rf.currentTerm, rf.voteFor, rf.Log, rf.lastAppliedIndex, rf.lastAppliedTerm)
@@ -321,13 +313,14 @@ func (rf *Raft) doSnapshot(index int, snapshot []byte) {
 	rf.mu.Unlock()
 	DPrintf("Machine %d release the locker of doSnapshot", rf.me)
 
-	// rf.mu.Lock()
-	// rf.lastApplied = index
+	rf.sender <- ApplyMsg{
+		CommandValid: false,
 
-	// DPrintf("Machine %d doSnapshot success, currentTerm: %d, VoteFor: %d, Log: %v, lastAppliedIndex: %d, lastAppliedTerm: %d",
-	// 	rf.me, rf.currentTerm, rf.voteFor, rf.Log, rf.lastAppliedIndex, rf.lastAppliedTerm)
-
-	// rf.mu.Unlock()
+		SnapshotValid: true,
+		Snapshot:      snapshot,
+		SnapshotTerm:  lastAppliedTerm, // maybe panic, cause len(rf.log) == 0
+		SnapshotIndex: lastAppliedIndex,
+	}
 }
 
 //
@@ -360,9 +353,7 @@ func (rf *Raft) startElection() {
 	defer rf.updateElectionTimeout()
 
 	// change the role from follower to candidate
-	if rf.role == follower {
-		rf.beCandidate()
-	}
+	rf.beCandidate()
 
 	// pack the args
 	currentTerm, role := rf.currentTerm, rf.role
@@ -380,7 +371,7 @@ func (rf *Raft) startElection() {
 
 	}
 
-	for voteCount <= int64(len(rf.peers)/2) && finished != int64(len(rf.peers)-1) {
+	for finished != int64(len(rf.peers)-1) {
 		rf.cond.Wait()
 	}
 	// win the election and change role to the leader
@@ -469,7 +460,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if args.Term < rf.currentTerm {
-		// DPrintf("Machine %d reject the request vote from %d because Term < currentTerm. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
+		DPrintf("Machine %d reject the request vote from %d because Term < currentTerm. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
@@ -481,7 +472,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if rf.voteFor != -1 && rf.voteFor != args.CandidateId {
-		// DPrintf("Machine %d reject the request vote from %d because voteFor != args.CandidateId. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
+		DPrintf("Machine %d reject the request vote from %d because voteFor != args.CandidateId. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
@@ -504,7 +495,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	if args.LastLogTerm == lastLogTerm && args.LastLogIndex < lastLogIndex {
-		// DPrintf("Machine %d reject the request vote from %d because log is not the same. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
+		DPrintf("Machine %d reject the request vote from %d because log is not the same. Term: %d", rf.me, args.CandidateId, rf.currentTerm)
 		voter(false)
 		return
 	}
@@ -994,6 +985,23 @@ func (rf *Raft) ticker() {
 	}
 }
 
+func (rf *Raft) ApplyMsgSender() {
+	next := rf.lastAppliedIndex + 1
+	for m := range rf.sender {
+		if m.SnapshotValid {
+			rf.applyCh <- m
+			next = m.SnapshotIndex + 1
+			DPrintf("Machine %d get a snapshot, next index is %d", rf.me, next)
+		} else if m.CommandValid && m.CommandIndex == next {
+			rf.applyCh <- m
+			next += 1
+			DPrintf("Machine %d get a command, next index is %d", rf.me, next)
+		} else {
+			DPrintf("Machine %d get a wrong message, index: %d, next: %d", rf.me, m.CommandIndex, next)
+		}
+	}
+}
+
 func (rf *Raft) unsafeApplyLogToRSM(index int) {
 	// apply the log to the RSM which index is before index(included).
 	// copy the data
@@ -1011,7 +1019,7 @@ func (rf *Raft) unsafeApplyLogToRSM(index int) {
 	for i := lastApplied + 1; i <= index; i++ {
 		DPrintf("Machine %d start to apply the log in index %d, Term: %d", rf.me, i, rf.currentTerm)
 
-		rf.applyCh <- ApplyMsg{
+		rf.sender <- ApplyMsg{
 			CommandIndex: i,
 			Command:      copyLog[i-lastAppliedIndex-1].Command,
 			CommandValid: true,
@@ -1067,6 +1075,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.lastAppliedIndex = -1
 	rf.lastAppliedTerm = 0
 	rf.applyCh = applyCh
+	rf.sender = make(chan ApplyMsg)
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
@@ -1087,6 +1096,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	// start ticker goroutine to start elections
 	go rf.ticker()
+	go rf.ApplyMsgSender()
 	go rf.applier()
 
 	return rf
