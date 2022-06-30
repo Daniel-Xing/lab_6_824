@@ -371,12 +371,6 @@ func (rf *Raft) startElection() {
 	// pack the args
 	currentTerm, role := rf.currentTerm, rf.role
 
-	// init result reply
-	reply := make([]*RequestVoteReply, len(rf.peers))
-	for i := 0; i < len(rf.peers); i++ {
-		reply[i] = &RequestVoteReply{}
-	}
-
 	var voteCount int64 = 1
 	var finished int64 = 0
 	DPrintf("Machine %d start to send requestVote. Term: %d", rf.me, rf.currentTerm)
@@ -386,7 +380,7 @@ func (rf *Raft) startElection() {
 			continue
 		}
 
-		go rf.electionSender(i, currentTerm, role, reply[i], &finished, &voteCount)
+		go rf.electionSender(i, currentTerm, role, &finished, &voteCount)
 
 	}
 
@@ -401,7 +395,7 @@ func (rf *Raft) startElection() {
 	DPrintf("Machine %d has finished the election. Term: %d", rf.me, rf.currentTerm)
 }
 
-func (rf *Raft) electionSender(index, currentTerm, role int, reply *RequestVoteReply, finished, voteCount *int64) {
+func (rf *Raft) electionSender(index, currentTerm, role int, finished, voteCount *int64) {
 	rf.mu.Lock()
 	args := &RequestVoteArgs{}
 	args.Term = rf.currentTerm
@@ -413,6 +407,9 @@ func (rf *Raft) electionSender(index, currentTerm, role int, reply *RequestVoteR
 		args.LastLogTerm = rf.lastAppliedTerm
 	}
 	args.CandidateId = rf.me
+
+	// 构建reply
+	reply := &RequestVoteReply{}
 	rf.mu.Unlock()
 
 	waitChan := make(chan bool)
@@ -581,12 +578,6 @@ func (rf *Raft) sendAERpcs() {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	// DPrintf("machine %d package the args and reply when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
-	replys := make([]*AppendEntriesReply, len(rf.peers))
-	for i := 0; i < len(rf.peers); i++ {
-		replys[i] = &AppendEntriesReply{}
-	}
-
 	//
 	DPrintf("Machine %d start to send the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 	var finished int64 = 0
@@ -600,9 +591,9 @@ func (rf *Raft) sendAERpcs() {
 		IsSendSnapshot := rf.nextIndex[i]-1 < rf.lastAppliedIndex
 
 		if IsSendSnapshot {
-			// nothing
+			go rf.InstallSnapshotSender(i, &finished)
 		} else {
-			go rf.appendRPCWorker(i, replys[i], &finished)
+			go rf.appendRPCWorker(i, &finished)
 		}
 	}
 
@@ -620,7 +611,7 @@ func (rf *Raft) sendAERpcs() {
 	DPrintf("Machine %d finish sending the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 }
 
-func (rf *Raft) appendRPCWorker(index int, reply *AppendEntriesReply, finished *int64) {
+func (rf *Raft) appendRPCWorker(index int, finished *int64) {
 
 	rf.mu.Lock()
 	args := &AppendEntriesArgs{}
@@ -641,6 +632,9 @@ func (rf *Raft) appendRPCWorker(index int, reply *AppendEntriesReply, finished *
 	if !isHeartBeat {
 		args.Entries = append(args.Entries, rf.Log[rf.nextIndex[index]-rf.lastAppliedIndex-1:]...)
 	}
+
+	// 构建reply
+	reply := &AppendEntriesReply{}
 	rf.mu.Unlock()
 
 	waitChan := make(chan bool)
@@ -806,8 +800,53 @@ type InstallsnapshotReply struct {
 }
 
 // InstallSnapshot
-func (rf *Raft) InstallSnapshotSender() {
+func (rf *Raft) InstallSnapshotSender(index int, finished *int64) {
+	DPrintf("Machine %d start to send InstallSnapshotRPC to %d. Term: %d", rf.me, index, rf.currentTerm)
+	// 构建参数
+	rf.mu.Lock()
+	args := &InstallsnapshotArgs{}
+	reply := &InstallsnapshotReply{}
 
+	args.Term = rf.currentTerm
+	args.LeaderId = rf.leaderId
+	args.LastIncludedIndex = rf.lastAppliedIndex
+	args.LastIncludedTerm = rf.lastAppliedTerm
+	args.Data = rf.persister.ReadSnapshot()
+	rf.mu.Unlock()
+
+	waitChan := make(chan bool)
+	go func() {
+		start := time.Now()
+		ok := rf.sendInstallSnapshot(index, args, reply)
+		end := time.Now()
+		if end.Sub(start) < RPCTimeout {
+			waitChan <- ok
+		}
+	}()
+
+	ok := false
+	select {
+	case ok = <-waitChan:
+	case <-time.After(RPCTimeout):
+	}
+
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	defer rf.cond.Broadcast()
+
+	DPrintf("Machine %d receive the reply from %d when InstallSnapshotRPC, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
+	atomic.AddInt64(finished, 1)
+
+	if !ok {
+		return
+	}
+
+	if reply.Term > rf.currentTerm {
+		rf.updateCurrentTerm(reply.Term)
+		rf.beFollower()
+		return
+	}
+	DPrintf("Machine %d get the response of InstallSnapshotRPC from %d success. Term: %d", rf.me, index, rf.currentTerm)
 }
 
 // sendInstallSnapshot
@@ -822,8 +861,6 @@ func (rf *Raft) InstallSnapshot(args *InstallsnapshotArgs, reply *Installsnapsho
 
 	// DPrintf("machine %d try to get the locker when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
 	rf.mu.Lock()
-	defer rf.mu.Unlock()
-	defer rf.updateElectionTimeout()
 	// DPrintf("machine %d has got the locker when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
 
 	//
@@ -831,28 +868,42 @@ func (rf *Raft) InstallSnapshot(args *InstallsnapshotArgs, reply *Installsnapsho
 
 	//
 	if args.Term < rf.currentTerm {
-		DPrintf("Machine %d get a lower term when InstallSnapshot, the request is not admitted. Term: %d", rf.me, rf.currentTerm)
+		DPrintf("Machine %d get a lower term when InstallSnapshot, the request is not admitted. Term: %d",
+			rf.me, rf.currentTerm)
 		return
 	}
 
 	//
 	if args.Term >= rf.currentTerm {
-		DPrintf("Machine %d get a higher term when InstallSnapshot, tansfer to the follower. Term: %d", rf.me, rf.currentTerm)
+		DPrintf("Machine %d get a higher term when InstallSnapshot, tansfer to the follower. Term: %d",
+			rf.me, rf.currentTerm)
 		rf.updateCurrentTerm(args.Term)
 		// rf.currentTerm = args.Term
 		rf.beFollower()
 	}
 
-	//
-	if args.LastIncludedIndex < rf.lastAppliedIndex || args.LastIncludedIndex > len(rf.Log)+rf.lastAppliedIndex {
-		DPrintf("Machine %d get a wrong lastIncludedIndex when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
-		return
+	// 如果本地log的index小于args.LastIncludedIndex
+	// 则清空log，并将lastAppliedIndex设置为args.LastIncludedIndex
+	if rf.lastAppliedIndex+len(rf.Log) <= args.LastIncludedIndex {
+		rf.Log = make([]Entry, 0)
+		rf.lastAppliedIndex = args.LastIncludedIndex
+		rf.lastAppliedTerm = args.LastIncludedTerm
+	} else if rf.lastAppliedIndex < args.LastIncludedIndex { // 如果本地log的index大于args.LastIncludedIndex
+		// 判断本地log的对应的那条entry的term是否等于args.LastIncludedTerm
+		if rf.Log[args.LastIncludedIndex-rf.lastAppliedIndex-1].Term != args.LastIncludedTerm {
+			DPrintf("Machine %d get a wrong lastIncludedTerm when InstallSnapshot, which shouldn't be failed. Term: %d", rf.me, rf.currentTerm)
+		}
+
+		rf.Log = rf.Log[args.LastIncludedIndex-rf.lastAppliedIndex:]
+		rf.lastAppliedIndex = args.LastIncludedIndex
+		rf.lastAppliedTerm = args.LastIncludedTerm
 	}
 
-	//
-	if args.LastIncludedTerm != rf.Log[args.LastIncludedIndex-rf.lastAppliedIndex-1].Term {
-		DPrintf("Machine %d get a wrong lastIncludedTerm when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
-	}
+	rf.updateElectionTimeout()
+	rf.mu.Unlock()
+
+	// 写入新的快照
+	rf.Snapshot(args.LastIncludedIndex, args.Data)
 }
 
 //
