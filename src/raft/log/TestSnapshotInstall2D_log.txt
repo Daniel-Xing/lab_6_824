@@ -1,0 +1,1280 @@
+2022/06/30 10:39:23 Machine: 0, Make()
+2022/06/30 10:39:23 Machine 0 become follower from . Term: 0
+2022/06/30 10:39:23 Machine 0 update election timeout: 2022-06-30 10:39:24.423029 +0800 CST m=+0.884580168
+2022/06/30 10:39:23 Machine 0 readPersist success, currentTerm: 0, VoteFor: -1, Log: [{<nil> 0}], lastAppliedIndex: -1, lastAppliedTerm: 0
+2022/06/30 10:39:23 Machine: 1, Make()
+2022/06/30 10:39:23 Machine 1 become follower from . Term: 0
+2022/06/30 10:39:23 Machine 1 update election timeout: 2022-06-30 10:39:24.469522 +0800 CST m=+0.931073084
+2022/06/30 10:39:23 Machine 1 readPersist success, currentTerm: 0, VoteFor: -1, Log: [{<nil> 0}], lastAppliedIndex: -1, lastAppliedTerm: 0
+2022/06/30 10:39:23 Machine: 2, Make()
+2022/06/30 10:39:23 Machine 2 become follower from . Term: 0
+2022/06/30 10:39:23 Machine 2 update election timeout: 2022-06-30 10:39:24.344596 +0800 CST m=+0.806147168
+2022/06/30 10:39:23 Machine 2 readPersist success, currentTerm: 0, VoteFor: -1, Log: [{<nil> 0}], lastAppliedIndex: -1, lastAppliedTerm: 0
+2022/06/30 10:39:23 0 ticker start
+2022/06/30 10:39:23 2 ticker start
+2022/06/30 10:39:23 1 ticker start
+Test (2D): install snapshots (disconnect) ...
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:23 index: -1
+2022/06/30 10:39:24 index: -1
+2022/06/30 10:39:24 index: -1
+2022/06/30 10:39:24 index: -1
+2022/06/30 10:39:24 index: -1
+2022/06/30 10:39:24 index: -1
+2022/06/30 10:39:24 index: -1
+2022/06/30 10:39:24 index: -1
+2022/06/30 10:39:24 Machine 2 become candidate from follower. Term: 0
+2022/06/30 10:39:24 Machine 2 start to send requestVote. Term: 1
+2022/06/30 10:39:24 Machine 2 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/06/30 10:39:24 Machine 1 receive request vote from 2. Term: 0
+2022/06/30 10:39:24 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 1 Vote info - args Term: 1, currentTerm : 1, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 2, CandidateID2, vote: true
+2022/06/30 10:39:24 Machine 1 finished Requestvote, called by 2. Term: 1
+2022/06/30 10:39:24 Machine 1 update election timeout: 2022-06-30 10:39:25.175549 +0800 CST m=+1.637024751
+2022/06/30 10:39:24 Machine 0 receive request vote from 2. Term: 0
+2022/06/30 10:39:24 Machine 0 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 Vote info - args Term: 1, currentTerm : 1, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 2, CandidateID2, vote: true
+2022/06/30 10:39:24 Machine 0 finished Requestvote, called by 2. Term: 1
+2022/06/30 10:39:24 Machine 0 update election timeout: 2022-06-30 10:39:25.212738 +0800 CST m=+1.674212918
+2022/06/30 10:39:24 Machine 2 get the reply when sendRequestVote from 1, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 get the reply when sendRequestVote from 0, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 become leader from candidate. Term: 1
+2022/06/30 10:39:24 Machine 2 has finished the election. Term: 1
+2022/06/30 10:39:24 Machine 2 update election timeout: 2022-06-30 10:39:25.208641 +0800 CST m=+1.670116084
+2022/06/30 10:39:24 Machine 2 is the leader, append the log in index 1, Term: 1
+2022/06/30 10:39:24 index: 1
+2022/06/30 10:39:24 TTTTTTT: Machine 0 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 1 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 2 has logs: map[]
+2022/06/30 10:39:24 0, <nil>
+2022/06/30 10:39:24 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 1 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/06/30 10:39:24 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 update election timeout: 2022-06-30 10:39:25.20089 +0800 CST m=+1.662360418
+2022/06/30 10:39:24 Machine 0 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 0 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/06/30 10:39:24 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 update election timeout: 2022-06-30 10:39:25.398587 +0800 CST m=+1.860057293
+2022/06/30 10:39:24 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 has log: [{<nil> 0} {3289843569609597974 1}]. rf.commitIndex: 1 , rf.lastApplied: -1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 TTTTTTT: Machine 0 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 1 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 2 has logs: map[]
+2022/06/30 10:39:24 0, <nil>
+2022/06/30 10:39:24 TTTTTTT: Machine 0 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 1 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 2 has logs: map[]
+2022/06/30 10:39:24 0, <nil>
+2022/06/30 10:39:24 Machine 2 has the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:24 Machine 2 has released the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:24 Machine 2 start to apply the log in index 0, Term: 1
+2022/06/30 10:39:24 TTTTTTT: Machine 0 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 1 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 2 has logs: map[]
+2022/06/30 10:39:24 0, <nil>
+2022/06/30 10:39:24 TTTTTTT: Machine 0 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 1 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 2 has logs: map[]
+2022/06/30 10:39:24 0, <nil>
+2022/06/30 10:39:24 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 0 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 0 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: -1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 update election timeout: 2022-06-30 10:39:25.432568 +0800 CST m=+1.894031126
+2022/06/30 10:39:24 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 1 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: -1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 1 update election timeout: 2022-06-30 10:39:25.067751 +0800 CST m=+1.529214001
+2022/06/30 10:39:24 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 has log: [{<nil> 0} {3289843569609597974 1}]. rf.commitIndex: 1 , rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 apply the log in index 0, Term: 1
+2022/06/30 10:39:24 Machine 2 start to apply the log in index 1, Term: 1
+2022/06/30 10:39:24 Machine 0 has the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:24 Machine 0 has released the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:24 Machine 0 start to apply the log in index 0, Term: 1
+2022/06/30 10:39:24 Machine 1 has the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:24 Machine 1 has released the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:24 Machine 1 start to apply the log in index 0, Term: 1
+2022/06/30 10:39:24 TTTTTTT: Machine 0 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 1 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:24 1, 3289843569609597974
+2022/06/30 10:39:24 TTTTTTT: Machine 0 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 1 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:24 1, 3289843569609597974
+2022/06/30 10:39:24 TTTTTTT: Machine 0 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 1 has logs: map[]
+2022/06/30 10:39:24 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:24 1, 3289843569609597974
+2022/06/30 10:39:24 Machine 2 apply the log in index 1, Term: 1
+2022/06/30 10:39:24 Machine 0 apply the log in index 0, Term: 1
+2022/06/30 10:39:24 Machine 0 start to apply the log in index 1, Term: 1
+2022/06/30 10:39:24 Machine 1 apply the log in index 0, Term: 1
+2022/06/30 10:39:24 Machine 1 start to apply the log in index 1, Term: 1
+2022/06/30 10:39:24 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:24 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:24 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:24 3, 3289843569609597974
+2022/06/30 10:39:24 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 0 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 update election timeout: 2022-06-30 10:39:25.552272 +0800 CST m=+2.013728126
+2022/06/30 10:39:24 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 1 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 update election timeout: 2022-06-30 10:39:25.217584 +0800 CST m=+1.679040334
+2022/06/30 10:39:24 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 has log: [{<nil> 0} {3289843569609597974 1}]. rf.commitIndex: 1 , rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 0 apply the log in index 1, Term: 1
+2022/06/30 10:39:24 Machine 1 apply the log in index 1, Term: 1
+2022/06/30 10:39:24 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 1 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 update election timeout: 2022-06-30 10:39:25.501023 +0800 CST m=+1.962472834
+2022/06/30 10:39:24 Machine 0 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 0 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 0 update election timeout: 2022-06-30 10:39:25.512337 +0800 CST m=+1.973786834
+2022/06/30 10:39:24 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 has log: [{<nil> 0} {3289843569609597974 1}]. rf.commitIndex: 1 , rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 0 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 0 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 update election timeout: 2022-06-30 10:39:25.250831 +0800 CST m=+1.712273168
+2022/06/30 10:39:24 Machine 1 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 update election timeout: 2022-06-30 10:39:25.718971 +0800 CST m=+2.180412918
+2022/06/30 10:39:24 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 has log: [{<nil> 0} {3289843569609597974 1}]. rf.commitIndex: 1 , rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 0 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 update election timeout: 2022-06-30 10:39:25.637695 +0800 CST m=+2.099129834
+2022/06/30 10:39:24 Machine 0 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 0 update election timeout: 2022-06-30 10:39:25.529947 +0800 CST m=+1.991381876
+2022/06/30 10:39:24 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 has log: [{<nil> 0} {3289843569609597974 1}]. rf.commitIndex: 1 , rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 0 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 0 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 update election timeout: 2022-06-30 10:39:25.803607 +0800 CST m=+2.265035501
+2022/06/30 10:39:24 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 1 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 update election timeout: 2022-06-30 10:39:25.790987 +0800 CST m=+2.252415418
+2022/06/30 10:39:24 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 has log: [{<nil> 0} {3289843569609597974 1}]. rf.commitIndex: 1 , rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:24 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 0 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:24 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 1 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 1 update election timeout: 2022-06-30 10:39:25.802499 +0800 CST m=+2.263919751
+2022/06/30 10:39:24 Machine 0 become follower from follower. Term: 1
+2022/06/30 10:39:24 Machine 0 has log: [{<nil> 0} {3289843569609597974 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:24 Machine 0 update election timeout: 2022-06-30 10:39:25.768873 +0800 CST m=+2.230294293
+2022/06/30 10:39:24 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:24 Machine 2 has log: [{<nil> 0} {3289843569609597974 1}]. rf.commitIndex: 1 , rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:24 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 2, Term: 1
+2022/06/30 10:39:25 index: 2
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:25 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:25 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:25 Machine 1 has log: [{<nil> 0} {3289843569609597974 1} {3437668359046558859 1}]. rf.lastApplied: 1, rf.commitedIndex: 1
+2022/06/30 10:39:25 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:25 Machine 1 update election timeout: 2022-06-30 10:39:25.599345 +0800 CST m=+2.060758834
+2022/06/30 10:39:25 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/06/30 10:39:25 Machine 2 has log: [{<nil> 0} {3289843569609597974 1} {3437668359046558859 1}]. rf.commitIndex: 2 , rf.lastApplied: 1, rf.commitedIndex: 2
+2022/06/30 10:39:25 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 has the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:25 Machine 2 has released the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:25 Machine 2 start to apply the log in index 2, Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 1, 3437668359046558859
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 1, 3437668359046558859
+2022/06/30 10:39:25 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 3, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 3, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:25 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:25 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:25 Machine 1 has log: [{<nil> 0} {3289843569609597974 1} {3437668359046558859 1}]. rf.lastApplied: 1, rf.commitedIndex: 2
+2022/06/30 10:39:25 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:25 Machine 1 update election timeout: 2022-06-30 10:39:26.204564 +0800 CST m=+2.665953584
+2022/06/30 10:39:25 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 1, 3437668359046558859
+2022/06/30 10:39:25 Machine 2 apply the log in index 2, Term: 1
+2022/06/30 10:39:25 Machine 1 has the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:25 Machine 1 has released the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:25 Machine 1 start to apply the log in index 2, Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 2, 3437668359046558859
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 3, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 4, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 5, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 6, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 7, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 8, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 9, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 10, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 11, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 12, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 13, Term: 1
+2022/06/30 10:39:25 Machine 2 is the leader, append the log in index 14, Term: 1
+2022/06/30 10:39:25 index: 14
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 1 apply the log in index 2, Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/06/30 10:39:25 Machine 2 has log: [{<nil> 0} {3289843569609597974 1} {3437668359046558859 1} {2473335459241813059 1} {6652374844056579232 1} {3493868248067367119 1} {924153883877544095 1} {4105910412647119342 1} {3128590617520042528 1} {392936297417111033 1} {3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}]. rf.commitIndex: 2 , rf.lastApplied: 2, rf.commitedIndex: 2
+2022/06/30 10:39:25 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 3, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 3, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:25 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:25 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:25 Machine 1 has log: [{<nil> 0} {3289843569609597974 1} {3437668359046558859 1} {2473335459241813059 1} {6652374844056579232 1} {3493868248067367119 1} {924153883877544095 1} {4105910412647119342 1} {3128590617520042528 1} {392936297417111033 1} {3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}]. rf.lastApplied: 2, rf.commitedIndex: 2
+2022/06/30 10:39:25 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:25 Machine 1 update election timeout: 2022-06-30 10:39:26.287879 +0800 CST m=+2.749245501
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 0 become candidate from follower. Term: 1
+2022/06/30 10:39:25 Machine 0 start to send requestVote. Term: 2
+2022/06/30 10:39:25 Machine 0 log info, the length of logs: 2, the last one log: [{<nil> 0} {3289843569609597974 1}], lastApplied: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/06/30 10:39:25 Machine 2 has log: [{<nil> 0} {3289843569609597974 1} {3437668359046558859 1} {2473335459241813059 1} {6652374844056579232 1} {3493868248067367119 1} {924153883877544095 1} {4105910412647119342 1} {3128590617520042528 1} {392936297417111033 1} {3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}]. rf.commitIndex: 14 , rf.lastApplied: 2, rf.commitedIndex: 14
+2022/06/30 10:39:25 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 Machine 2 has the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 has released the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:25 Machine 2 start to apply the log in index 3, Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 15, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 2 has rf.nextIndex[index]: 15, rf.lastAppliedIndex: -1. Term: 1
+2022/06/30 10:39:25 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:25 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:25 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:25 Machine 1 has log: [{<nil> 0} {3289843569609597974 1} {3437668359046558859 1} {2473335459241813059 1} {6652374844056579232 1} {3493868248067367119 1} {924153883877544095 1} {4105910412647119342 1} {3128590617520042528 1} {392936297417111033 1} {3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}]. rf.lastApplied: 2, rf.commitedIndex: 14
+2022/06/30 10:39:25 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:25 Machine 1 update election timeout: 2022-06-30 10:39:26.669488 +0800 CST m=+3.130831834
+2022/06/30 10:39:25 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:25 Machine 2 apply the log in index 3, Term: 1
+2022/06/30 10:39:25 Machine 2 start to apply the log in index 4, Term: 1
+2022/06/30 10:39:25 Machine 1 has the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:25 Machine 1 has released the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:25 Machine 1 start to apply the log in index 3, Term: 1
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:25 Machine 2 apply the log in index 4, Term: 1
+2022/06/30 10:39:25 Machine 1 apply the log in index 3, Term: 1
+2022/06/30 10:39:25 Machine 1 start to apply the log in index 4, Term: 1
+2022/06/30 10:39:25 Machine 2 start to apply the log in index 5, Term: 1
+2022/06/30 10:39:25 Machine 0 get the reply when sendRequestVote from 2, Status: false. Term: 2
+2022/06/30 10:39:25 Machine 0 get the reply when sendRequestVote from 1, Status: false. Term: 2
+2022/06/30 10:39:25 Machine 0 has finished the election. Term: 2
+2022/06/30 10:39:25 Machine 0 update election timeout: 2022-06-30 10:39:26.514055 +0800 CST m=+2.975395126
+2022/06/30 10:39:25 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:25 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232]
+2022/06/30 10:39:25 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119]
+2022/06/30 10:39:25 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 apply the log in index 5, Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 6, Term: 1
+2022/06/30 10:39:26 Machine 1 apply the log in index 4, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 5, Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 1 apply the log in index 5, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 6, Term: 1
+2022/06/30 10:39:26 Machine 2 apply the log in index 6, Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 7, Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/06/30 10:39:26 Machine 2 has log: [{<nil> 0} {3289843569609597974 1} {3437668359046558859 1} {2473335459241813059 1} {6652374844056579232 1} {3493868248067367119 1} {924153883877544095 1} {4105910412647119342 1} {3128590617520042528 1} {392936297417111033 1} {3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}]. rf.commitIndex: 14 , rf.lastApplied: 14, rf.commitedIndex: 14
+2022/06/30 10:39:26 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:26 Machine 1 apply the log in index 6, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 7, Term: 1
+2022/06/30 10:39:26 Machine 2 apply the log in index 7, Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 8, Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342 8:3128590617520042528]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342 8:3128590617520042528]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342 8:3128590617520042528]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 1 apply the log in index 7, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 8, Term: 1
+2022/06/30 10:39:26 Machine 2 apply the log in index 8, Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 9, Term: 1
+2022/06/30 10:39:26 Machine 2 has the locker of doSnapshot
+2022/06/30 10:39:26 Machine 2 doSnapshot success, currentTerm: 1, VoteFor: 2, Log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}], lastAppliedIndex: 9, lastAppliedTerm: 1
+2022/06/30 10:39:26 Machine 2 release the locker of doSnapshot
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342 8:3128590617520042528]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:26 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: 9. Term: 1
+2022/06/30 10:39:26 Machine 2 has rf.nextIndex[index]: 15, rf.lastAppliedIndex: 9. Term: 1
+2022/06/30 10:39:26 Machine 2 start to send InstallSnapshotRPC to 0. Term: 1
+2022/06/30 10:39:26 Machine 2 has rf.nextIndex[index]: 15, rf.lastAppliedIndex: 9. Term: 1
+2022/06/30 10:39:26 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:26 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:26 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:26 Machine 1 has log: [{<nil> 0} {3289843569609597974 1} {3437668359046558859 1} {2473335459241813059 1} {6652374844056579232 1} {3493868248067367119 1} {924153883877544095 1} {4105910412647119342 1} {3128590617520042528 1} {392936297417111033 1} {3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}]. rf.lastApplied: 14, rf.commitedIndex: 14
+2022/06/30 10:39:26 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:26 Machine 1 update election timeout: 2022-06-30 10:39:27.155839 +0800 CST m=+3.617160709
+2022/06/30 10:39:26 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[1:3289843569609597974 2:3437668359046558859 3:2473335459241813059 4:6652374844056579232 5:3493868248067367119 6:924153883877544095 7:4105910412647119342 8:3128590617520042528]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 apply the log in index 9, Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 10, Term: 1
+2022/06/30 10:39:26 Machine 1 apply the log in index 8, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 9, Term: 1
+2022/06/30 10:39:26 Machine 1 has the locker of doSnapshot
+2022/06/30 10:39:26 Machine 1 doSnapshot success, currentTerm: 1, VoteFor: -1, Log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}], lastAppliedIndex: 9, lastAppliedTerm: 1
+2022/06/30 10:39:26 Machine 1 release the locker of doSnapshot
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 apply the log in index 10, Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 11, Term: 1
+2022/06/30 10:39:26 Machine 1 apply the log in index 9, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 10, Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 apply the log in index 11, Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 12, Term: 1
+2022/06/30 10:39:26 Machine 1 apply the log in index 10, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 11, Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 apply the log in index 12, Term: 1
+2022/06/30 10:39:26 Machine 1 apply the log in index 11, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 12, Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 13, Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 receive the reply from 0 when InstallSnapshotRPC, Status: false. Term: 1
+2022/06/30 10:39:26 Machine 2 has log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}]. rf.commitIndex: 14 , rf.lastApplied: 9, rf.commitedIndex: 14
+2022/06/30 10:39:26 Machine 2 finish sending the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 apply the log in index 13, Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 14, Term: 1
+2022/06/30 10:39:26 Machine 1 apply the log in index 12, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 13, Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 1, 6360455822787181154
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 1, 6360455822787181154
+2022/06/30 10:39:26 Machine 2 apply the log in index 14, Term: 1
+2022/06/30 10:39:26 Machine 1 apply the log in index 13, Term: 1
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 14, Term: 1
+2022/06/30 10:39:26 Machine 2 start to send the requests when SendAERpcs. Term: 1
+2022/06/30 10:39:26 Machine 2 has rf.nextIndex[index]: 2, rf.lastAppliedIndex: 9. Term: 1
+2022/06/30 10:39:26 Machine 2 has rf.nextIndex[index]: 15, rf.lastAppliedIndex: 9. Term: 1
+2022/06/30 10:39:26 Machine 2 start to send InstallSnapshotRPC to 0. Term: 1
+2022/06/30 10:39:26 Machine 2 has rf.nextIndex[index]: 15, rf.lastAppliedIndex: 9. Term: 1
+2022/06/30 10:39:26 Machine 1 get the request from 2 when AppendEntries. Term: 1
+2022/06/30 10:39:26 Machine 1 get a higher term when AppendEntries, tansfer to the follower. Term: 1
+2022/06/30 10:39:26 Machine 1 become follower from follower. Term: 1
+2022/06/30 10:39:26 Machine 1 has log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}]. rf.lastApplied: 9, rf.commitedIndex: 14
+2022/06/30 10:39:26 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 1
+2022/06/30 10:39:26 Machine 1 update election timeout: 2022-06-30 10:39:27.332252 +0800 CST m=+3.793551751
+2022/06/30 10:39:26 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 2, 6360455822787181154
+2022/06/30 10:39:26 Machine 2 is the leader, append the log in index 15, Term: 1
+2022/06/30 10:39:26 index: 15
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 has the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:26 Machine 2 has released the lock in unsafeApplyLogToRSM. Term: 1
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 10, Term: 1
+2022/06/30 10:39:26 Machine 1 apply the log in index 14, Term: 1
+2022/06/30 10:39:26 Machine 0 start to send requestVote. Term: 3
+2022/06/30 10:39:26 Machine 0 log info, the length of logs: 2, the last one log: [{<nil> 0} {3289843569609597974 1}], lastApplied: 1
+2022/06/30 10:39:26 Machine 1 receive request vote from 0. Term: 1
+2022/06/30 10:39:26 Machine 2 receive request vote from 0. Term: 1
+2022/06/30 10:39:26 Machine 1 become follower from follower. Term: 3
+2022/06/30 10:39:26 Machine 2 become follower from leader. Term: 3
+2022/06/30 10:39:26 Machine 2 Vote info - args Term: 3, currentTerm : 3, args.LastLogTerm: 1, args.LastLogIndex:1, voteFor: -1, CandidateID0, vote: false
+2022/06/30 10:39:26 Machine 2 update election timeout: 2022-06-30 10:39:27.288103 +0800 CST m=+3.749398709
+2022/06/30 10:39:26 Machine 1 Vote info - args Term: 3, currentTerm : 3, args.LastLogTerm: 1, args.LastLogIndex:1, voteFor: -1, CandidateID0, vote: false
+2022/06/30 10:39:26 Machine 1 update election timeout: 2022-06-30 10:39:27.368255 +0800 CST m=+3.829551043
+2022/06/30 10:39:26 Machine 0 get the reply when sendRequestVote from 2, Status: true. Term: 3
+2022/06/30 10:39:26 Machine 0 get the reply when sendRequestVote from 1, Status: true. Term: 3
+2022/06/30 10:39:26 Machine 0 has finished the election. Term: 3
+2022/06/30 10:39:26 Machine 0 update election timeout: 2022-06-30 10:39:27.221524 +0800 CST m=+3.682819751
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 1 has the lock in unsafeApplyLogToRSM. Term: 3
+2022/06/30 10:39:26 Machine 1 has released the lock in unsafeApplyLogToRSM. Term: 3
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 10, Term: 3
+2022/06/30 10:39:26 Machine 2 apply the log in index 10, Term: 3
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 11, Term: 3
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 apply the log in index 11, Term: 3
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 12, Term: 3
+2022/06/30 10:39:26 Machine 1 apply the log in index 10, Term: 3
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 11, Term: 3
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 1 apply the log in index 11, Term: 3
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 12, Term: 3
+2022/06/30 10:39:26 Machine 2 apply the log in index 12, Term: 3
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 13, Term: 3
+2022/06/30 10:39:26 Machine 2 receive the reply from 0 when InstallSnapshotRPC, Status: false. Term: 3
+2022/06/30 10:39:26 Machine 2 has log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1} {7110584742771164759 1}]. rf.commitIndex: 14 , rf.lastApplied: 14, rf.commitedIndex: 14
+2022/06/30 10:39:26 Machine 2 finish sending the requests when SendAERpcs. Term: 3
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 apply the log in index 13, Term: 3
+2022/06/30 10:39:26 Machine 2 start to apply the log in index 14, Term: 3
+2022/06/30 10:39:26 Machine 1 apply the log in index 12, Term: 3
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 13, Term: 3
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 2 apply the log in index 14, Term: 3
+2022/06/30 10:39:26 Machine 1 apply the log in index 13, Term: 3
+2022/06/30 10:39:26 Machine 1 start to apply the log in index 14, Term: 3
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 Machine 1 apply the log in index 14, Term: 3
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:26 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:26 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:26 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 Machine 0 start to send requestVote. Term: 4
+2022/06/30 10:39:27 Machine 0 log info, the length of logs: 2, the last one log: [{<nil> 0} {3289843569609597974 1}], lastApplied: 1
+2022/06/30 10:39:27 Machine 2 receive request vote from 0. Term: 3
+2022/06/30 10:39:27 Machine 1 receive request vote from 0. Term: 3
+2022/06/30 10:39:27 Machine 2 become follower from follower. Term: 4
+2022/06/30 10:39:27 Machine 1 become follower from follower. Term: 4
+2022/06/30 10:39:27 Machine 2 Vote info - args Term: 4, currentTerm : 4, args.LastLogTerm: 1, args.LastLogIndex:1, voteFor: -1, CandidateID0, vote: false
+2022/06/30 10:39:27 Machine 1 Vote info - args Term: 4, currentTerm : 4, args.LastLogTerm: 1, args.LastLogIndex:1, voteFor: -1, CandidateID0, vote: false
+2022/06/30 10:39:27 Machine 1 update election timeout: 2022-06-30 10:39:28.241455 +0800 CST m=+4.702697959
+2022/06/30 10:39:27 Machine 2 update election timeout: 2022-06-30 10:39:28.03854 +0800 CST m=+4.499782834
+2022/06/30 10:39:27 Machine 0 get the reply when sendRequestVote from 1, Status: true. Term: 4
+2022/06/30 10:39:27 Machine 0 get the reply when sendRequestVote from 2, Status: true. Term: 4
+2022/06/30 10:39:27 Machine 0 has finished the election. Term: 4
+2022/06/30 10:39:27 Machine 0 update election timeout: 2022-06-30 10:39:27.907315 +0800 CST m=+4.368557959
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 Machine 0 start to send requestVote. Term: 5
+2022/06/30 10:39:27 Machine 0 log info, the length of logs: 2, the last one log: [{<nil> 0} {3289843569609597974 1}], lastApplied: 1
+2022/06/30 10:39:27 Machine 1 receive request vote from 0. Term: 4
+2022/06/30 10:39:27 Machine 2 receive request vote from 0. Term: 4
+2022/06/30 10:39:27 Machine 1 become follower from follower. Term: 5
+2022/06/30 10:39:27 Machine 2 become follower from follower. Term: 5
+2022/06/30 10:39:27 Machine 1 Vote info - args Term: 5, currentTerm : 5, args.LastLogTerm: 1, args.LastLogIndex:1, voteFor: -1, CandidateID0, vote: false
+2022/06/30 10:39:27 Machine 1 update election timeout: 2022-06-30 10:39:28.513063 +0800 CST m=+4.974256043
+2022/06/30 10:39:27 Machine 2 Vote info - args Term: 5, currentTerm : 5, args.LastLogTerm: 1, args.LastLogIndex:1, voteFor: -1, CandidateID0, vote: false
+2022/06/30 10:39:27 Machine 2 update election timeout: 2022-06-30 10:39:28.923159 +0800 CST m=+5.384351334
+2022/06/30 10:39:27 Machine 0 get the reply when sendRequestVote from 1, Status: true. Term: 5
+2022/06/30 10:39:27 Machine 0 get the reply when sendRequestVote from 2, Status: true. Term: 5
+2022/06/30 10:39:27 Machine 0 has finished the election. Term: 5
+2022/06/30 10:39:27 Machine 0 update election timeout: 2022-06-30 10:39:28.701456 +0800 CST m=+5.162648043
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:27 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:27 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:27 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 index: -1
+2022/06/30 10:39:28 index: -1
+2022/06/30 10:39:28 Machine 1 become candidate from follower. Term: 5
+2022/06/30 10:39:28 Machine 1 start to send requestVote. Term: 6
+2022/06/30 10:39:28 Machine 1 log info, the length of logs: 5, the last one log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1}], lastApplied: 14
+2022/06/30 10:39:28 Machine 2 receive request vote from 1. Term: 5
+2022/06/30 10:39:28 Machine 2 become follower from follower. Term: 6
+2022/06/30 10:39:28 Machine 0 receive request vote from 1. Term: 5
+2022/06/30 10:39:28 Machine 2 Vote info - args Term: 6, currentTerm : 6, args.LastLogTerm: 1, args.LastLogIndex:4, voteFor: -1, CandidateID1, vote: false
+2022/06/30 10:39:28 Machine 2 update election timeout: 2022-06-30 10:39:29.445051 +0800 CST m=+5.906202418
+2022/06/30 10:39:28 Machine 0 become follower from candidate. Term: 6
+2022/06/30 10:39:28 Machine 0 Vote info - args Term: 6, currentTerm : 6, args.LastLogTerm: 1, args.LastLogIndex:4, voteFor: 1, CandidateID1, vote: true
+2022/06/30 10:39:28 Machine 0 finished Requestvote, called by 1. Term: 6
+2022/06/30 10:39:28 Machine 0 update election timeout: 2022-06-30 10:39:29.390275 +0800 CST m=+5.851425918
+2022/06/30 10:39:28 Machine 1 get the reply when sendRequestVote from 2, Status: true. Term: 6
+2022/06/30 10:39:28 Machine 1 get the reply when sendRequestVote from 0, Status: true. Term: 6
+2022/06/30 10:39:28 Machine 1 become leader from candidate. Term: 6
+2022/06/30 10:39:28 Machine 1 has finished the election. Term: 6
+2022/06/30 10:39:28 Machine 1 update election timeout: 2022-06-30 10:39:29.557567 +0800 CST m=+6.018717543
+2022/06/30 10:39:28 Machine 1 is the leader, append the log in index 15, Term: 6
+2022/06/30 10:39:28 index: 15
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[1:3289843569609597974]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 Machine 1 start to send the requests when SendAERpcs. Term: 6
+2022/06/30 10:39:28 Machine 1 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: 9. Term: 6
+2022/06/30 10:39:28 Machine 1 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: 9. Term: 6
+2022/06/30 10:39:28 Machine 1 start to send InstallSnapshotRPC to 0. Term: 6
+2022/06/30 10:39:28 Machine 0 get the request from -1 when InstallSnapshot. Term: 6
+2022/06/30 10:39:28 Machine 0 get a higher term when InstallSnapshot, tansfer to the follower. Term: 6
+2022/06/30 10:39:28 Machine 0 become follower from follower. Term: 6
+2022/06/30 10:39:28 Machine 0 update election timeout: 2022-06-30 10:39:29.501555 +0800 CST m=+5.962702918
+2022/06/30 10:39:28 Machine 0 has the locker of doSnapshot
+2022/06/30 10:39:28 Machine 1 receive the reply from 0 when InstallSnapshotRPC, Status: true. Term: 6
+2022/06/30 10:39:28 Machine 1 get the response of InstallSnapshotRPC from 0 success. Term: 6
+2022/06/30 10:39:28 Machine 0 doSnapshot success, currentTerm: 6, VoteFor: -1, Log: [], lastAppliedIndex: 9, lastAppliedTerm: 1
+2022/06/30 10:39:28 Machine 0 release the locker of doSnapshot
+2022/06/30 10:39:28 Machine 1 start to send InstallSnapshotRPC to 2. Term: 6
+2022/06/30 10:39:28 Machine 2 get the request from -1 when InstallSnapshot. Term: 6
+2022/06/30 10:39:28 Machine 2 get a higher term when InstallSnapshot, tansfer to the follower. Term: 6
+2022/06/30 10:39:28 Machine 2 become follower from follower. Term: 6
+2022/06/30 10:39:28 Machine 2 update election timeout: 2022-06-30 10:39:29.511347 +0800 CST m=+5.972494376
+2022/06/30 10:39:28 Machine 2 has the locker of doSnapshot
+2022/06/30 10:39:28 Machine 2 doSnapshot success, currentTerm: 6, VoteFor: -1, Log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1} {7110584742771164759 1}], lastAppliedIndex: 9, lastAppliedTerm: 1
+2022/06/30 10:39:28 Machine 2 release the locker of doSnapshot
+2022/06/30 10:39:28 Machine 1 receive the reply from 2 when InstallSnapshotRPC, Status: true. Term: 6
+2022/06/30 10:39:28 Machine 1 get the response of InstallSnapshotRPC from 2 success. Term: 6
+2022/06/30 10:39:28 Machine 1 has log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1} {7110584742771164759 6}]. rf.commitIndex: 14 , rf.lastApplied: 14, rf.commitedIndex: 14
+2022/06/30 10:39:28 Machine 1 finish sending the requests when SendAERpcs. Term: 6
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[9:392936297417111033]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[9:392936297417111033]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[9:392936297417111033]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 Machine 2 has the lock in unsafeApplyLogToRSM. Term: 6
+2022/06/30 10:39:28 Machine 2 has released the lock in unsafeApplyLogToRSM. Term: 6
+2022/06/30 10:39:28 Machine 2 start to apply the log in index 10, Term: 6
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[9:392936297417111033]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033 10:3203752978336357919]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 Machine 1 start to send the requests when SendAERpcs. Term: 6
+2022/06/30 10:39:28 Machine 1 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: 9. Term: 6
+2022/06/30 10:39:28 Machine 1 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: 9. Term: 6
+2022/06/30 10:39:28 Machine 1 start to send InstallSnapshotRPC to 2. Term: 6
+2022/06/30 10:39:28 Machine 1 start to send InstallSnapshotRPC to 0. Term: 6
+2022/06/30 10:39:28 Machine 0 get the request from -1 when InstallSnapshot. Term: 6
+2022/06/30 10:39:28 Machine 0 get a higher term when InstallSnapshot, tansfer to the follower. Term: 6
+2022/06/30 10:39:28 Machine 2 get the request from -1 when InstallSnapshot. Term: 6
+2022/06/30 10:39:28 Machine 2 get a higher term when InstallSnapshot, tansfer to the follower. Term: 6
+2022/06/30 10:39:28 Machine 0 become follower from follower. Term: 6
+2022/06/30 10:39:28 Machine 2 become follower from follower. Term: 6
+2022/06/30 10:39:28 Machine 2 update election timeout: 2022-06-30 10:39:29.220633 +0800 CST m=+5.681774709
+2022/06/30 10:39:28 Machine 2 has the locker of doSnapshot
+2022/06/30 10:39:28 Machine 1 receive the reply from 2 when InstallSnapshotRPC, Status: true. Term: 6
+2022/06/30 10:39:28 Machine 1 get the response of InstallSnapshotRPC from 2 success. Term: 6
+2022/06/30 10:39:28 Machine 2 doSnapshot success, currentTerm: 6, VoteFor: -1, Log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1} {7110584742771164759 1}], lastAppliedIndex: 9, lastAppliedTerm: 1
+2022/06/30 10:39:28 Machine 0 update election timeout: 2022-06-30 10:39:29.341929 +0800 CST m=+5.803071418
+2022/06/30 10:39:28 Machine 2 release the locker of doSnapshot
+2022/06/30 10:39:28 Machine 0 has the locker of doSnapshot
+2022/06/30 10:39:28 Machine 0 doSnapshot success, currentTerm: 6, VoteFor: -1, Log: [], lastAppliedIndex: 9, lastAppliedTerm: 1
+2022/06/30 10:39:28 Machine 0 release the locker of doSnapshot
+2022/06/30 10:39:28 Machine 1 receive the reply from 0 when InstallSnapshotRPC, Status: true. Term: 6
+2022/06/30 10:39:28 Machine 1 get the response of InstallSnapshotRPC from 0 success. Term: 6
+2022/06/30 10:39:28 Machine 1 has log: [{3203752978336357919 1} {8189859794442867856 1} {8990339504945920506 1} {2173229612235102814 1} {6360455822787181154 1} {7110584742771164759 6}]. rf.commitIndex: 14 , rf.lastApplied: 14, rf.commitedIndex: 14
+2022/06/30 10:39:28 Machine 1 finish sending the requests when SendAERpcs. Term: 6
+2022/06/30 10:39:28 TTTTTTT: Machine 0 has logs: map[9:392936297417111033]
+2022/06/30 10:39:28 TTTTTTT: Machine 1 has logs: map[9:392936297417111033 10:3203752978336357919 11:8189859794442867856 12:8990339504945920506 13:2173229612235102814 14:6360455822787181154]
+2022/06/30 10:39:28 TTTTTTT: Machine 2 has logs: map[9:392936297417111033]
+2022/06/30 10:39:28 0, <nil>
+2022/06/30 10:39:28 Machine 2 apply the log in index 10, Term: 6
+2022/06/30 10:39:28 Machine 2 start to apply the log in index 11, Term: 6
+2022/06/30 10:39:28 apply error: server 2 apply out of order 11
+exit status 1
+FAIL	6.824/raft	5.939s

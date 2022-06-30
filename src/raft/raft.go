@@ -38,7 +38,7 @@ import (
 const follower int = 1
 const candidate int = 2
 const leader int = 3
-const RPCTimeout = time.Millisecond * 200
+const RPCTimeout = time.Millisecond * 100
 
 var role_map map[int]string
 
@@ -139,12 +139,6 @@ func (rf *Raft) updateVoteFor(candidateId int) {
 	rf.persist()
 }
 
-// update logs
-// func (rf *Raft) updateLogs(index int, entries []Entry) {
-// 	rf.Log = append(rf.Log[:index], entries...)
-// 	rf.persist()
-// }
-
 // state transfer
 // beLeader clear the nextIndex and matchIndex
 func (rf *Raft) beLeaer() {
@@ -154,8 +148,8 @@ func (rf *Raft) beLeaer() {
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
-		rf.matchIndex[i] = 0
-		rf.nextIndex[i] = 1
+		rf.nextIndex[i] = len(rf.Log) + rf.lastAppliedIndex
+		rf.matchIndex[i] = rf.nextIndex[i] - 1
 	}
 
 }
@@ -163,6 +157,11 @@ func (rf *Raft) beLeaer() {
 // beCandidate
 func (rf *Raft) beCandidate() {
 	DPrintf("Machine %d become candidate from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
+	// currentTerm add more one
+	rf.updateCurrentTerm(rf.currentTerm + 1)
+	// vote for himself
+	rf.updateVoteFor(rf.me)
+
 	rf.role = candidate
 }
 
@@ -250,6 +249,7 @@ func (rf *Raft) readPersist(data []byte) {
 		rf.Log = log
 		rf.lastAppliedIndex = lastAppliedIndex
 		rf.lastAppliedTerm = lastAppliedTerm
+
 		DPrintf("Machine %d readPersist success, currentTerm: %d, VoteFor: %d, Log: %v, lastAppliedIndex: %d, lastAppliedTerm: %d",
 			rf.me, rf.currentTerm, rf.voteFor, rf.Log, rf.lastAppliedIndex, rf.lastAppliedTerm)
 	}
@@ -364,10 +364,6 @@ func (rf *Raft) startElection() {
 		rf.beCandidate()
 	}
 
-	// currentTerm add more one
-	rf.updateCurrentTerm(rf.currentTerm + 1)
-	// vote for himself
-	rf.updateVoteFor(rf.me)
 	// pack the args
 	currentTerm, role := rf.currentTerm, rf.role
 
@@ -685,7 +681,11 @@ func (rf *Raft) appendRPCWorker(index int, finished *int64) {
 		rf.nextIndex[index] += len(args.Entries)
 		rf.matchIndex[index] = rf.nextIndex[index] - 1
 	} else {
-		rf.nextIndex[index]--
+		if rf.nextIndex[index]-rf.lastApplied <= 5 {
+			rf.nextIndex[index]--
+		} else {
+			rf.nextIndex[index] -= 5
+		}
 	}
 
 }
@@ -713,7 +713,7 @@ func (rf *Raft) findMaxN() int {
 
 //
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
-	DPrintf("Machine %d get the request from %d when AppendEntries. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
+	DPrintf("Machine %d get the request from %d when AppendEntries, Args: %v. Term: %d", rf.me, args.LeaderId, *args, rf.currentTerm)
 
 	// DPrintf("machine %d try to get the locker when AppendEntries. Term: %d", rf.me, rf.currentTerm)
 	rf.mu.Lock()
@@ -748,7 +748,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	//
 	var prevLogTerm int
-	if len(rf.Log) == 0 {
+	if len(rf.Log) == 0 || args.PrevLogIndex == rf.lastAppliedIndex {
 		prevLogTerm = rf.lastAppliedTerm
 	} else {
 		prevLogTerm = rf.Log[args.PrevLogIndex-rf.lastAppliedIndex-1].Term
@@ -846,6 +846,11 @@ func (rf *Raft) InstallSnapshotSender(index int, finished *int64) {
 		rf.beFollower()
 		return
 	}
+
+	// if success, means all log entries has been appended
+	rf.nextIndex[index] = rf.lastAppliedIndex + 1
+	rf.matchIndex[index] = rf.nextIndex[index] - 1
+
 	DPrintf("Machine %d get the response of InstallSnapshotRPC from %d success. Term: %d", rf.me, index, rf.currentTerm)
 }
 
@@ -977,7 +982,7 @@ func (rf *Raft) ticker() {
 			// DPrintf("%d ticker send heartbeat. Term: %d", rf.me, rf.currentTerm)
 			rf.sendAERpcs()
 
-			time.Sleep(time.Millisecond * 80)
+			time.Sleep(time.Millisecond * 50)
 			continue
 		}
 
@@ -1011,8 +1016,8 @@ func (rf *Raft) unsafeApplyLogToRSM(index int) {
 			Command:      copyLog[i-lastAppliedIndex-1].Command,
 			CommandValid: true,
 		}
-		time.Sleep(time.Millisecond * 50)
-		DPrintf("Machine %d apply the log in index %d, Term: %d", rf.me, i, rf.currentTerm)
+		// time.Sleep(time.Millisecond * 50)
+		DPrintf("Machine %d apply the log: %v in index %d, Term: %d", rf.me, copyLog[i-lastAppliedIndex-1].Command, i, rf.currentTerm)
 	}
 }
 
@@ -1056,35 +1061,29 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.Log = make([]Entry, 0)
 	rf.Log = append(rf.Log, Entry{Command: nil, Term: 0})
 
-	// recover from the persister
-	if rf.persister != nil {
-		rf.readPersist(rf.persister.raftstate)
-	}
-
 	rf.commitIndex = -1
 	rf.leaderId = -1
 	rf.lastApplied = -1
 	rf.lastAppliedIndex = -1
 	rf.lastAppliedTerm = 0
+	rf.applyCh = applyCh
+
+	// initialize from state persisted before a crash
+	rf.readPersist(persister.ReadRaftState())
 
 	// init nextIndex as the 0 + 1
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
-		rf.matchIndex[i] = 0
-		rf.nextIndex[i] = 1
+		rf.nextIndex[i] = len(rf.Log) + rf.lastAppliedIndex
+		rf.matchIndex[i] = rf.nextIndex[i] - 1
 	}
-
-	rf.applyCh = applyCh
 
 	// init as the follower
 	rf.mu.Lock()
 	rf.beFollower()
 	rf.updateElectionTimeout()
 	rf.mu.Unlock()
-
-	// initialize from state persisted before a crash
-	rf.readPersist(persister.ReadRaftState())
 
 	// start ticker goroutine to start elections
 	go rf.ticker()
