@@ -792,6 +792,69 @@ func (rf *Raft) sendAppendEntries(server int, args *AppendEntriesArgs, reply *Ap
 	return ok
 }
 
+// install snapshot
+type InstallsnapshotArgs struct {
+	Term              int
+	LeaderId          int
+	LastIncludedIndex int
+	LastIncludedTerm  int
+	Data              []byte
+}
+
+type InstallsnapshotReply struct {
+	Term int
+}
+
+// InstallSnapshot
+func (rf *Raft) InstallSnapshotSender() {
+
+}
+
+// sendInstallSnapshot
+func (rf *Raft) sendInstallSnapshot(server int, args *InstallsnapshotArgs, reply *InstallsnapshotReply) bool {
+	ok := rf.peers[server].Call("Raft.InstallSnapshot", args, reply)
+	return ok
+}
+
+// InstallSnapshot
+func (rf *Raft) InstallSnapshot(args *InstallsnapshotArgs, reply *InstallsnapshotReply) {
+	DPrintf("Machine %d get the request from %d when InstallSnapshot. Term: %d", rf.me, args.LeaderId, rf.currentTerm)
+
+	// DPrintf("machine %d try to get the locker when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	defer rf.updateElectionTimeout()
+	// DPrintf("machine %d has got the locker when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
+
+	//
+	reply.Term = rf.currentTerm
+
+	//
+	if args.Term < rf.currentTerm {
+		DPrintf("Machine %d get a lower term when InstallSnapshot, the request is not admitted. Term: %d", rf.me, rf.currentTerm)
+		return
+	}
+
+	//
+	if args.Term >= rf.currentTerm {
+		DPrintf("Machine %d get a higher term when InstallSnapshot, tansfer to the follower. Term: %d", rf.me, rf.currentTerm)
+		rf.updateCurrentTerm(args.Term)
+		// rf.currentTerm = args.Term
+		rf.beFollower()
+	}
+
+	//
+	if args.LastIncludedIndex < rf.lastAppliedIndex || args.LastIncludedIndex > len(rf.Log)+rf.lastAppliedIndex {
+		DPrintf("Machine %d get a wrong lastIncludedIndex when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
+		return
+	}
+
+	//
+	if args.LastIncludedTerm != rf.Log[args.LastIncludedIndex-rf.lastAppliedIndex-1].Term {
+		DPrintf("Machine %d get a wrong lastIncludedTerm when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
+	}
+}
+
 //
 // the service using Raft (e.g. a k/v server) wants to start
 // agreement on the next command to be appended to Raft's log. if this
@@ -853,7 +916,6 @@ func (rf *Raft) killed() bool {
 // heartsbeats recently.
 func (rf *Raft) ticker() {
 	DPrintf("%d ticker start", rf.me)
-
 	for rf.killed() == false {
 		// Your code here to check if a leader election should
 		// be started and to randomize sleeping time using
