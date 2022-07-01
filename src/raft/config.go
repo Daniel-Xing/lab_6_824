@@ -526,7 +526,7 @@ func (cfg *config) one(cmd interface{}, expectedServers int, retry bool) int {
 			}
 		}
 
-		DPrintf("index: %d", index)
+		DPrintf("index is : %d, cmd: %v", index, cmd)
 
 		if index != -1 {
 			// somebody claimed to be the leader and to have

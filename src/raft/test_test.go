@@ -1085,18 +1085,22 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 		}
 
 		if disconnect {
+			DPrintf("Disconnecting %d from %d", sender, victim)
 			cfg.disconnect(victim)
 			cfg.one(rand.Int(), servers-1, true)
 		}
 		if crash {
+			DPrintf("Crashing %d", victim)
 			cfg.crash1(victim)
 			cfg.one(rand.Int(), servers-1, true)
 		}
 		// send enough to get a snapshot
+		DPrintf("Sending %d messages from %d to %d", MAXLOGSIZE, sender, victim)
 		for i := 0; i < SnapShotInterval+1; i++ {
 			cfg.rafts[sender].Start(rand.Int())
 		}
 		// let applier threads catch up with the Start()'s
+		DPrintf("Waiting for %d to catch up", victim)
 		cfg.one(rand.Int(), servers-1, true)
 
 		if cfg.LogSize() >= MAXLOGSIZE {
@@ -1105,12 +1109,18 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 		if disconnect {
 			// reconnect a follower, who maybe behind and
 			// needs to rceive a snapshot to catch up.
+			DPrintf("Reconnecting %d", victim)
 			cfg.connect(victim)
+			DPrintf("判断是否达成一致")
 			cfg.one(rand.Int(), servers, true)
+			DPrintf("已经达成一致")
 			leader1 = cfg.checkOneLeader()
+			DPrintf("leader1:%d", leader1)
 		}
 		if crash {
+			DPrintf("Restarting %d", victim)
 			cfg.start1(victim, cfg.applierSnap)
+			DPrintf("Connecting %d", victim)
 			cfg.connect(victim)
 			cfg.one(rand.Int(), servers, true)
 			leader1 = cfg.checkOneLeader()
