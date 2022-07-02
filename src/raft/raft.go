@@ -38,7 +38,7 @@ import (
 const follower int = 1
 const candidate int = 2
 const leader int = 3
-const RPCTimeout = time.Millisecond * 100
+const RPCTimeout = time.Millisecond * 150
 
 var role_map map[int]string
 
@@ -316,9 +316,6 @@ func (rf *Raft) doSnapshot(index int, snapshot []byte) {
 	DPrintf("Machine %d doSnapshot success, currentTerm: %d, VoteFor: %d, Log: %v, lastAppliedIndex: %d, lastAppliedTerm: %d",
 		rf.me, rf.currentTerm, rf.voteFor, rf.Log, rf.lastAppliedIndex, rf.lastAppliedTerm)
 
-	rf.mu.Unlock()
-	DPrintf("Machine %d release the locker of doSnapshot", rf.me)
-
 	rf.sender <- ApplyMsg{
 		CommandValid: false,
 
@@ -327,6 +324,10 @@ func (rf *Raft) doSnapshot(index int, snapshot []byte) {
 		SnapshotTerm:  lastAppliedTerm, // maybe panic, cause len(rf.log) == 0
 		SnapshotIndex: lastAppliedIndex,
 	}
+
+	rf.mu.Unlock()
+	DPrintf("Machine %d release the locker of doSnapshot", rf.me)
+
 }
 
 //
@@ -391,6 +392,15 @@ func (rf *Raft) startElection() {
 
 func (rf *Raft) electionSender(index, currentTerm, role int, finished, voteCount *int64) {
 	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	defer rf.cond.Broadcast()
+	defer atomic.AddInt64(finished, 1)
+
+	if rf.currentTerm != currentTerm || rf.role != role {
+		DPrintf("Machine %d is not the candidate, shouldnot send election!", rf.me)
+		return
+	}
+
 	args := &RequestVoteArgs{}
 	args.Term = rf.currentTerm
 	if len(rf.Log) != 0 {
@@ -404,7 +414,6 @@ func (rf *Raft) electionSender(index, currentTerm, role int, finished, voteCount
 
 	// 构建reply
 	reply := &RequestVoteReply{}
-	rf.mu.Unlock()
 
 	waitChan := make(chan bool)
 	go func() {
@@ -422,12 +431,7 @@ func (rf *Raft) electionSender(index, currentTerm, role int, finished, voteCount
 	case <-time.After(RPCTimeout):
 	}
 
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-	defer rf.cond.Broadcast()
-
 	DPrintf("Machine %d get the reply when sendRequestVote from %d, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
-	atomic.AddInt64(finished, 1)
 
 	if rf.currentTerm != currentTerm || rf.role != role {
 		DPrintf("Machine %d, expired process, currentTerm: %d, role: %d, rf.currentTerm: %d, rf.role: %d", rf.me, currentTerm, role, rf.currentTerm, rf.role)
@@ -575,6 +579,9 @@ func (rf *Raft) sendAERpcs() {
 	//
 	DPrintf("Machine %d start to send the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 	var finished int64 = 0
+	var count int64 = 1
+	role := rf.role
+	currentTerm := rf.currentTerm
 	for i := 0; i < len(rf.peers); i++ {
 		if i == rf.me {
 			continue
@@ -585,9 +592,9 @@ func (rf *Raft) sendAERpcs() {
 		IsSendSnapshot := rf.nextIndex[i]-1 < rf.lastAppliedIndex
 
 		if IsSendSnapshot {
-			go rf.InstallSnapshotSender(i, &finished)
+			go rf.InstallSnapshotSender(i, &finished, role, currentTerm)
 		} else {
-			go rf.appendRPCWorker(i, &finished)
+			go rf.appendRPCWorker(i, &finished, role, currentTerm, &count)
 		}
 	}
 
@@ -596,23 +603,33 @@ func (rf *Raft) sendAERpcs() {
 		rf.cond.Wait()
 	}
 
-	N := rf.findMaxN()
-	if N != -1 {
-		rf.commitIndex = N + rf.lastAppliedIndex + 1
+	// win the election and change role to the leader
+	if count > int64(len(rf.peers)/2) {
+		N := rf.findMaxN()
+		DPrintf("Machine %d get the success in appendEntryRpc of most servers, find the N: %d, Term: %d.", rf.me, N, rf.currentTerm)
+		if N > rf.commitIndex {
+			rf.commitIndex = N
+		}
 	}
 
 	DPrintf("Machine %d has log: %v. rf.commitIndex: %d , rf.lastApplied: %d, rf.lastApplidIndex: %d", rf.me, rf.Log, rf.commitIndex, rf.lastApplied, rf.lastAppliedIndex)
 	DPrintf("Machine %d finish sending the requests when SendAERpcs. Term: %d", rf.me, rf.currentTerm)
 }
 
-func (rf *Raft) appendRPCWorker(index int, finished *int64) {
+func (rf *Raft) appendRPCWorker(index int, finished *int64, role, currentTerm int, count *int64) {
 
 	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	defer rf.cond.Broadcast()
+	defer atomic.AddInt64(finished, 1)
+
 	// TODO: not strong
 	if rf.nextIndex[index]-1 < rf.lastAppliedIndex {
-		atomic.AddInt64(finished, 1)
-		rf.cond.Broadcast()
-		rf.mu.Unlock()
+		return
+	}
+
+	if rf.currentTerm != currentTerm || rf.role != role {
+		DPrintf("Machine %d, expired process in appendRPC, currentTerm: %d, role: %d, rf.currentTerm: %d, rf.role: %d", rf.me, currentTerm, role, rf.currentTerm, rf.role)
 		return
 	}
 
@@ -637,7 +654,7 @@ func (rf *Raft) appendRPCWorker(index int, finished *int64) {
 
 	// 构建reply
 	reply := &AppendEntriesReply{}
-	rf.mu.Unlock()
+	// rf.mu.Unlock()
 
 	waitChan := make(chan bool)
 	go func() {
@@ -657,13 +674,7 @@ func (rf *Raft) appendRPCWorker(index int, finished *int64) {
 		// DPrintf("machine %d get the response of sendAppendEntriews from to %d failed. Term: %d", rf.me, index, rf.currentTerm)
 	}
 
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-	defer rf.cond.Broadcast()
-
 	DPrintf("Machine %d receive the reply from %d when sendAppendEntries, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
-	// finished++
-	atomic.AddInt64(finished, 1)
 
 	if !ok {
 		// DPrintf("machine %d get the response to %d failed when SendAERpcs. Term: %d", rf.me, index, rf.currentTerm)
@@ -678,21 +689,17 @@ func (rf *Raft) appendRPCWorker(index int, finished *int64) {
 		return
 	}
 
-	if isHeartBeat {
-		return
-	}
+	// if isHeartBeat {
+	// 	atomic.AddInt64(count, 1)
+	// 	return
+	// }
 
 	// if success, means all log entries has been appended
-	if reply.Success {
+	if isHeartBeat || reply.Success {
 		rf.nextIndex[index] += len(args.Entries)
 		rf.matchIndex[index] = rf.nextIndex[index] - 1
+		atomic.AddInt64(count, 1)
 	} else {
-		// if rf.nextIndex[index]-rf.lastApplied <= 5 {
-		// 	rf.nextIndex[index]--
-		// } else {
-		// 	rf.nextIndex[index] -= 5
-		// }
-
 		rf.nextIndex[index] = min(rf.lastApplied+1, rf.nextIndex[index]/2)
 	}
 
@@ -700,11 +707,12 @@ func (rf *Raft) appendRPCWorker(index int, finished *int64) {
 
 func (rf *Raft) findMaxN() int {
 
-	N := len(rf.Log) - 1
-	for N > 0 {
+	// N 初始化为最后一个log的下标
+	N := len(rf.Log) + rf.lastAppliedIndex
+	for N > rf.commitIndex {
 		count := 1
 		for i := 0; i < len(rf.peers); i++ {
-			if i != rf.me && rf.matchIndex[i] >= N && rf.Log[N].Term == rf.currentTerm {
+			if i != rf.me && rf.matchIndex[i] >= N && rf.Log[N-rf.lastAppliedIndex-1].Term == rf.currentTerm {
 				count++
 			}
 		}
@@ -716,7 +724,7 @@ func (rf *Raft) findMaxN() int {
 		N--
 	}
 
-	return -1
+	return N
 }
 
 //
@@ -808,10 +816,21 @@ type InstallsnapshotReply struct {
 }
 
 // InstallSnapshot
-func (rf *Raft) InstallSnapshotSender(index int, finished *int64) {
-	DPrintf("Machine %d start to send InstallSnapshotRPC to %d. Term: %d", rf.me, index, rf.currentTerm)
+func (rf *Raft) InstallSnapshotSender(index int, finished *int64, role, currentTerm int) {
+	DPrintf("Machine %d start to send InstallSnapshotRPC to %d. Term: %d",
+		rf.me, index, rf.currentTerm)
 	// 构建参数
 	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	defer rf.cond.Broadcast()
+	defer atomic.AddInt64(finished, 1)
+
+	if rf.currentTerm != currentTerm || rf.role != role {
+		DPrintf("Machine %d, expired process in appendRPC, currentTerm: %d, role: %d, rf.currentTerm: %d, rf.role: %d",
+			rf.me, currentTerm, role, rf.currentTerm, rf.role)
+		return
+	}
+
 	args := &InstallsnapshotArgs{}
 	reply := &InstallsnapshotReply{}
 
@@ -820,7 +839,6 @@ func (rf *Raft) InstallSnapshotSender(index int, finished *int64) {
 	args.LastIncludedIndex = rf.lastAppliedIndex
 	args.LastIncludedTerm = rf.lastAppliedTerm
 	args.Data = rf.persister.ReadSnapshot()
-	rf.mu.Unlock()
 
 	waitChan := make(chan bool)
 	go func() {
@@ -838,12 +856,8 @@ func (rf *Raft) InstallSnapshotSender(index int, finished *int64) {
 	case <-time.After(RPCTimeout):
 	}
 
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-	defer rf.cond.Broadcast()
-
-	DPrintf("Machine %d receive the reply from %d when InstallSnapshotRPC, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
-	atomic.AddInt64(finished, 1)
+	DPrintf("Machine %d receive the reply from %d when InstallSnapshotRPC, Status: %v. Term: %d",
+		rf.me, index, ok, rf.currentTerm)
 
 	if !ok {
 		return
@@ -859,7 +873,8 @@ func (rf *Raft) InstallSnapshotSender(index int, finished *int64) {
 	rf.nextIndex[index] = rf.lastAppliedIndex + 1
 	rf.matchIndex[index] = rf.nextIndex[index] - 1
 
-	DPrintf("Machine %d get the response of InstallSnapshotRPC from %d success. Term: %d", rf.me, index, rf.currentTerm)
+	DPrintf("Machine %d get the response of InstallSnapshotRPC from %d success. Term: %d",
+		rf.me, index, rf.currentTerm)
 }
 
 // sendInstallSnapshot
@@ -874,6 +889,8 @@ func (rf *Raft) InstallSnapshot(args *InstallsnapshotArgs, reply *Installsnapsho
 
 	// DPrintf("machine %d try to get the locker when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
 	rf.mu.Lock()
+	defer rf.mu.Unlock()
+	defer rf.updateElectionTimeout()
 	// DPrintf("machine %d has got the locker when InstallSnapshot. Term: %d", rf.me, rf.currentTerm)
 
 	//
@@ -883,7 +900,6 @@ func (rf *Raft) InstallSnapshot(args *InstallsnapshotArgs, reply *Installsnapsho
 	if args.Term < rf.currentTerm {
 		DPrintf("Machine %d get a lower term when InstallSnapshot, the request is not admitted. Term: %d",
 			rf.me, rf.currentTerm)
-		rf.updateElectionTimeout()
 		return
 	}
 
@@ -914,9 +930,6 @@ func (rf *Raft) InstallSnapshot(args *InstallsnapshotArgs, reply *Installsnapsho
 		rf.lastAppliedTerm = args.LastIncludedTerm
 		rf.lastApplied = rf.lastAppliedIndex
 	}
-
-	rf.updateElectionTimeout()
-	rf.mu.Unlock()
 
 	// 写入新的快照
 	rf.Snapshot(args.LastIncludedIndex, args.Data)
@@ -1015,43 +1028,10 @@ func (rf *Raft) ApplyMsgSender() {
 		} else if m.CommandValid && m.CommandIndex == next {
 			rf.applyCh <- m
 			next += 1
-			DPrintf("ApplyMsgSender: Machine %d get a command, next index is %d", rf.me, next)
+			DPrintf("ApplyMsgSender: Machine %d get a message: %v, next index is %d", rf.me, m, next)
 		} else {
 			DPrintf("ApplyMsgSender: Machine %d get a wrong message, index: %d, next: %d", rf.me, m.CommandIndex, next)
 		}
-	}
-}
-
-func (rf *Raft) unsafeApplyLogToRSM(index int) {
-	// apply the log to the RSM which index is before index(included).
-	// copy the data
-	rf.mu.Lock()
-	DPrintf("Machine %d has the lock in unsafeApplyLogToRSM. Term: %d", rf.me, rf.currentTerm)
-	copyLog := make([]Entry, len(rf.Log), cap(rf.Log))
-	copy(copyLog, rf.Log)
-	lastApplied := rf.lastApplied
-	lastAppliedIndex := rf.lastAppliedIndex
-	rf.lastApplied = index
-	// commitIndex := rf.commitIndex
-	rf.mu.Unlock()
-	DPrintf("Machine %d has released the lock in unsafeApplyLogToRSM. Term: %d", rf.me, rf.currentTerm)
-
-	for i := lastApplied + 1; i <= index; i++ {
-		DPrintf("Machine %d start to apply the log in index %d, Term: %d", rf.me, i, rf.currentTerm)
-
-		if lastAppliedIndex != rf.lastAppliedIndex {
-			DPrintf("Machine %d has a new lastAppliedIndex %d, which is different from the old one %d, which is not expected", rf.me, rf.lastAppliedIndex, lastAppliedIndex)
-			// no need to update the rf.lastApplied
-			break
-		}
-
-		rf.sender <- ApplyMsg{
-			CommandIndex: i,
-			Command:      copyLog[i-lastAppliedIndex-1].Command,
-			CommandValid: true,
-		}
-		// time.Sleep(time.Millisecond * 50)
-		DPrintf("Machine %d apply the log: %v in index %d, Term: %d", rf.me, copyLog[i-lastAppliedIndex-1].Command, i, rf.currentTerm)
 	}
 }
 
@@ -1059,27 +1039,29 @@ func (rf *Raft) applyLogToRsm(index int) {
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
 
-	for i := rf.lastApplied + 1; i <= index; i++ {
-		DPrintf("Machine %d start to apply the log in index %d, Term: %d", rf.me, i, rf.currentTerm)
-		rf.sender <- ApplyMsg{
-			CommandIndex: i,
-			Command:      rf.Log[i-rf.lastAppliedIndex-1].Command,
-			CommandValid: true,
+	if rf.commitIndex > rf.lastApplied {
+		for i := rf.lastApplied + 1; i <= index && i-rf.lastAppliedIndex-1 >= 0; i++ {
+			DPrintf("Machine %d start to apply the log in index %d, Term: %d", rf.me, i, rf.currentTerm)
+			rf.sender <- ApplyMsg{
+				CommandIndex: i,
+				Command:      rf.Log[i-rf.lastAppliedIndex-1].Command,
+				CommandValid: true,
+			}
+			rf.lastApplied++
+			// time.Sleep(time.Millisecond * 50)
+			DPrintf("Machine %d apply the log: %v in index %d, Term: %d", rf.me, rf.Log[i-rf.lastAppliedIndex-1].Command, i, rf.currentTerm)
 		}
-		rf.lastApplied ++
-		// time.Sleep(time.Millisecond * 50)
-		DPrintf("Machine %d apply the log: %v in index %d, Term: %d", rf.me, rf.Log[i-rf.lastAppliedIndex-1].Command, i, rf.currentTerm)
 	}
+
 }
 
 func (rf *Raft) applier() {
+
 	for !rf.killed() {
-		time.Sleep(time.Millisecond * 50)
+		time.Sleep(time.Millisecond * 150)
 
 		// 决定是否需要应用日志到状态机
-		if rf.commitIndex > rf.lastApplied {
-			rf.applyLogToRsm(rf.commitIndex)
-		}
+		rf.applyLogToRsm(rf.commitIndex)
 	}
 }
 
@@ -1111,23 +1093,27 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.voteFor = -1
 	rf.Log = make([]Entry, 0)
 	rf.Log = append(rf.Log, Entry{Command: nil, Term: 0})
+	rf.lastAppliedIndex = -1
+	rf.lastAppliedTerm = 0
 
 	rf.commitIndex = -1
 	rf.leaderId = -1
 	rf.lastApplied = -1
-	rf.lastAppliedIndex = -1
-	rf.lastAppliedTerm = 0
 	rf.applyCh = applyCh
 	rf.sender = make(chan ApplyMsg)
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
 
+	// init the lastApplied and commitIndex after read Persisiter
+	rf.lastApplied = rf.lastAppliedIndex
+	rf.commitIndex = rf.lastAppliedIndex
+
 	// init nextIndex as the 0 + 1
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
-		rf.nextIndex[i] = len(rf.Log) + rf.lastAppliedIndex
+		rf.nextIndex[i] = len(rf.Log) + rf.lastAppliedIndex + 1
 		rf.matchIndex[i] = rf.nextIndex[i] - 1
 	}
 
@@ -1136,6 +1122,9 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.beFollower()
 	rf.updateElectionTimeout()
 	rf.mu.Unlock()
+
+	// update to the lastest term
+	rf.sendAERpcs()
 
 	// start ticker goroutine to start elections
 	go rf.ticker()

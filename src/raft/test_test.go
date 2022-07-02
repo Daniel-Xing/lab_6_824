@@ -768,7 +768,7 @@ func TestFigure82C(t *testing.T) {
 
 	nup := servers
 	for iters := 0; iters < 1000; iters++ {
-		// DPrintf("Test (2C): iter %v\n", iters)
+		DPrintf("Test (2C): iter %v\n", iters)
 
 		leader := -1
 		for i := 0; i < servers; i++ {
@@ -779,7 +779,7 @@ func TestFigure82C(t *testing.T) {
 				}
 			}
 		}
-		// DPrintf("Test (2C): leader %v\n", leader)
+		DPrintf("Test (2C): leader %v\n", leader)
 
 		if (rand.Int() % 1000) < 100 {
 			ms := rand.Int63() % (int64(RaftElectionTimeout/time.Millisecond) / 2)
@@ -791,7 +791,7 @@ func TestFigure82C(t *testing.T) {
 
 		if leader != -1 {
 			cfg.crash1(leader)
-			// DPrintf("Test (2C): crash %v\n", leader)
+			DPrintf("Test (2C): crash %v\n", leader)
 			nup -= 1
 		}
 
@@ -800,12 +800,12 @@ func TestFigure82C(t *testing.T) {
 			if cfg.rafts[s] == nil {
 				cfg.start1(s, cfg.applier)
 				cfg.connect(s)
-				// DPrintf("Test (2C): start %v\n", s)
+				DPrintf("Test (2C): start %v\n", s)
 				nup += 1
 			}
 		}
 	}
-	// DPrintf("Test (2C): done\n")
+	DPrintf("Test (2C): done\n")
 
 	for i := 0; i < servers; i++ {
 		if cfg.rafts[i] == nil {
@@ -1122,7 +1122,9 @@ func snapcommon(t *testing.T, name string, disconnect bool, reliable bool, crash
 			cfg.start1(victim, cfg.applierSnap)
 			DPrintf("Connecting %d", victim)
 			cfg.connect(victim)
+			DPrintf("判断是否达成一致")
 			cfg.one(rand.Int(), servers, true)
+			DPrintf("已经达成一致")
 			leader1 = cfg.checkOneLeader()
 		}
 	}

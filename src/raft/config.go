@@ -446,6 +446,7 @@ func (cfg *config) nCommitted(index int) (int, interface{}) {
 
 		cfg.mu.Lock()
 		cmd1, ok := cfg.logs[i][index]
+		DPrintf("nCommitted: index : %d, server: %d, log: %v, ok: %v", index, i, cfg.logs[i], ok)
 		cfg.mu.Unlock()
 
 		if ok {

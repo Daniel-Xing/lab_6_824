@@ -1,0 +1,4 @@
+Test (2A): initial election ...
+  ... Passed --   3.5  3  114   27430    0
+PASS
+ok  	6.824/raft	3.501s
