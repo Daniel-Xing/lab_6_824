@@ -1,6 +1,0 @@
-Test (2D): install snapshots (disconnect+unreliable) ...
---- FAIL: TestSnapshotInstallUnreliable2D (120.06s)
-    config.go:296: test took longer than 120 seconds
-FAIL
-exit status 1
-FAIL	6.824/raft	120.062s

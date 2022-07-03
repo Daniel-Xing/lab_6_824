@@ -117,7 +117,7 @@ func TestManyElections2A(t *testing.T) {
 		i1 := rand.Int() % servers
 		i2 := rand.Int() % servers
 		i3 := rand.Int() % servers
-		// DPrintf("DISCONNECT %d %d %d\n", i1, i2, i3)
+		DPrintf("DISCONNECT %d %d %d\n", i1, i2, i3)
 		cfg.disconnect(i1)
 		cfg.disconnect(i2)
 		cfg.disconnect(i3)
@@ -127,7 +127,7 @@ func TestManyElections2A(t *testing.T) {
 		cfg.checkOneLeader()
 
 		// re-connect the nodes in a random order
-		// DPrintf("RECONNECT %d %d %d\n", i1, i2, i3)
+		DPrintf("RECONNECT %d %d %d\n", i1, i2, i3)
 		cfg.connect(i1)
 		cfg.connect(i2)
 		cfg.connect(i3)
