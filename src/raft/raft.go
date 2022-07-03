@@ -96,6 +96,7 @@ type Raft struct {
 	// volatile state for leaders
 	nextIndex  []int
 	matchIndex []int
+	leases     []bool
 
 	// when follower received AppendEntries rpc, send a message to channel. TODO: maybe block.
 	applyCh chan ApplyMsg
@@ -140,37 +141,6 @@ func (rf *Raft) updateVoteFor(candidateId int) {
 	rf.persist()
 }
 
-// state transfer
-// beLeader clear the nextIndex and matchIndex
-func (rf *Raft) beLeaer() {
-	// DPrintf("Machine %d become leader from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
-	rf.leaderId = rf.me
-
-	rf.nextIndex = make([]int, len(rf.peers))
-	rf.matchIndex = make([]int, len(rf.peers))
-	for i := 0; i < len(rf.peers); i++ {
-		rf.nextIndex[i] = len(rf.Log) + rf.lastAppliedIndex + 1
-		rf.matchIndex[i] = rf.nextIndex[i] - 1
-	}
-
-}
-
-// beCandidate
-func (rf *Raft) beCandidate() {
-	// DPrintf("Machine %d become candidate from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
-	// currentTerm add more one
-	rf.updateCurrentTerm(rf.currentTerm + 1)
-	// vote for himself
-	rf.updateVoteFor(rf.me)
-
-	rf.leaderId = -1
-}
-
-// beFollower
-func (rf *Raft) beFollower() {
-	// DPrintf("Machine %d become follower from %s. Term: %d", rf.me, role_map[rf.role], rf.currentTerm)
-}
-
 func (rf *Raft) updateElectionTimeout() {
 	rf.electionTimeout = time.Now().Add(RandomTime())
 	DPrintf("Machine %d update election timeout: %s", rf.me, rf.electionTimeout)
@@ -186,14 +156,6 @@ func (rf *Raft) isTimeout() bool {
 // see paper's Figure 2 for a description of what should be persistent.
 //
 func (rf *Raft) persist() {
-	// Your code here (2C).
-	// Example:
-	// w := new(bytes.Buffer)
-	// e := labgob.NewEncoder(w)
-	// e.Encode(rf.xxx)
-	// e.Encode(rf.yyy)
-	// data := w.Bytes()
-	// rf.persister.SaveRaftState(data)
 
 	w := new(bytes.Buffer)
 	e := labgob.NewEncoder(w)
@@ -213,19 +175,6 @@ func (rf *Raft) readPersist(data []byte) {
 	if data == nil || len(data) < 1 { // bootstrap without any state?
 		return
 	}
-	// Your code here (2C).
-	// Example:
-	// r := bytes.NewBuffer(data)
-	// d := labgob.NewDecoder(r)
-	// var xxx
-	// var yyy
-	// if d.Decode(&xxx) != nil ||
-	//    d.Decode(&yyy) != nil {
-	//   error...
-	// } else {
-	//   rf.xxx = xxx
-	//   rf.yyy = yyy
-	// }
 
 	r := bytes.NewBuffer(data)
 	d := labgob.NewDecoder(r)
@@ -388,15 +337,16 @@ func (rf *Raft) startElection() {
 	}
 	// win the election and change role to the leader
 	if voteCount > int64(len(rf.peers)/2) {
-		// rf.beLeaer()
 		DPrintf("Machine %d become leader from candidate. Term: %d", rf.me, rf.currentTerm)
 		rf.leaderId = rf.me
 
 		rf.nextIndex = make([]int, len(rf.peers))
 		rf.matchIndex = make([]int, len(rf.peers))
+		rf.leases = make([]bool, len(rf.peers))
 		for i := 0; i < len(rf.peers); i++ {
 			rf.nextIndex[i] = len(rf.Log) + rf.lastAppliedIndex + 1
 			rf.matchIndex[i] = rf.nextIndex[i] - 1
+			rf.leases[i] = true
 		}
 
 	}
@@ -693,6 +643,8 @@ func (rf *Raft) appendRPCWorker(index int, finished *int64, currentTerm int, cou
 	rf.mu.Lock()
 	DPrintf("Machine %d receive the reply from %d when sendAppendEntries, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
 
+	rf.leases[index] = false
+
 	if rf.currentTerm != currentTerm || rf.leaderId != rf.me {
 		DPrintf("Machine %d, expired process in appendRPC, currentTerm: %d, rf.currentTerm: %d.", rf.me, currentTerm, rf.currentTerm)
 		return
@@ -711,6 +663,8 @@ func (rf *Raft) appendRPCWorker(index int, finished *int64, currentTerm int, cou
 		return
 	}
 
+	rf.leases[index] = true
+
 	// if success, means all log entries has been appended
 	if reply.Success {
 		rf.nextIndex[index] += len(args.Entries)
@@ -719,7 +673,6 @@ func (rf *Raft) appendRPCWorker(index int, finished *int64, currentTerm int, cou
 	} else {
 		rf.nextIndex[index] = min(rf.lastApplied+1, rf.nextIndex[index]/2)
 	}
-
 }
 
 func (rf *Raft) findMaxN() int {
@@ -883,6 +836,9 @@ func (rf *Raft) InstallSnapshotSender(index int, finished *int64, currentTerm in
 	DPrintf("Machine %d receive the reply from %d when InstallSnapshotRPC, Status: %v. Term: %d",
 		rf.me, index, ok, rf.currentTerm)
 
+	// 更新租约
+	rf.leases[index] = false
+
 	if !ok {
 		return
 	}
@@ -898,6 +854,7 @@ func (rf *Raft) InstallSnapshotSender(index int, finished *int64, currentTerm in
 	// if success, means all log entries has been appended
 	rf.nextIndex[index] = rf.lastAppliedIndex + 1
 	rf.matchIndex[index] = rf.nextIndex[index] - 1
+	rf.leases[index] = true
 
 	DPrintf("Machine %d get the response of InstallSnapshotRPC from %d success. Term: %d",
 		rf.me, index, rf.currentTerm)
@@ -1098,6 +1055,34 @@ func (rf *Raft) applier() {
 	}
 }
 
+func (rf *Raft) CheckerLease() {
+	for !rf.killed() {
+		if rf.isTimeout() && rf.leaderId == rf.me {
+			rf.mu.Lock()
+			DPrintf("Machine %d 开始检查租约. Term: %d", rf.me, rf.currentTerm)
+
+			count := 1
+			for i := 0; i < len(rf.peers); i++ {
+				if i != rf.me && rf.leases[i] {
+					count++
+				}
+			}
+
+			if count >= len(rf.peers)/2 {
+				DPrintf("MAchine %d 租约检查成功. Term:%d", rf.me, rf.currentTerm)
+				rf.updateElectionTimeout()
+			} else {
+				DPrintf("Machine %d 租约检查失败. Term: %d", rf.me, rf.currentTerm)
+				rf.leaderId = -1
+				rf.voteFor = -1
+			}
+			rf.mu.Unlock()
+		}
+
+		time.Sleep(RPCTimeout * 2)
+	}
+}
+
 //
 // the service or tester wants to create a Raft server. the ports
 // of all the Raft servers (including this one) are in peers[]. this
@@ -1145,14 +1130,15 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	// init nextIndex as the 0 + 1
 	rf.nextIndex = make([]int, len(rf.peers))
 	rf.matchIndex = make([]int, len(rf.peers))
+	rf.leases = make([]bool, len(rf.peers))
 	for i := 0; i < len(rf.peers); i++ {
 		rf.nextIndex[i] = len(rf.Log) + rf.lastAppliedIndex + 1
 		rf.matchIndex[i] = rf.nextIndex[i] - 1
+		rf.leases[i] = false
 	}
 
 	// init as the follower
 	rf.mu.Lock()
-	rf.beFollower()
 	rf.updateElectionTimeout()
 	rf.mu.Unlock()
 
@@ -1160,6 +1146,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	go rf.ticker()
 	go rf.ApplyMsgSender()
 	go rf.applier()
+	go rf.CheckerLease()
 
 	return rf
 }
