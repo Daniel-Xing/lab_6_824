@@ -335,6 +335,13 @@ func (rf *Raft) startElection() {
 	for finished != int64(len(rf.peers)-1) {
 		rf.cond.Wait()
 	}
+
+	// 过期中止
+	if rf.currentTerm != currentTerm || rf.leaderId != -1 || rf.voteFor != rf.me {
+		DPrintf("Machine %d, expired process, currentTerm: %d, rf.currentTerm: %d.", rf.me, currentTerm, rf.currentTerm)
+		return
+	}
+
 	// win the election and change role to the leader
 	if voteCount > int64(len(rf.peers)/2) {
 		DPrintf("Machine %d become leader from candidate. Term: %d", rf.me, rf.currentTerm)
@@ -360,7 +367,7 @@ func (rf *Raft) electionSender(index, currentTerm int, finished, voteCount *int6
 	defer rf.cond.Broadcast()
 	defer atomic.AddInt64(finished, 1)
 
-	if rf.currentTerm != currentTerm {
+	if rf.currentTerm != currentTerm || rf.leaderId != -1 || rf.voteFor != rf.me {
 		DPrintf("Machine %d's currentTerm has changed, shouldnot send election!", rf.me)
 		return
 	}
@@ -401,7 +408,7 @@ func (rf *Raft) electionSender(index, currentTerm int, finished, voteCount *int6
 
 	DPrintf("Machine %d get the reply when sendRequestVote from %d, Status: %v. Term: %d", rf.me, index, ok, rf.currentTerm)
 
-	if rf.currentTerm != currentTerm {
+	if rf.currentTerm != currentTerm || rf.leaderId != -1 || rf.voteFor != rf.me {
 		DPrintf("Machine %d, expired process, currentTerm: %d, rf.currentTerm: %d.", rf.me, currentTerm, rf.currentTerm)
 		return
 	}
@@ -567,6 +574,12 @@ func (rf *Raft) sendAERpcs() {
 	// process the result
 	for finished != int64(len(rf.peers)-1) {
 		rf.cond.Wait()
+	}
+
+	// 过期中止
+	if rf.currentTerm != currentTerm || rf.leaderId != rf.me {
+		DPrintf("Machine %d, expired process in appendRPC, currentTerm: %d, rf.currentTerm: %d.", rf.me, currentTerm, rf.currentTerm)
+		return
 	}
 
 	// win the election and change role to the leader

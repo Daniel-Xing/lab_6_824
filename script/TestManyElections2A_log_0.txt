@@ -1,0 +1,1103 @@
+2022/07/03 16:05:12 disconnect(0)
+2022/07/03 16:05:12 Machine: 0, Make()
+2022/07/03 16:05:12 Machine 0 update election timeout: 2022-07-03 16:05:13.6642295 +0800 CST m=+1.354748201
+2022/07/03 16:05:12 disconnect(1)
+2022/07/03 16:05:12 0 ticker start
+2022/07/03 16:05:12 Machine: 1, Make()
+2022/07/03 16:05:12 Machine 1 update election timeout: 2022-07-03 16:05:13.7624686 +0800 CST m=+1.452987201
+2022/07/03 16:05:12 disconnect(2)
+2022/07/03 16:05:12 Machine: 2, Make()
+2022/07/03 16:05:12 Machine 2 update election timeout: 2022-07-03 16:05:14.1005839 +0800 CST m=+1.791102501
+2022/07/03 16:05:12 disconnect(3)
+2022/07/03 16:05:12 1 ticker start
+2022/07/03 16:05:12 2 ticker start
+2022/07/03 16:05:12 Machine: 3, Make()
+2022/07/03 16:05:12 Machine 3 update election timeout: 2022-07-03 16:05:13.2797363 +0800 CST m=+0.970255001
+2022/07/03 16:05:12 disconnect(4)
+2022/07/03 16:05:12 3 ticker start
+2022/07/03 16:05:12 Machine: 4, Make()
+2022/07/03 16:05:12 Machine 4 update election timeout: 2022-07-03 16:05:13.3748431 +0800 CST m=+1.065361701
+2022/07/03 16:05:12 disconnect(5)
+2022/07/03 16:05:12 4 ticker start
+2022/07/03 16:05:12 Machine: 5, Make()
+2022/07/03 16:05:12 Machine 5 update election timeout: 2022-07-03 16:05:13.5429553 +0800 CST m=+1.233473901
+2022/07/03 16:05:12 disconnect(6)
+2022/07/03 16:05:12 5 ticker start
+2022/07/03 16:05:12 Machine: 6, Make()
+2022/07/03 16:05:12 Machine 6 update election timeout: 2022-07-03 16:05:13.1330707 +0800 CST m=+0.823589301
+Test (2A): multiple elections ...
+2022/07/03 16:05:12 6 ticker start
+2022/07/03 16:05:13 Machine 6 become candidate. Term: 0
+2022/07/03 16:05:13 Machine 6 start to send requestVote. Term: 1
+2022/07/03 16:05:13 Machine 6 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:13 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:13 Machine 3 receive request vote from 6. Term: 0
+2022/07/03 16:05:13 Machine 3 finished Requestvote, called by 6. Term: 1
+2022/07/03 16:05:13 Machine 3 Vote info - args Term: 1, currentTerm : 1, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:13 Machine 4 receive request vote from 6. Term: 0
+2022/07/03 16:05:13 Machine 1 receive request vote from 6. Term: 0
+2022/07/03 16:05:13 Machine 4 finished Requestvote, called by 6. Term: 1
+2022/07/03 16:05:13 Machine 4 Vote info - args Term: 1, currentTerm : 1, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:13 Machine 4 update election timeout: 2022-07-03 16:05:14.0158882 +0800 CST m=+1.706406901
+2022/07/03 16:05:13 Machine 2 receive request vote from 6. Term: 0
+2022/07/03 16:05:13 Machine 6 get the reply when sendRequestVote from 4, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 1 finished Requestvote, called by 6. Term: 1
+2022/07/03 16:05:13 Machine 1 Vote info - args Term: 1, currentTerm : 1, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:13 Machine 1 update election timeout: 2022-07-03 16:05:14.3440349 +0800 CST m=+2.034553501
+2022/07/03 16:05:13 Machine 3 update election timeout: 2022-07-03 16:05:14.9638519 +0800 CST m=+2.654370501
+2022/07/03 16:05:13 Machine 2 finished Requestvote, called by 6. Term: 1
+2022/07/03 16:05:13 Machine 2 Vote info - args Term: 1, currentTerm : 1, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:13 Machine 2 update election timeout: 2022-07-03 16:05:14.2152208 +0800 CST m=+1.905739401
+2022/07/03 16:05:13 Machine 5 receive request vote from 6. Term: 0
+2022/07/03 16:05:13 Machine 5 finished Requestvote, called by 6. Term: 1
+2022/07/03 16:05:13 Machine 5 Vote info - args Term: 1, currentTerm : 1, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:13 Machine 5 update election timeout: 2022-07-03 16:05:14.776427 +0800 CST m=+2.466945601
+2022/07/03 16:05:13 Machine 0 receive request vote from 6. Term: 0
+2022/07/03 16:05:13 Machine 0 finished Requestvote, called by 6. Term: 1
+2022/07/03 16:05:13 Machine 0 Vote info - args Term: 1, currentTerm : 1, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:13 Machine 0 update election timeout: 2022-07-03 16:05:14.6076516 +0800 CST m=+2.298170201
+2022/07/03 16:05:13 Machine 6 get the reply when sendRequestVote from 1, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 get the reply when sendRequestVote from 3, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 get the reply when sendRequestVote from 2, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 get the reply when sendRequestVote from 5, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 get the reply when sendRequestVote from 0, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 become leader from candidate. Term: 1
+2022/07/03 16:05:13 Machine 6 has finished the election. Term: 1
+2022/07/03 16:05:13 Machine 6 update election timeout: 2022-07-03 16:05:14.924833 +0800 CST m=+2.615351601
+2022/07/03 16:05:13 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 5 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 3 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 0 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 5 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 5 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 5 update election timeout: 2022-07-03 16:05:14.6127232 +0800 CST m=+2.303241901
+2022/07/03 16:05:13 Machine 3 update election timeout: 2022-07-03 16:05:14.1637078 +0800 CST m=+1.854226401
+2022/07/03 16:05:13 Machine 2 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 2 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 2 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 2 update election timeout: 2022-07-03 16:05:14.2420078 +0800 CST m=+1.932526401
+2022/07/03 16:05:13 Machine 4 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 4 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 4 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 4 update election timeout: 2022-07-03 16:05:14.9391269 +0800 CST m=+2.629645601
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 0 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 0 update election timeout: 2022-07-03 16:05:14.3413711 +0800 CST m=+2.031889701
+2022/07/03 16:05:13 Machine 1 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 1 update election timeout: 2022-07-03 16:05:14.27848 +0800 CST m=+1.968998601
+2022/07/03 16:05:13 Machine 6 receive the reply from 5 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 2 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 4 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 1.
+2022/07/03 16:05:13 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:13 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 2 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 2 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 2 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 2 update election timeout: 2022-07-03 16:05:15.0015395 +0800 CST m=+2.692058101
+2022/07/03 16:05:13 Machine 1 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 0 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 0 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 4 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 4 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 4 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 4 update election timeout: 2022-07-03 16:05:14.2356696 +0800 CST m=+1.926188301
+2022/07/03 16:05:13 Machine 6 receive the reply from 2 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 0 update election timeout: 2022-07-03 16:05:14.4236554 +0800 CST m=+2.114174001
+2022/07/03 16:05:13 Machine 6 receive the reply from 4 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 1 update election timeout: 2022-07-03 16:05:14.7986362 +0800 CST m=+2.489154901
+2022/07/03 16:05:13 Machine 6 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 5 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 5 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 5 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 5 update election timeout: 2022-07-03 16:05:14.759194 +0800 CST m=+2.449712601
+2022/07/03 16:05:13 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 3 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 3 update election timeout: 2022-07-03 16:05:14.9303755 +0800 CST m=+2.620894201
+2022/07/03 16:05:13 Machine 6 receive the reply from 5 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 1.
+2022/07/03 16:05:13 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:13 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 DISCONNECT 5 0 4
+2022/07/03 16:05:13 disconnect(5)
+2022/07/03 16:05:13 disconnect(0)
+2022/07/03 16:05:13 disconnect(4)
+2022/07/03 16:05:13 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 2 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 2 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 2 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 2 update election timeout: 2022-07-03 16:05:14.5440922 +0800 CST m=+2.234610801
+2022/07/03 16:05:13 Machine 3 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 3 update election timeout: 2022-07-03 16:05:15.1201639 +0800 CST m=+2.810682501
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 2 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 1 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 1 update election timeout: 2022-07-03 16:05:14.4462903 +0800 CST m=+2.136808901
+2022/07/03 16:05:13 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:13 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 1.
+2022/07/03 16:05:13 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:13 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 2 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 2 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 2 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 3 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 3 update election timeout: 2022-07-03 16:05:14.7685377 +0800 CST m=+2.459056401
+2022/07/03 16:05:13 Machine 2 update election timeout: 2022-07-03 16:05:14.3823975 +0800 CST m=+2.072916101
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 2 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 1 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 1 update election timeout: 2022-07-03 16:05:14.5370417 +0800 CST m=+2.227560301
+2022/07/03 16:05:13 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:13 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 1.
+2022/07/03 16:05:13 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:13 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 1 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 1 update election timeout: 2022-07-03 16:05:14.9970409 +0800 CST m=+2.687559501
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 3 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 3 update election timeout: 2022-07-03 16:05:14.8033622 +0800 CST m=+2.493880901
+2022/07/03 16:05:13 Machine 2 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 2 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 2 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 2 update election timeout: 2022-07-03 16:05:15.3074435 +0800 CST m=+2.997962101
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 2 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 RECONNECT 5 0 4
+2022/07/03 16:05:13 DISCONNECT 5 5 2
+2022/07/03 16:05:13 disconnect(5)
+2022/07/03 16:05:13 disconnect(5)
+2022/07/03 16:05:13 disconnect(2)
+2022/07/03 16:05:13 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:13 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 1.
+2022/07/03 16:05:13 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:13 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 1 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 1 update election timeout: 2022-07-03 16:05:14.8986185 +0800 CST m=+2.589137101
+2022/07/03 16:05:13 Machine 0 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 0 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 0 update election timeout: 2022-07-03 16:05:15.4457027 +0800 CST m=+3.136221301
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:13 Machine 3 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 3 update election timeout: 2022-07-03 16:05:15.6078308 +0800 CST m=+3.298349501
+2022/07/03 16:05:13 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:13 Machine 4 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:13 Machine 4 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:13 Machine 4 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:13 Machine 4 update election timeout: 2022-07-03 16:05:14.9369217 +0800 CST m=+2.627440301
+2022/07/03 16:05:13 Machine 6 receive the reply from 4 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 1.
+2022/07/03 16:05:14 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:14 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 0 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:14 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:14 Machine 0 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 0 update election timeout: 2022-07-03 16:05:15.135346 +0800 CST m=+2.825864601
+2022/07/03 16:05:14 Machine 3 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:14 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:14 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:14 Machine 3 update election timeout: 2022-07-03 16:05:15.6564448 +0800 CST m=+3.346963401
+2022/07/03 16:05:14 Machine 4 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:14 Machine 4 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:14 Machine 4 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:14 Machine 4 update election timeout: 2022-07-03 16:05:15.8144681 +0800 CST m=+3.504986801
+2022/07/03 16:05:14 Machine 1 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:14 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:14 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:14 Machine 1 update election timeout: 2022-07-03 16:05:15.723558 +0800 CST m=+3.414076601
+2022/07/03 16:05:14 Machine 6 receive the reply from 4 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 1.
+2022/07/03 16:05:14 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:14 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 1 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:14 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:14 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:14 Machine 1 update election timeout: 2022-07-03 16:05:16.0646224 +0800 CST m=+3.755141001
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 3 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:14 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:14 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:14 Machine 3 update election timeout: 2022-07-03 16:05:15.9116579 +0800 CST m=+3.602176501
+2022/07/03 16:05:14 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 4 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:14 Machine 0 get the request from 6 when AppendEntries, Args: {1 6 0 0 [] -1}. Term: 1
+2022/07/03 16:05:14 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:14 Machine 0 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:14 Machine 0 update election timeout: 2022-07-03 16:05:15.4668465 +0800 CST m=+3.157365101
+2022/07/03 16:05:14 Machine 4 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:14 Machine 4 has sended the heartbeat when 6 when AppendEntries. Term: 1
+2022/07/03 16:05:14 Machine 4 update election timeout: 2022-07-03 16:05:15.9279177 +0800 CST m=+3.618436301
+2022/07/03 16:05:14 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 0 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 4 when sendAppendEntries, Status: true. Term: 1
+2022/07/03 16:05:14 RECONNECT 5 5 2
+2022/07/03 16:05:14 DISCONNECT 6 5 6
+2022/07/03 16:05:14 disconnect(6)
+2022/07/03 16:05:14 disconnect(5)
+2022/07/03 16:05:14 disconnect(6)
+2022/07/03 16:05:14 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 1.
+2022/07/03 16:05:14 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:14 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 1 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 3 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:14 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 5 become candidate. Term: 1
+2022/07/03 16:05:14 Machine 5 start to send requestVote. Term: 2
+2022/07/03 16:05:14 Machine 5 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:14 Machine 5 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:14 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 3 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 receive the reply from 1 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:14 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:14 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 5 get the reply when sendRequestVote from 0, Status: false. Term: 2
+2022/07/03 16:05:14 Machine 5 get the reply when sendRequestVote from 2, Status: false. Term: 2
+2022/07/03 16:05:14 Machine 5 get the reply when sendRequestVote from 3, Status: false. Term: 2
+2022/07/03 16:05:14 Machine 5 get the reply when sendRequestVote from 6, Status: false. Term: 2
+2022/07/03 16:05:14 Machine 5 get the reply when sendRequestVote from 4, Status: false. Term: 2
+2022/07/03 16:05:14 Machine 5 get the reply when sendRequestVote from 1, Status: false. Term: 2
+2022/07/03 16:05:14 Machine 5 has finished the election. Term: 2
+2022/07/03 16:05:14 Machine 5 update election timeout: 2022-07-03 16:05:16.6506864 +0800 CST m=+4.341205001
+2022/07/03 16:05:14 Machine 6 start to send the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:14 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 1
+2022/07/03 16:05:15 Machine 6 开始检查租约. Term: 1
+2022/07/03 16:05:15 Machine 6 租约检查失败. Term: 1
+2022/07/03 16:05:15 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:15 Machine 6, expired process in appendRPC, currentTerm: 1, rf.currentTerm: 1.
+2022/07/03 16:05:15 Machine 6 receive the reply from 1 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:15 Machine 6, expired process in appendRPC, currentTerm: 1, rf.currentTerm: 1.
+2022/07/03 16:05:15 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:15 Machine 6, expired process in appendRPC, currentTerm: 1, rf.currentTerm: 1.
+2022/07/03 16:05:15 Machine 6 receive the reply from 3 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:15 Machine 6, expired process in appendRPC, currentTerm: 1, rf.currentTerm: 1.
+2022/07/03 16:05:15 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:15 Machine 6, expired process in appendRPC, currentTerm: 1, rf.currentTerm: 1.
+2022/07/03 16:05:15 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 1
+2022/07/03 16:05:15 Machine 6, expired process in appendRPC, currentTerm: 1, rf.currentTerm: 1.
+2022/07/03 16:05:15 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:15 Machine 6 finish sending the requests when SendAERpcs. Term: 1
+2022/07/03 16:05:15 Machine 6 become candidate. Term: 1
+2022/07/03 16:05:15 Machine 6 start to send requestVote. Term: 2
+2022/07/03 16:05:15 Machine 6 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:15 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:15 Machine 6 get the reply when sendRequestVote from 5, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 6 get the reply when sendRequestVote from 2, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 6 get the reply when sendRequestVote from 1, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 6 get the reply when sendRequestVote from 3, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 6 get the reply when sendRequestVote from 0, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 6 get the reply when sendRequestVote from 4, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 6 has finished the election. Term: 2
+2022/07/03 16:05:15 Machine 6 update election timeout: 2022-07-03 16:05:16.3789079 +0800 CST m=+4.069426501
+2022/07/03 16:05:15 Machine 2 become candidate. Term: 1
+2022/07/03 16:05:15 Machine 2 start to send requestVote. Term: 2
+2022/07/03 16:05:15 Machine 2 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:15 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:15 Machine 0 receive request vote from 2. Term: 1
+2022/07/03 16:05:15 Machine 0 finished Requestvote, called by 2. Term: 2
+2022/07/03 16:05:15 Machine 0 Vote info - args Term: 2, currentTerm : 2, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 2, CandidateID2, vote: true
+2022/07/03 16:05:15 Machine 0 update election timeout: 2022-07-03 16:05:16.4268184 +0800 CST m=+4.117337001
+2022/07/03 16:05:15 Machine 3 receive request vote from 2. Term: 1
+2022/07/03 16:05:15 Machine 2 get the reply when sendRequestVote from 0, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 3 finished Requestvote, called by 2. Term: 2
+2022/07/03 16:05:15 Machine 4 receive request vote from 2. Term: 1
+2022/07/03 16:05:15 Machine 4 finished Requestvote, called by 2. Term: 2
+2022/07/03 16:05:15 Machine 4 Vote info - args Term: 2, currentTerm : 2, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 2, CandidateID2, vote: true
+2022/07/03 16:05:15 Machine 4 update election timeout: 2022-07-03 16:05:17.1220144 +0800 CST m=+4.812533001
+2022/07/03 16:05:15 Machine 2 get the reply when sendRequestVote from 4, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 3 Vote info - args Term: 2, currentTerm : 2, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 2, CandidateID2, vote: true
+2022/07/03 16:05:15 Machine 3 update election timeout: 2022-07-03 16:05:17.0831352 +0800 CST m=+4.773653901
+2022/07/03 16:05:15 Machine 2 get the reply when sendRequestVote from 3, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 1 receive request vote from 2. Term: 1
+2022/07/03 16:05:15 Machine 1 finished Requestvote, called by 2. Term: 2
+2022/07/03 16:05:15 Machine 1 Vote info - args Term: 2, currentTerm : 2, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 2, CandidateID2, vote: true
+2022/07/03 16:05:15 Machine 1 update election timeout: 2022-07-03 16:05:16.9372918 +0800 CST m=+4.627810401
+2022/07/03 16:05:15 Machine 2 get the reply when sendRequestVote from 1, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 2 get the reply when sendRequestVote from 6, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 2 get the reply when sendRequestVote from 5, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 2 become leader from candidate. Term: 2
+2022/07/03 16:05:15 Machine 2 has finished the election. Term: 2
+2022/07/03 16:05:15 Machine 2 update election timeout: 2022-07-03 16:05:17.1300534 +0800 CST m=+4.820572101
+2022/07/03 16:05:15 Machine 2 start to send the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 0 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 2
+2022/07/03 16:05:15 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:15 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 2
+2022/07/03 16:05:15 Machine 0 update election timeout: 2022-07-03 16:05:16.829836 +0800 CST m=+4.520354601
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 4 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 2
+2022/07/03 16:05:15 Machine 4 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:15 Machine 4 has sended the heartbeat when 2 when AppendEntries. Term: 2
+2022/07/03 16:05:15 Machine 4 update election timeout: 2022-07-03 16:05:16.5639845 +0800 CST m=+4.254503101
+2022/07/03 16:05:15 Machine 1 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 2
+2022/07/03 16:05:15 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:15 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 2
+2022/07/03 16:05:15 Machine 1 update election timeout: 2022-07-03 16:05:16.9300973 +0800 CST m=+4.620615901
+2022/07/03 16:05:15 Machine 3 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 2
+2022/07/03 16:05:15 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:15 Machine 3 has sended the heartbeat when 2 when AppendEntries. Term: 2
+2022/07/03 16:05:15 Machine 3 update election timeout: 2022-07-03 16:05:16.5581937 +0800 CST m=+4.248712401
+2022/07/03 16:05:15 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 4 when sendAppendEntries, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 3 when sendAppendEntries, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 5 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 6 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 2 get the success in appendEntryRpc of most servers, find the N: -1, Term: 2.
+2022/07/03 16:05:15 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:15 Machine 2 finish sending the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:15 Machine 2 start to send the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 1 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 2
+2022/07/03 16:05:15 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:15 Machine 1 has sended the heartbeat when 2 when AppendEntries. Term: 2
+2022/07/03 16:05:15 Machine 1 update election timeout: 2022-07-03 16:05:17.2999636 +0800 CST m=+4.990482301
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 3 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 2
+2022/07/03 16:05:15 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:15 Machine 3 has sended the heartbeat when 2 when AppendEntries. Term: 2
+2022/07/03 16:05:15 Machine 3 update election timeout: 2022-07-03 16:05:17.5101079 +0800 CST m=+5.200626601
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 4 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 2
+2022/07/03 16:05:15 Machine 4 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:15 Machine 4 has sended the heartbeat when 2 when AppendEntries. Term: 2
+2022/07/03 16:05:15 Machine 4 update election timeout: 2022-07-03 16:05:17.0584232 +0800 CST m=+4.748941901
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 1 when sendAppendEntries, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 3 when sendAppendEntries, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 4 when sendAppendEntries, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 0 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 2
+2022/07/03 16:05:15 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:15 Machine 0 has sended the heartbeat when 2 when AppendEntries. Term: 2
+2022/07/03 16:05:15 Machine 0 update election timeout: 2022-07-03 16:05:16.7728036 +0800 CST m=+4.463322201
+2022/07/03 16:05:15 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 5 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:15 RECONNECT 6 5 6
+2022/07/03 16:05:15 DISCONNECT 2 2 4
+2022/07/03 16:05:15 disconnect(2)
+2022/07/03 16:05:15 disconnect(2)
+2022/07/03 16:05:15 disconnect(4)
+2022/07/03 16:05:15 Machine 2 receive the reply from 6 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:15 Machine 2 get the success in appendEntryRpc of most servers, find the N: -1, Term: 2.
+2022/07/03 16:05:15 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:15 Machine 2 finish sending the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:15 Machine 2 start to send the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:15 Machine 2 receive the reply from 1 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 5 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 6 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 0 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 4 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 3 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:16 Machine 2 finish sending the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 start to send the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 6 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 4 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 5 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 0 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 1 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 3 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:16 Machine 2 finish sending the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 start to send the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 6 become candidate. Term: 2
+2022/07/03 16:05:16 Machine 6 start to send requestVote. Term: 3
+2022/07/03 16:05:16 Machine 6 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:16 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:16 Machine 5 receive request vote from 6. Term: 2
+2022/07/03 16:05:16 Machine 5 finished Requestvote, called by 6. Term: 3
+2022/07/03 16:05:16 Machine 5 Vote info - args Term: 3, currentTerm : 3, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:16 Machine 5 update election timeout: 2022-07-03 16:05:17.9180162 +0800 CST m=+5.608534801
+2022/07/03 16:05:16 Machine 0 receive request vote from 6. Term: 2
+2022/07/03 16:05:16 Machine 6 get the reply when sendRequestVote from 5, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 3 receive request vote from 6. Term: 2
+2022/07/03 16:05:16 Machine 0 finished Requestvote, called by 6. Term: 3
+2022/07/03 16:05:16 Machine 0 Vote info - args Term: 3, currentTerm : 3, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:16 Machine 0 update election timeout: 2022-07-03 16:05:17.4332095 +0800 CST m=+5.123728201
+2022/07/03 16:05:16 Machine 1 receive request vote from 6. Term: 2
+2022/07/03 16:05:16 Machine 3 finished Requestvote, called by 6. Term: 3
+2022/07/03 16:05:16 Machine 3 Vote info - args Term: 3, currentTerm : 3, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:16 Machine 6 get the reply when sendRequestVote from 0, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 3 update election timeout: 2022-07-03 16:05:17.7963487 +0800 CST m=+5.486867401
+2022/07/03 16:05:16 Machine 1 finished Requestvote, called by 6. Term: 3
+2022/07/03 16:05:16 Machine 1 Vote info - args Term: 3, currentTerm : 3, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 6, CandidateID6, vote: true
+2022/07/03 16:05:16 Machine 1 update election timeout: 2022-07-03 16:05:17.4073645 +0800 CST m=+5.097883101
+2022/07/03 16:05:16 Machine 6 get the reply when sendRequestVote from 1, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 6 get the reply when sendRequestVote from 3, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 2 receive the reply from 5 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 3 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 1 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 6 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 4 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 0 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:16 Machine 2 finish sending the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 start to send the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 6 get the reply when sendRequestVote from 2, Status: false. Term: 3
+2022/07/03 16:05:16 Machine 6 get the reply when sendRequestVote from 4, Status: false. Term: 3
+2022/07/03 16:05:16 Machine 6 become leader from candidate. Term: 3
+2022/07/03 16:05:16 Machine 6 has finished the election. Term: 3
+2022/07/03 16:05:16 Machine 6 update election timeout: 2022-07-03 16:05:18.3446035 +0800 CST m=+6.035122101
+2022/07/03 16:05:16 Machine 6 start to send the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 5 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 0 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:16 Machine 0 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:16 Machine 0 update election timeout: 2022-07-03 16:05:18.0789993 +0800 CST m=+5.769517901
+2022/07/03 16:05:16 Machine 1 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:16 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:16 Machine 5 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:16 Machine 5 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:16 Machine 5 update election timeout: 2022-07-03 16:05:17.4680381 +0800 CST m=+5.158556701
+2022/07/03 16:05:16 Machine 6 receive the reply from 0 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 3 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 6 receive the reply from 5 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:16 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:16 Machine 3 update election timeout: 2022-07-03 16:05:17.5571365 +0800 CST m=+5.247655201
+2022/07/03 16:05:16 Machine 1 update election timeout: 2022-07-03 16:05:18.4070214 +0800 CST m=+6.097540101
+2022/07/03 16:05:16 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 2 receive the reply from 4 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 0 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 1 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 6 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 5 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 3 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:16 Machine 2 finish sending the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 start to send the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:16 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 3.
+2022/07/03 16:05:16 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:16 Machine 6 finish sending the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:16 Machine 6 start to send the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 5 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 5 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:16 Machine 5 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 5 update election timeout: 2022-07-03 16:05:17.7619553 +0800 CST m=+5.452474001
+2022/07/03 16:05:16 Machine 6 receive the reply from 5 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 3 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:16 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:16 Machine 3 update election timeout: 2022-07-03 16:05:18.3670396 +0800 CST m=+6.057558201
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 0 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:16 Machine 0 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:16 Machine 0 update election timeout: 2022-07-03 16:05:18.5061475 +0800 CST m=+6.196666101
+2022/07/03 16:05:16 Machine 1 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 1 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:16 Machine 1 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:16 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:16 Machine 1 update election timeout: 2022-07-03 16:05:17.836212 +0800 CST m=+5.526730601
+2022/07/03 16:05:16 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 6 receive the reply from 0 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 6 receive the reply from 1 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 RECONNECT 2 2 4
+2022/07/03 16:05:16 DISCONNECT 1 4 4
+2022/07/03 16:05:16 disconnect(1)
+2022/07/03 16:05:16 disconnect(4)
+2022/07/03 16:05:16 disconnect(4)
+2022/07/03 16:05:16 Machine 2 receive the reply from 6 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 3 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 4 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 5 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 0 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 receive the reply from 1 when sendAppendEntries, Status: false. Term: 2
+2022/07/03 16:05:16 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:16 Machine 2 finish sending the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 start to send the requests when SendAERpcs. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:16 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 3.
+2022/07/03 16:05:16 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:16 Machine 6 finish sending the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:16 Machine 2 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 2
+2022/07/03 16:05:16 Machine 3 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 3 get a lower term when AppendEntries, the request is not admitted. Term: 3
+2022/07/03 16:05:16 Machine 3 update election timeout: 2022-07-03 16:05:18.3958583 +0800 CST m=+6.086376901
+2022/07/03 16:05:16 Machine 6 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 6 get a lower term when AppendEntries, the request is not admitted. Term: 3
+2022/07/03 16:05:16 Machine 6 update election timeout: 2022-07-03 16:05:18.1059511 +0800 CST m=+5.796469801
+2022/07/03 16:05:16 Machine 0 get the request from 2 when AppendEntries, Args: {2 2 0 0 [] -1}. Term: 3
+2022/07/03 16:05:16 Machine 0 get a lower term when AppendEntries, the request is not admitted. Term: 3
+2022/07/03 16:05:16 Machine 0 update election timeout: 2022-07-03 16:05:18.622987 +0800 CST m=+6.313505601
+2022/07/03 16:05:16 Machine 2 receive the reply from 3 when sendAppendEntries, Status: true. Term: 2
+2022/07/03 16:05:16 Machine 2, expired process in appendRPC, currentTerm: 2, rf.currentTerm: 3.
+2022/07/03 16:05:16 Machine 2, expired process in appendRPC, currentTerm: 2, rf.currentTerm: 3.
+2022/07/03 16:05:16 Machine 2, expired process in appendRPC, currentTerm: 2, rf.currentTerm: 3.
+2022/07/03 16:05:16 Machine 2 receive the reply from 6 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 2, expired process in appendRPC, currentTerm: 2, rf.currentTerm: 3.
+2022/07/03 16:05:16 Machine 2 receive the reply from 0 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:16 Machine 2, expired process in appendRPC, currentTerm: 2, rf.currentTerm: 3.
+2022/07/03 16:05:16 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:16 Machine 2 finish sending the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 start to send the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 2 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:17 Machine 2 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:17 Machine 2 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:17 Machine 2 update election timeout: 2022-07-03 16:05:18.3353724 +0800 CST m=+6.025891001
+2022/07/03 16:05:17 Machine 0 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:17 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:17 Machine 0 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:17 Machine 0 update election timeout: 2022-07-03 16:05:18.3205188 +0800 CST m=+6.011037501
+2022/07/03 16:05:17 Machine 5 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:17 Machine 5 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:17 Machine 5 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:17 Machine 5 update election timeout: 2022-07-03 16:05:18.1156532 +0800 CST m=+5.806171801
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 5 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 3 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:17 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:17 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:17 Machine 3 update election timeout: 2022-07-03 16:05:18.1380303 +0800 CST m=+5.828548901
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 2 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 0 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:17 Machine 4 become candidate. Term: 2
+2022/07/03 16:05:17 Machine 4 start to send requestVote. Term: 3
+2022/07/03 16:05:17 Machine 4 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:17 Machine 4 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:17 Machine 6 receive the reply from 1 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 3.
+2022/07/03 16:05:17 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:17 Machine 6 finish sending the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 start to send the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 3 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:17 Machine 3 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:17 Machine 3 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:17 Machine 2 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 2 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:17 Machine 2 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:17 Machine 2 update election timeout: 2022-07-03 16:05:18.1398221 +0800 CST m=+5.830340701
+2022/07/03 16:05:17 Machine 3 update election timeout: 2022-07-03 16:05:18.6607806 +0800 CST m=+6.351299201
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 0 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:17 Machine 0 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:17 Machine 0 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:17 Machine 0 update election timeout: 2022-07-03 16:05:18.2970452 +0800 CST m=+5.987563901
+2022/07/03 16:05:17 Machine 5 get the request from 6 when AppendEntries, Args: {3 6 0 0 [] -1}. Term: 3
+2022/07/03 16:05:17 Machine 5 has log: [{<nil> 0}]. rf.lastApplied: -1, rf.commitedIndex: -1
+2022/07/03 16:05:17 Machine 5 has sended the heartbeat when 6 when AppendEntries. Term: 3
+2022/07/03 16:05:17 Machine 5 update election timeout: 2022-07-03 16:05:18.9802062 +0800 CST m=+6.670724801
+2022/07/03 16:05:17 Machine 6 receive the reply from 2 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 3 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 0 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 5 when sendAppendEntries, Status: true. Term: 3
+2022/07/03 16:05:17 Machine 4 get the reply when sendRequestVote from 0, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 4 get the reply when sendRequestVote from 6, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 4 get the reply when sendRequestVote from 3, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 4 get the reply when sendRequestVote from 5, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 4 get the reply when sendRequestVote from 1, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 4 get the reply when sendRequestVote from 2, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 4 has finished the election. Term: 3
+2022/07/03 16:05:17 Machine 4 update election timeout: 2022-07-03 16:05:18.164054 +0800 CST m=+5.854572601
+2022/07/03 16:05:17 RECONNECT 1 4 4
+2022/07/03 16:05:17 DISCONNECT 1 0 6
+2022/07/03 16:05:17 disconnect(1)
+2022/07/03 16:05:17 disconnect(0)
+2022/07/03 16:05:17 disconnect(6)
+2022/07/03 16:05:17 Machine 6 receive the reply from 1 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 get the success in appendEntryRpc of most servers, find the N: -1, Term: 3.
+2022/07/03 16:05:17 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:17 Machine 6 finish sending the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 start to send the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 1 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 3 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:17 Machine 6 finish sending the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 start to send the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 1 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 3 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:17 Machine 6 finish sending the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 start to send the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:17 Machine 1 become candidate. Term: 3
+2022/07/03 16:05:17 Machine 1 start to send requestVote. Term: 4
+2022/07/03 16:05:17 Machine 1 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:17 Machine 1 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:17 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 1 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 receive the reply from 3 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:17 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:17 Machine 6 finish sending the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:18 Machine 6 start to send the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 1 get the reply when sendRequestVote from 3, Status: false. Term: 4
+2022/07/03 16:05:18 Machine 1 get the reply when sendRequestVote from 6, Status: false. Term: 4
+2022/07/03 16:05:18 Machine 1 get the reply when sendRequestVote from 0, Status: false. Term: 4
+2022/07/03 16:05:18 Machine 1 get the reply when sendRequestVote from 2, Status: false. Term: 4
+2022/07/03 16:05:18 Machine 1 get the reply when sendRequestVote from 5, Status: false. Term: 4
+2022/07/03 16:05:18 Machine 1 get the reply when sendRequestVote from 4, Status: false. Term: 4
+2022/07/03 16:05:18 Machine 1 has finished the election. Term: 4
+2022/07/03 16:05:18 Machine 1 update election timeout: 2022-07-03 16:05:19.5753315 +0800 CST m=+7.265850101
+2022/07/03 16:05:18 Machine 6 receive the reply from 0 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:18 Machine 6 receive the reply from 5 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:18 Machine 6 receive the reply from 3 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:18 Machine 6 receive the reply from 2 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:18 Machine 6 receive the reply from 4 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:18 Machine 6 receive the reply from 1 when sendAppendEntries, Status: false. Term: 3
+2022/07/03 16:05:18 Machine 6 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:18 Machine 6 finish sending the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:18 Machine 2 become candidate. Term: 3
+2022/07/03 16:05:18 Machine 2 start to send requestVote. Term: 4
+2022/07/03 16:05:18 Machine 2 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:18 Machine 2 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:18 Machine 4 receive request vote from 2. Term: 3
+2022/07/03 16:05:18 Machine 4 finished Requestvote, called by 2. Term: 4
+2022/07/03 16:05:18 Machine 4 Vote info - args Term: 4, currentTerm : 4, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 2, CandidateID2, vote: true
+2022/07/03 16:05:18 Machine 4 update election timeout: 2022-07-03 16:05:19.5622023 +0800 CST m=+7.252720901
+2022/07/03 16:05:18 Machine 5 receive request vote from 2. Term: 3
+2022/07/03 16:05:18 Machine 5 finished Requestvote, called by 2. Term: 4
+2022/07/03 16:05:18 Machine 3 receive request vote from 2. Term: 3
+2022/07/03 16:05:18 Machine 3 finished Requestvote, called by 2. Term: 4
+2022/07/03 16:05:18 Machine 3 Vote info - args Term: 4, currentTerm : 4, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 2, CandidateID2, vote: true
+2022/07/03 16:05:18 Machine 3 update election timeout: 2022-07-03 16:05:19.5803795 +0800 CST m=+7.270898101
+2022/07/03 16:05:18 Machine 2 get the reply when sendRequestVote from 4, Status: true. Term: 4
+2022/07/03 16:05:18 Machine 2 get the reply when sendRequestVote from 3, Status: true. Term: 4
+2022/07/03 16:05:18 Machine 4 become candidate. Term: 4
+2022/07/03 16:05:18 Machine 4 start to send requestVote. Term: 5
+2022/07/03 16:05:18 Machine 4 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:18 Machine 4 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+2022/07/03 16:05:18 Machine 5 Vote info - args Term: 4, currentTerm : 4, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 2, CandidateID2, vote: true
+2022/07/03 16:05:18 Machine 5 update election timeout: 2022-07-03 16:05:19.4756614 +0800 CST m=+7.166180101
+2022/07/03 16:05:18 Machine 2 get the reply when sendRequestVote from 5, Status: true. Term: 4
+2022/07/03 16:05:18 Machine 5 receive request vote from 4. Term: 4
+2022/07/03 16:05:18 Machine 3 receive request vote from 4. Term: 4
+2022/07/03 16:05:18 Machine 5 finished Requestvote, called by 4. Term: 5
+2022/07/03 16:05:18 Machine 5 Vote info - args Term: 5, currentTerm : 5, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 4, CandidateID4, vote: true
+2022/07/03 16:05:18 Machine 5 update election timeout: 2022-07-03 16:05:19.4668939 +0800 CST m=+7.157412601
+2022/07/03 16:05:18 Machine 3 finished Requestvote, called by 4. Term: 5
+2022/07/03 16:05:18 Machine 3 Vote info - args Term: 5, currentTerm : 5, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 4, CandidateID4, vote: true
+2022/07/03 16:05:18 Machine 2 receive request vote from 4. Term: 4
+2022/07/03 16:05:18 Machine 4 get the reply when sendRequestVote from 5, Status: true. Term: 5
+2022/07/03 16:05:18 Machine 2 finished Requestvote, called by 4. Term: 5
+2022/07/03 16:05:18 Machine 2 Vote info - args Term: 5, currentTerm : 5, args.LastLogTerm: 0, args.LastLogIndex:0, voteFor: 4, CandidateID4, vote: true
+2022/07/03 16:05:18 Machine 2 update election timeout: 2022-07-03 16:05:19.8680166 +0800 CST m=+7.558535301
+2022/07/03 16:05:18 Machine 3 update election timeout: 2022-07-03 16:05:19.2259573 +0800 CST m=+6.916475901
+2022/07/03 16:05:18 Machine 4 get the reply when sendRequestVote from 2, Status: true. Term: 5
+2022/07/03 16:05:18 Machine 4 get the reply when sendRequestVote from 3, Status: true. Term: 5
+2022/07/03 16:05:18 Machine 6 start to send the requests when SendAERpcs. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 has rf.nextIndex[index]: 1, rf.lastAppliedIndex: -1. Term: 3
+2022/07/03 16:05:18 Machine 6 开始检查租约. Term: 3
+2022/07/03 16:05:18 Machine 6 租约检查失败. Term: 3
+2022/07/03 16:05:18 Machine 2 get the reply when sendRequestVote from 0, Status: false. Term: 5
+2022/07/03 16:05:18 Machine 2, expired process, currentTerm: 4, rf.currentTerm: 5.
+2022/07/03 16:05:18 Machine 2 get the reply when sendRequestVote from 6, Status: false. Term: 5
+2022/07/03 16:05:18 Machine 2, expired process, currentTerm: 4, rf.currentTerm: 5.
+2022/07/03 16:05:18 Machine 4 get the reply when sendRequestVote from 1, Status: false. Term: 5
+2022/07/03 16:05:18 Machine 4 get the reply when sendRequestVote from 6, Status: false. Term: 5
+2022/07/03 16:05:18 Machine 2 get the reply when sendRequestVote from 1, Status: false. Term: 5
+2022/07/03 16:05:18 Machine 2, expired process, currentTerm: 4, rf.currentTerm: 5.
+2022/07/03 16:05:18 Machine 2 become leader from candidate. Term: 5
+2022/07/03 16:05:18 Machine 2 has finished the election. Term: 5
+2022/07/03 16:05:18 Machine 4 get the reply when sendRequestVote from 0, Status: false. Term: 5
+2022/07/03 16:05:18 Machine 4 become leader from candidate. Term: 5
+2022/07/03 16:05:18 Machine 4 has finished the election. Term: 5
+2022/07/03 16:05:18 Machine 4 update election timeout: 2022-07-03 16:05:19.9181903 +0800 CST m=+7.608709001
+2022/07/03 16:05:18 Machine 2 update election timeout: 2022-07-03 16:05:20.0011244 +0800 CST m=+7.691643101
+2022/07/03 16:05:18 Machine 0 become candidate. Term: 3
+2022/07/03 16:05:18 Machine 0 start to send requestVote. Term: 4
+2022/07/03 16:05:18 Machine 0 log info, the length of logs: 1, the last one log: [{<nil> 0}], lastApplied: -1
+2022/07/03 16:05:18 Machine 0 has log: [{<nil> 0}]. rf.commitIndex: -1 , rf.lastApplied: -1, rf.lastApplidIndex: -1
+--- FAIL: TestManyElections2A (6.06s)
+    config.go:395: term 5 has 2 (>1) leaders
+FAIL
+exit status 1
+FAIL	6.824/raft	6.058s
