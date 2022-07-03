@@ -8,7 +8,6 @@ import (
 
 // Debugging
 const Debug = false
-const Debug2b = false
 
 func DPrintf(format string, a ...interface{}) (n int, err error) {
 	if Debug {
@@ -17,16 +16,9 @@ func DPrintf(format string, a ...interface{}) (n int, err error) {
 	return
 }
 
-func P2b(format string, a ...interface{}) (n int, err error) {
-	if Debug2b {
-		log.Printf(format, a...)
-	}
-	return
-}
-
 // RandomTime return a random time between min and max
 func RandomTime() time.Duration {
-	return time.Duration(rand.Intn(400))*time.Millisecond + time.Millisecond*600
+	return time.Duration(rand.Intn(1000))*time.Millisecond + time.Millisecond*800
 }
 
 //
