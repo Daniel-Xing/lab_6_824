@@ -38,6 +38,6 @@ def find_fail_with_lab(labName, times = 50):
 if __name__ == "__main__":
     args = sys.argv
     if len(args) >= 2:
-        find_fail_with_lab(args[1])
+        find_fail(args[1])
     elif len(args) >= 3:
-        find_fail_with_lab(args[1], int(args[2]))
+        find_fail(args[1], int(args[2]))
